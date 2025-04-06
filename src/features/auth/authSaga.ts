@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { AUTH_LOGIN_REQUEST, AUTH_REGISTER_REQUEST } from "./AuthActions";
 import { loginAPI, registerAPI } from "./authApi";
 import { loginSuccess } from "./authSlice";
+import { router } from "../../router/rootRouter";
 
 type ActionWithPayload = {
   type: string;
@@ -15,6 +16,7 @@ function* handleLogin(action: ActionWithPayload): Generator {
     const response = yield call(loginAPI, action.payload);
     yield put(loginSuccess(response));
     toast.success("Login successful!");
+    router.navigate({ to: "/" });
   } catch (err) {
     toast.error("Login failed ");
     console.log(err);

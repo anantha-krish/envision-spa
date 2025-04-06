@@ -5,7 +5,7 @@ import { Link } from "@tanstack/react-router";
 
 const Navbar = () => {
   const dispatch = useDispatch();
-  const token = useSelector((state: RootState) => state.auth.token);
+  const token = useSelector((state: RootState) => state.auth.accessToken);
 
   if (!token) return null;
 
