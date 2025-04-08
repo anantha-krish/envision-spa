@@ -10,15 +10,26 @@ const loginSchema = Yup.object({
 
 const Login = () => {
   const dispatch = useDispatch();
+  const envisionLogo = new URL("/assets/images/logo.png", import.meta.url).href;
+  //  document.documentElement.setAttribute("data-theme", "dark");
 
   return (
-    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-6 flex flex-col justify-center sm:py-12">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-        <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+        <div className="relative px-4 py-10 bg-white dark:bg-gray-800 shadow-lg sm:rounded-3xl sm:p-20">
           <div className="max-w-md mx-auto">
+            <div className="flex justify-center mb-4">
+              <img
+                src={envisionLogo}
+                alt="Envision Logo"
+                className="h-35 w-auto"
+              />
+            </div>
             <div>
-              <h1 className="text-2xl font-semibold">Login</h1>
+              <h1 className="text-2xl text-sky-800 dark:text-white font-semibold text-center">
+                ENVISION
+              </h1>
             </div>
             <Formik
               initialValues={{ email: "", password: "" }}
@@ -69,12 +80,20 @@ const Login = () => {
                     />
                   </div>
                   <div></div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex justify-center">
                     <button
                       type="submit"
-                      className="bg-sky-400 text-white rounded-md px-2 py-1"
+                      className="bg-sky-600 text-white rounded-md px-4 py-1 hover:bg-sky-700  hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition duration-150 ease-in-out"
                     >
-                      Submit
+                      Login
+                    </button>
+                  </div>
+                  <div className="flex justify-center">
+                    <button
+                      type="submit"
+                      className="bg-white text-sky-900 rounded-md border px-4 py-1 hover:bg-sky-700  hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition duration-150 ease-in-out"
+                    >
+                      Register
                     </button>
                   </div>
                 </div>
