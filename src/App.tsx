@@ -4,7 +4,7 @@ import { Toaster } from "react-hot-toast";
 
 const App = () => {
   return (
-    <div>
+    <div className="transition-theme duration-1000 ease-in-out">
       <Navbar />
       <Toaster position="top-right" />
       <Outlet />
