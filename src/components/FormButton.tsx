@@ -1,3 +1,4 @@
+import clsx from "clsx";
 interface FormButtonProps {
   label: string;
   onClick?: () => void;
@@ -10,22 +11,16 @@ export const FormButton: React.FC<FormButtonProps> = ({
   style,
   onClick,
 }) => {
-  let buttonStyles =
-    "w-full rounded-md px-4 py-1 transition duration-150 ease-in-out hover:cursor-pointer focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 focus:outline-none ";
-  const primaryClass = "text-white bg-sky-600 dark:hover:bg-sky-800 ";
-  const secondaryClass =
-    "border text-sky-900  bg-transparent dark:text-sky-300 dark:hover:bg-sky-950";
+  const buttonStyles = clsx(
+    "w-full rounded-md px-4 py-1  transition duration-150 ease-in-out hover:cursor-pointer focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 focus:outline-none ",
+    {
+      " text-white bg-sky-500 hover:bg-sky-600 dark:bg-sky-700 dark:hover:bg-sky-800":
+        style === "primary",
+      "border text-sky-900 bg-transparent hover:bg-sky-100 dark:text-sky-300 dark:hover:bg-sky-950 ":
+        style === "secondary",
+    }
+  );
 
-  switch (style) {
-    case "primary":
-      buttonStyles += primaryClass;
-      break;
-    case "secondary":
-      buttonStyles += secondaryClass;
-      break;
-    default:
-      buttonStyles += primaryClass;
-  }
   return (
     <button type={type} className={buttonStyles} onClick={onClick}>
       {label}

@@ -5,10 +5,14 @@ import { loginRequest } from "../features/auth/AuthActions";
 import { useNavigate } from "@tanstack/react-router";
 import { FormInput } from "../components/FormInput";
 import { FormButton } from "../components/FormButton";
-import { ToggleThemeAction } from "../components/ToggleThemeAction";
+import { ThemeSwitch } from "../components/SwitchTheme";
 const loginSchema = Yup.object({
-  email: Yup.string().email("Invalid email").required("Required"),
-  password: Yup.string().min(6, "Min 6 characters").required("Required"),
+  email: Yup.string()
+    .email("Please enter a valid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(6, "Should have minimum 6 characters")
+    .required("Password is required"),
 });
 
 const Login = () => {
@@ -22,7 +26,7 @@ const Login = () => {
         <div className="absolute inset-0 -skew-y-6 transform bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg sm:-rotate-6 sm:skew-y-0 sm:rounded-3xl"></div>
         <div className="relative bg-white p-10 pt-0 shadow-lg sm:rounded-3xl  dark:bg-gray-800">
           <div className="w-full flex justify-end align-center py-4 ">
-            <ToggleThemeAction />
+            <ThemeSwitch />
           </div>
           <div className="mx-auto max-w-lg space-y-4">
             <div className="mx-auto flex w-70 justify-center">
@@ -33,7 +37,7 @@ const Login = () => {
               />
             </div>
             <div>
-              <h1 className="text-center text-2xl font-semibold text-sky-800 dark:text-white">
+              <h1 className="text-center text-2xl font-semibold text-sky-800 dark:text-white tracking-widest">
                 ENVISION
               </h1>
             </div>
