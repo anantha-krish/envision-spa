@@ -5,6 +5,7 @@ interface FormInputProps {
   type?: string;
   touched?: Record<string, boolean>;
   errors?: Record<string, string>;
+  autoComplete?: string;
 }
 
 export const FormInput = ({
@@ -13,6 +14,7 @@ export const FormInput = ({
   type = "text",
   errors = {},
   touched = {},
+  autoComplete,
 }: FormInputProps) => {
   return (
     <div>
@@ -25,6 +27,7 @@ export const FormInput = ({
       <Field
         type={type}
         name={name}
+        autoComplete={autoComplete}
         className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-offset-2 focus:outline-none focus:ring-sky-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 ${
           errors[name] && touched[name]
             ? "border-red-500! focus:ring-red-500!"

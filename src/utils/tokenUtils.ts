@@ -1,9 +1,35 @@
-export const isTokenExpired = (token: string | null): boolean => {
-  if (!token) return true;
+import { jwtDecode } from "jwt-decode";
+
+interface JwtPayload {
+  exp: number;
+  role: string;
+  iat: number;
+  user_id: number;
+}
+
+/**
+ * Decodes a JWT token.
+ * @param token JWT string.
+ * @returns Decoded payload or null if invalid.
+ */
+export function decodeJwt(token: string): JwtPayload | null {
   try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    return payload.exp * 1000 < Date.now();
-  } catch {
-    return true;
+    return jwtDecode<JwtPayload>(token);
+  } catch (error) {
+    console.error("Invalid JWT:", error);
+    return null;
   }
-};
+}
+
+/**
+ * Checks if the JWT is expired.
+ * @param token JWT string.
+ * @returns true if expired, false otherwise.
+ */
+export function isJwtExpired(token: string): boolean {
+  const decoded = decodeJwt(token);
+  if (!decoded || !decoded.exp) return true;
+
+  const currentTime = Math.floor(Date.now() / 1000);
+  return decoded.exp < currentTime;
+}

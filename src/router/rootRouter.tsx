@@ -1,7 +1,7 @@
-import { rootRoute } from "./rootRoute";
+import { rootRoute } from "../routes/__root";
 
 import { createRouter } from "@tanstack/react-router";
-import { indexRoute, loginRoute, registerRoute } from "./routes";
+import { indexRoute, loginRoute, registerRoute } from "../routes";
 
 export const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -11,10 +11,6 @@ export const routeTree = rootRoute.addChildren([
 
 export const router = createRouter({
   routeTree,
+  context: { isAuthenticated: false },
   defaultPreload: "intent",
 });
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
-}

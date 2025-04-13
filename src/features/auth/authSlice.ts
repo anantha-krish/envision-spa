@@ -1,14 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { decodeJwt } from "../../utils/tokenUtils";
 
 export interface AuthState {
   accessToken: string | null;
   isAuthenticated: boolean;
+  role: string;
+  userId: number;
 }
 
-const initialState = {
-  accessToken: localStorage.getItem("accessToken"),
-  isAuthenticated: !!localStorage.getItem("accessToken"),
+const getInitialAuthState = (): AuthState => {
+  const accessToken = sessionStorage.getItem("accessToken") ?? null;
+  const decodedToken = decodeJwt(accessToken ?? "");
+  return {
+    accessToken,
+    role: decodedToken?.role ?? "user",
+    isAuthenticated: !!accessToken,
+    userId: decodedToken?.user_id ?? -1,
+  };
 };
+
+const initialState: AuthState = getInitialAuthState();
 
 const authSlice = createSlice({
   name: "auth",
@@ -16,13 +27,15 @@ const authSlice = createSlice({
   reducers: {
     loginSuccess: (state, action) => {
       state.accessToken = action.payload.accessToken;
+      state.role = decodeJwt(action.payload.accessToken)?.role ?? "user";
+      state.userId = decodeJwt(action.payload.accessToken)?.user_id ?? -1;
       state.isAuthenticated = true;
-      localStorage.setItem("token", action.payload.accessToken);
+      sessionStorage.setItem("accessToken", action.payload.accessToken);
     },
     logout: (state) => {
       state.accessToken = null;
       state.isAuthenticated = false;
-      localStorage.removeItem("token");
+      sessionStorage.removeItem("accessToken");
     },
   },
 });
