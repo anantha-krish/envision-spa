@@ -1,12 +1,12 @@
 import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleTheme } from "../features/theme/themeSlice";
+import { toggleTheme } from "../features/app/appSlice";
 import { RootState } from "../store";
 import { useEffect } from "react";
 import clsx from "clsx";
 
 export const ThemeSwitch = () => {
-  const theme = useSelector((state: RootState) => state.theme.mode);
+  const theme = useSelector((state: RootState) => state.app.theme);
   const dispatch = useDispatch();
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);

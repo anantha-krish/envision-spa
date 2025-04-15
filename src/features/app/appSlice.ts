@@ -1,0 +1,54 @@
+// src/features/theme/themeSlice.ts
+import { createSlice } from "@reduxjs/toolkit";
+import { Designation, Role, UserProfile } from "../../types/models";
+
+const savedTheme = sessionStorage.getItem("theme") || "light";
+interface appState {
+  theme: string;
+  dropdowns: {
+    roles: Role[];
+    designations: Designation[];
+    managers: UserProfile[];
+  };
+}
+const appSlice = createSlice({
+  name: "app",
+  initialState: {
+    theme: savedTheme,
+    dropdowns: {
+      roles: [],
+      designations: [],
+      managers: [],
+    },
+  } as appState,
+  reducers: {
+    fetchRegisterPageDropDownOptionsSuccess: (state, action) => {
+      state.dropdowns.roles = action.payload.roles;
+      state.dropdowns.managers = action.payload.managers;
+      state.dropdowns.designations = action.payload.designations;
+    },
+    clearRegisterPageDropDownOptions: (state) => {
+      state.dropdowns = {
+        roles: [],
+        designations: [],
+        managers: [],
+      };
+    },
+    toggleTheme: (state) => {
+      state.theme = state.theme === "dark" ? "light" : "dark";
+      sessionStorage.setItem("theme", state.theme);
+    },
+    setTheme: (state, action) => {
+      state.theme = action.payload;
+      sessionStorage.setItem("theme", action.payload);
+    },
+  },
+});
+
+export const {
+  toggleTheme,
+  setTheme,
+  fetchRegisterPageDropDownOptionsSuccess,
+  clearRegisterPageDropDownOptions,
+} = appSlice.actions;
+export default appSlice.reducer;

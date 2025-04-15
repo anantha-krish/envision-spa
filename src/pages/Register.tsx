@@ -1,9 +1,17 @@
 import * as Yup from "yup";
 import { registerRequest } from "../features/auth/AuthActions";
 import { Formik } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FormInput } from "../components/FormInput";
 import { FormButton } from "../components/FormButton";
+import { FormSelect } from "../components/FormSelect";
+import {
+  clearRegisterDropDownOptions,
+  fetchRegisterDropDownOptions,
+} from "../features/app/appActions";
+import { useEffect } from "react";
+import { RootState } from "../store";
+import { useNavigate } from "@tanstack/react-router";
 
 const registerSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Required"),
@@ -17,6 +25,7 @@ const registerSchema = Yup.object({
     "Passwords must match"
   ),
   role: Yup.string().required("Required"),
+  managerId: Yup.string().optional(),
 });
 
 const initialValues = {
@@ -28,10 +37,26 @@ const initialValues = {
   username: "",
   confirmPassword: "",
   role: "",
+  managerId: "",
 };
 
 const Register = () => {
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchRegisterDropDownOptions());
+    return () => {
+      dispatch(clearRegisterDropDownOptions());
+    };
+  }, [dispatch]);
+
+  const roles = useSelector((state: RootState) => state.app.dropdowns.roles);
+  const designations = useSelector(
+    (state: RootState) => state.app.dropdowns.designations
+  );
+  const managers = useSelector(
+    (state: RootState) => state.app.dropdowns.managers
+  );
+  const navigate = useNavigate();
 
   return (
     <div className="bg-gray-400 border-2 border-gray-300 rounded-lg p-4 w-full max-w-xl mx-auto mt-10 flex flex-col gap-4">
@@ -49,6 +74,13 @@ const Register = () => {
               <div className="flex flex-row gap-4">
                 <div className="flex flex-col flex-1/2">
                   <FormInput
+                    name="firstName"
+                    label="First Name"
+                    type="text"
+                    errors={errors}
+                    touched={touched}
+                  />
+                  <FormInput
                     name="username"
                     label="Username"
                     type="text"
@@ -56,6 +88,7 @@ const Register = () => {
                     touched={touched}
                     autoComplete="false"
                   />
+
                   <FormInput
                     name="email"
                     label="Email"
@@ -85,33 +118,70 @@ const Register = () => {
                 </div>
                 <div className="flex flex-col flex-1/2">
                   <FormInput
-                    name="firstName"
-                    label="First Name"
-                    type="text"
-                    errors={errors}
-                    touched={touched}
-                  />
-
-                  <FormInput
                     name="lastName"
                     label="Last Name"
                     type="text"
                     errors={errors}
                     touched={touched}
                   />
-                  <select name="designation" onChange={handleChange}>
-                    <option value="" label="Select designation" />
-                  </select>
+                  <FormSelect
+                    name="role"
+                    label="Select Role"
+                    defaultValue={""}
+                    onChange={handleChange}
+                  >
+                    {roles.map((role) => (
+                      <option key={`role-${role.id}`} value={role.roleCode}>
+                        {role.roleName}
+                      </option>
+                    ))}
+                  </FormSelect>
+                  <FormSelect
+                    name="designation"
+                    label="Select Designation"
+                    defaultValue={""}
+                    onChange={handleChange}
+                  >
+                    {designations.map((designation) => (
+                      <option
+                        key={`designation-${designation.id}`}
+                        value={designation.designationCode}
+                      >
+                        {designation.designationName}
+                      </option>
+                    ))}
+                  </FormSelect>
 
-                  <select name="role" onChange={handleChange}>
-                    <option value="" label="Select role" />
-                    <option value="admin" label="Admin" />
-                    <option value="user" label="User" />
-                    <option value="guest" label="Guest" />
-                  </select>
+                  <FormSelect
+                    name="managerId"
+                    label="Reporting Manager"
+                    defaultValue={""}
+                    onChange={handleChange}
+                  >
+                    {managers.map((manager) => (
+                      <option
+                        key={`manager-${manager.userId}`}
+                        value={manager.userId}
+                      >
+                        {[
+                          manager.firstName,
+                          manager.lastName,
+                          `<${manager.email}>`,
+                        ].join(" ")}
+                      </option>
+                    ))}
+                  </FormSelect>
                 </div>
               </div>
-              <FormButton type="submit" label="Register" style={"primary"} />
+              <div className="flex flex-row justify-between gap-4 px-1 py-2">
+                <FormButton
+                  type="button"
+                  label="Back to Login"
+                  onClick={() => navigate({ to: "/login" })}
+                  color="secondary"
+                />
+                <FormButton type="submit" label="Register" />
+              </div>
             </form>
           )}
         </Formik>

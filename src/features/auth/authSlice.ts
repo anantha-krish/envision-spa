@@ -10,7 +10,8 @@ export interface AuthState {
 
 const getInitialAuthState = (): AuthState => {
   const accessToken = sessionStorage.getItem("accessToken") ?? null;
-  const decodedToken = decodeJwt(accessToken ?? "");
+  const decodedToken =
+    (accessToken?.length ?? 0) > 0 ? decodeJwt(accessToken!) : null;
   return {
     accessToken,
     role: decodedToken?.role ?? "user",

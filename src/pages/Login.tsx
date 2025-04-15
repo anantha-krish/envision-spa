@@ -68,15 +68,16 @@ const Login = () => {
                   />
 
                   <div className="flex flex-row justify-between gap-4 px-1 py-2">
-                    <FormButton label="Login" style="primary" type="submit" />
+                    <FormButton label="Login" type="submit" />
                     <FormButton
                       label="Register"
-                      style="secondary"
                       onClick={() =>
                         navigate({
                           to: "/register",
                         })
                       }
+                      style="outline"
+                      color="secondary"
                     />
                   </div>
                 </div>

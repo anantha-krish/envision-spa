@@ -2,27 +2,42 @@ import clsx from "clsx";
 interface FormButtonProps {
   label: string;
   onClick?: () => void;
-  style: "primary" | "secondary";
+  color?:
+    | "primary"
+    | "secondary"
+    | "accent"
+    | "error"
+    | "warning"
+    | "info"
+    | "success"
+    | "neutral";
+  style?: "dashed" | "outline" | "link" | "ghost";
+  behaviour?: "active" | "disabled";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  modifier?: "wide" | "block" | "circle" | "square";
   type?: "button" | "submit" | "reset";
 }
 export const FormButton: React.FC<FormButtonProps> = ({
   label,
   type = "button",
-  style,
+  color = "primary",
+  style = "",
+  behaviour,
+  modifier,
+  size,
   onClick,
 }) => {
-  const buttonStyles = clsx(
-    "w-full rounded-md px-4 py-1  transition duration-150 ease-in-out hover:cursor-pointer focus:ring-2 focus:ring-sky-600 focus:ring-offset-2 focus:outline-none ",
-    {
-      " text-white bg-sky-500 hover:bg-sky-600 dark:bg-sky-700 dark:hover:bg-sky-800":
-        style === "primary",
-      "border text-sky-900 bg-transparent hover:bg-sky-100 dark:text-sky-300 dark:hover:bg-sky-950 ":
-        style === "secondary",
-    }
-  );
+  const btnStyles = clsx(
+    "btn",
+    { [`btn-${style}`]: style.length > 0 },
+    { [`btn-${behaviour}`]: behaviour?.length ?? 0 > 0 },
+    { [`btn-${modifier}`]: modifier?.length ?? 0 > 0 },
 
+    { [`btn-${color}`]: color.length > 0 },
+    { [`btn-${size}`]: size?.length ?? 0 > 0 }
+  );
   return (
-    <button type={type} className={buttonStyles} onClick={onClick}>
+    <button type={type} className={btnStyles} onClick={onClick}>
       {label}
     </button>
   );

@@ -11,6 +11,8 @@ export const routeTree = rootRoute.addChildren([
 
 export const router = createRouter({
   routeTree,
-  context: { isAuthenticated: false },
+  context: {
+    auth: undefined!,
+  },
   defaultPreload: "intent",
 });
