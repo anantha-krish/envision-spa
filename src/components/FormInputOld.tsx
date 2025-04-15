@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { ErrorMessage, Field } from "formik";
 interface FormInputProps {
   name: string;
@@ -9,7 +8,7 @@ interface FormInputProps {
   autoComplete?: string;
 }
 
-export const FormInput = ({
+export const FormInputOld = ({
   name,
   label,
   type = "text",
@@ -29,17 +28,18 @@ export const FormInput = ({
         type={type}
         name={name}
         autoComplete={autoComplete}
-        className={clsx("input input-primary", {
-          "input-error": errors[name] && touched[name],
-        })}
-        placeholder={label}
+        className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-offset-2 focus:outline-none focus:ring-sky-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 ${
+          errors[name] && touched[name]
+            ? "border-red-500! focus:ring-red-500!"
+            : ""
+        }`}
         required
       />
       <div className="mt-1 min-h-6">
         <ErrorMessage
           name={name}
           component="div"
-          className="text-sm text-red-600 px-3"
+          className="text-sm font-semibold text-red-500"
         />
       </div>
     </div>

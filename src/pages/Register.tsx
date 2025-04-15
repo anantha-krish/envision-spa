@@ -178,7 +178,7 @@ const Register = () => {
                   type="button"
                   label="Back to Login"
                   onClick={() => navigate({ to: "/login" })}
-                  color="secondary"
+                  color="accent"
                 />
                 <FormButton type="submit" label="Register" />
               </div>

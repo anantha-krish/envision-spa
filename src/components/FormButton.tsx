@@ -11,7 +11,7 @@ interface FormButtonProps {
     | "info"
     | "success"
     | "neutral";
-  style?: "dashed" | "outline" | "link" | "ghost";
+  style?: "dashed" | "outline" | "link" | "ghost" | "soft";
   behaviour?: "active" | "disabled";
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   modifier?: "wide" | "block" | "circle" | "square";

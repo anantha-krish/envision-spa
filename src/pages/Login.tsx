@@ -68,7 +68,6 @@ const Login = () => {
                   />
 
                   <div className="flex flex-row justify-between gap-4 px-1 py-2">
-                    <FormButton label="Login" type="submit" />
                     <FormButton
                       label="Register"
                       onClick={() =>
@@ -76,9 +75,9 @@ const Login = () => {
                           to: "/register",
                         })
                       }
-                      style="outline"
-                      color="secondary"
+                      color="accent"
                     />
+                    <FormButton label="Login" color="primary" type="submit" />
                   </div>
                 </div>
               </Form>
