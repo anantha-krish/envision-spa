@@ -5,7 +5,7 @@ import { loginRequest } from "../features/auth/AuthActions";
 import { useNavigate } from "@tanstack/react-router";
 import { FormInput } from "../components/FormInput";
 import { FormButton } from "../components/FormButton";
-import { ThemeSwitch } from "../components/SwitchTheme";
+import { ThemeSwitch } from "../components/ThemeSwitch";
 const loginSchema = Yup.object({
   email: Yup.string()
     .email("Please enter a valid email address")
@@ -51,7 +51,7 @@ const Login = () => {
           >
             {({ errors, touched }) => (
               <Form className="divide-y divide-gray-200">
-                <div className="space-y-1 pt-6 text-base leading-6 text-gray-700 sm:text-lg sm:leading-7">
+                <div className="space-y-1 pt-6 text-base leading-6 sm:text-lg sm:leading-7">
                   <FormInput
                     name="email"
                     label={"Email Address"}

@@ -1,5 +1,4 @@
 @import "tailwindcss";
-/* @plugin "daisyui"; */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 
@@ -58,7 +57,10 @@ html[data-theme='dark']{
  /*--color-base-100: oklch(25.33% 0.016 252.42);
  --color-base-200: oklch(23.26% 0.014 253.1);
  --color-base-300: oklch(21.15% 0.012 254.09);*/
- --color-base-content: oklch(97.807% 0.029 256.847);
+    --color-base-100: oklch(25.33% 0.016 252.42);
+    --color-base-200: oklch(23.26% 0.014 253.1);
+    --color-base-300: oklch(21.15% 0.012 254.09);
+    --color-base-content: oklch(97.807% 0.029 256.847);
 /* --color-primary: oklch(42% 0.199 265.638);
  --color-primary-content: oklch(96% 0.018 272.314);
  --color-secondary: oklch(48% 0.243 264.376);

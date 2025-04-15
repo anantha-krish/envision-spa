@@ -41,6 +41,7 @@ export const FormSelect = ({
             : ""
         }`}
       >
+        <option value="">Please select</option>
         {children}
       </select>
       <div className="mt-1 min-h-6">

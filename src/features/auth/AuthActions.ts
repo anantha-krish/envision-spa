@@ -15,10 +15,34 @@ export const loginRequest = ({
 export const registerRequest = ({
   email,
   password,
+  firstName,
+  lastName,
+  designation,
+  username,
+  confirmPassword,
+  role,
+  managerId,
 }: {
   email: string;
   password: string;
+  firstName: string;
+  lastName: string;
+  designation: string;
+  username: string;
+  confirmPassword: string;
+  role: string;
+  managerId: string;
 }) => ({
   type: AUTH_REGISTER_REQUEST,
-  payload: { name, email, password },
+  payload: {
+    email,
+    password,
+    firstName,
+    lastName,
+    designation,
+    username,
+    confirmPassword,
+    role,
+    managerId,
+  },
 });

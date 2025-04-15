@@ -1,16 +1,12 @@
 import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../features/app/appSlice";
-import { RootState } from "../store";
-import { useEffect } from "react";
 import clsx from "clsx";
+import { RootState } from "../store";
 
 export const ThemeSwitch = () => {
-  const theme = useSelector((state: RootState) => state.app.theme);
   const dispatch = useDispatch();
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
+  const theme = useSelector((state: RootState) => state.app.theme);
   const radioStyle = clsx(
     "absolute h-7 w-7 left-1 top-1 rounded-full flex items-center justify-center text-sky-600 shadow-md transition-transform duration-500 border-1 peer-checked:translate-x-7 ",
     { "bg-gray-800": theme === "dark", "bg-white": theme === "light" }

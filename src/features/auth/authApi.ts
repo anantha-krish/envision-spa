@@ -10,5 +10,5 @@ export const registerAPI = async (data: {
   email: string;
   password: string;
 }) => {
-  await axios.post("/api/register", data);
+  await axios.post("http://localhost:8080/users/register", data);
 };
