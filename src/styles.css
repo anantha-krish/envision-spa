@@ -2,7 +2,7 @@
 /* @plugin "daisyui"; */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-@import url("https: //cdn.jsdelivr.net/npm/daisyui@5");
+
 
 :root{
 --color-base-100: oklch(98% 0.003 247.858);

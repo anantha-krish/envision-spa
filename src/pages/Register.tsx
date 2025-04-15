@@ -69,7 +69,7 @@ const Register = () => {
             dispatch(registerRequest(values));
           }}
         >
-          {({ handleSubmit, handleChange, errors, touched }) => (
+          {({ handleSubmit, handleChange, resetForm, errors, touched }) => (
             <form autoComplete="off" onSubmit={handleSubmit}>
               <div className="flex flex-row gap-4">
                 <div className="flex flex-col flex-1/2">
@@ -80,41 +80,6 @@ const Register = () => {
                     errors={errors}
                     touched={touched}
                   />
-                  <FormInput
-                    name="username"
-                    label="Username"
-                    type="text"
-                    errors={errors}
-                    touched={touched}
-                    autoComplete="false"
-                  />
-
-                  <FormInput
-                    name="email"
-                    label="Email"
-                    type="email"
-                    errors={errors}
-                    touched={touched}
-                    autoComplete="off"
-                  />
-
-                  <FormInput
-                    type="password"
-                    name="password"
-                    label="Password"
-                    errors={errors}
-                    touched={touched}
-                    autoComplete="new-password"
-                  />
-
-                  <FormInput
-                    type="password"
-                    name="confirmPassword"
-                    label="Confirm Password"
-                    errors={errors}
-                    touched={touched}
-                    autoComplete="new-password"
-                  />
                 </div>
                 <div className="flex flex-col flex-1/2">
                   <FormInput
@@ -124,6 +89,55 @@ const Register = () => {
                     errors={errors}
                     touched={touched}
                   />
+                </div>
+              </div>
+
+              <div className="flex flex-row gap-4">
+                <div className="flex flex-col flex-1/2">
+                  <FormInput
+                    name="username"
+                    label="Username"
+                    type="text"
+                    errors={errors}
+                    touched={touched}
+                    autoComplete="false"
+                  />
+                </div>
+                <div className="flex flex-col flex-1/2">
+                  <FormInput
+                    name="email"
+                    label="Email"
+                    type="email"
+                    errors={errors}
+                    touched={touched}
+                    autoComplete="off"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-row gap-4">
+                <div className="flex flex-col flex-1/2">
+                  <FormInput
+                    type="password"
+                    name="password"
+                    label="Password"
+                    errors={errors}
+                    touched={touched}
+                    autoComplete="new-password"
+                  />
+                </div>
+                <div className="flex flex-col flex-1/2">
+                  <FormInput
+                    type="password"
+                    name="confirmPassword"
+                    label="Confirm Password"
+                    errors={errors}
+                    touched={touched}
+                    autoComplete="new-password"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-row gap-4">
+                <div className="flex flex-col flex-1/2">
                   <FormSelect
                     name="role"
                     label="Select Role"
@@ -136,6 +150,8 @@ const Register = () => {
                       </option>
                     ))}
                   </FormSelect>
+                </div>
+                <div className="flex flex-col flex-1/2">
                   <FormSelect
                     name="designation"
                     label="Select Designation"
@@ -151,7 +167,10 @@ const Register = () => {
                       </option>
                     ))}
                   </FormSelect>
-
+                </div>
+              </div>
+              <div className="flex flex-row gap-4">
+                <div className="flex flex-col flex-1/2">
                   <FormSelect
                     name="managerId"
                     label="Reporting Manager"
@@ -172,15 +191,29 @@ const Register = () => {
                     ))}
                   </FormSelect>
                 </div>
+                <div className="flex flex-col flex-1/2" />
               </div>
-              <div className="flex flex-row justify-between gap-4 px-1 py-2">
-                <FormButton
-                  type="button"
-                  label="Back to Login"
-                  onClick={() => navigate({ to: "/login" })}
-                  color="accent"
-                />
-                <FormButton type="submit" label="Register" />
+
+              <div className="flex flex-row justify-between gap-8 px-1 py-2">
+                <div className="flex flex-col flex-1/3">
+                  <FormButton
+                    type="button"
+                    label="Back to Login"
+                    onClick={() => navigate({ to: "/login" })}
+                    color="accent"
+                  />
+                </div>
+                <div className="flex flex-col flex-1/3">
+                  <FormButton
+                    type="reset"
+                    label="Clear Form"
+                    onClick={resetForm}
+                    color="secondary"
+                  />
+                </div>
+                <div className="flex flex-col flex-1/3">
+                  <FormButton type="submit" label="Register" />
+                </div>
               </div>
             </form>
           )}
