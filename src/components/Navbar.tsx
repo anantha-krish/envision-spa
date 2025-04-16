@@ -7,7 +7,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const token = useSelector((state: RootState) => state.auth.accessToken);
 
-  if (!token) return null;
+  if (!token) return;
 
   return (
     <nav className="bg-blue-600 text-white p-4 flex justify-between items-center">

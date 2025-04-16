@@ -5,6 +5,7 @@ import { Designation, Role, UserProfile } from "../../types/models";
 const savedTheme = sessionStorage.getItem("theme") || "light";
 interface appState {
   theme: string;
+  activeRequests: number;
   dropdowns: {
     roles: Role[];
     designations: Designation[];
@@ -14,6 +15,7 @@ interface appState {
 const appSlice = createSlice({
   name: "app",
   initialState: {
+    activeRequests: 0,
     theme: savedTheme,
     dropdowns: {
       roles: [],
@@ -22,6 +24,12 @@ const appSlice = createSlice({
     },
   } as appState,
   reducers: {
+    requestStart: (state) => {
+      state.activeRequests += 1;
+    },
+    requestEnd: (state) => {
+      state.activeRequests = Math.max(state.activeRequests - 1, 0);
+    },
     fetchRegisterPageDropDownOptionsSuccess: (state, action) => {
       state.dropdowns.roles = action.payload.roles;
       state.dropdowns.managers = action.payload.managers;
@@ -50,5 +58,7 @@ export const {
   setTheme,
   fetchRegisterPageDropDownOptionsSuccess,
   clearRegisterPageDropDownOptions,
+  requestStart,
+  requestEnd,
 } = appSlice.actions;
 export default appSlice.reducer;

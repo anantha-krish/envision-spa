@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { RootState } from "./store";
+import Loader from "./components/Loader";
 
 const App = () => {
   const theme = useSelector((state: RootState) => state.app.theme);
@@ -12,6 +13,7 @@ const App = () => {
   }, [theme]);
   return (
     <div className="transition-theme duration-1000 ease-in-out">
+      <Loader />
       <Navbar />
       <Toaster position="top-right" />
       <Outlet />
