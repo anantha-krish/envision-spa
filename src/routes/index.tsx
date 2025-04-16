@@ -3,18 +3,19 @@ import { lazy } from "react";
 import Home from "../pages/Home";
 import { requireAuth } from "../utils/authGuard";
 import { rootRoute } from "./__root";
+import { Logout } from "../pages/Logout";
 
 const Login = lazy(() => import("../pages/Login"));
 const Register = lazy(() => import("../pages/Register"));
 
-const indexRoute = createRoute({
+export const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   beforeLoad: requireAuth,
   component: Home,
 });
 
-const loginRoute = createRoute({
+export const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/login",
   component: Login,
@@ -26,7 +27,7 @@ const loginRoute = createRoute({
   },
 });
 
-const registerRoute = createRoute({
+export const registerRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/register",
   component: Register,
@@ -38,4 +39,8 @@ const registerRoute = createRoute({
   },
 });
 
-export { indexRoute, loginRoute, registerRoute };
+export const logoutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/logout",
+  component: Logout,
+});

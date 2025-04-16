@@ -12,7 +12,6 @@ import {
 import { useEffect } from "react";
 import { RootState } from "../store";
 import { useNavigate } from "@tanstack/react-router";
-import { ThemeSwitch } from "../components/ThemeSwitch";
 
 const registerSchema = Yup.object({
   email: Yup.string()
@@ -62,21 +61,15 @@ const Register = () => {
   );
   const navigate = useNavigate();
   return (
-    <div className="flex min-h-screen flex-col justify-center bg-gray-100 py-6 sm:py-12 dark:bg-gray-900">
-      <div className="relative py-2 sm:mx-auto">
+    <div className="flex h-full -mt-3 flex-col justify-center items-center">
+      <div className="relative sm:mx-auto">
         <div className="absolute inset-0 -skew-y-6 transform bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg sm:-rotate-6 sm:skew-y-0 sm:rounded-3xl"></div>
-        <div className="relative w-xl bg-white px-10 pt-6 pb-6 shadow-lg sm:rounded-3xl  dark:bg-gray-800">
-          <div className="flex flex-row gap-4 pb-6 items-center">
+        <div className="relative w-xl bg-white px-10 py-5 shadow-lg sm:rounded-3xl  dark:bg-gray-800">
+          <div className="flex flex-row gap-4 pb-3 items-center">
             <div className="flex flex-col flex-2/3 shrink-0 ">
               <div className="text-2xl font-medium">
-                <span className="align-middle">
-                  Join Envision — Registration
-                </span>
+                Join Envision — Registration
               </div>
-            </div>
-
-            <div className="flex flex-col flex-1/3 items-end">
-              <ThemeSwitch />
             </div>
           </div>
 

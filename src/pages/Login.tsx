@@ -5,7 +5,6 @@ import { loginRequest } from "../features/auth/AuthActions";
 import { useNavigate } from "@tanstack/react-router";
 import { FormInput } from "../components/FormInput";
 import { FormButton } from "../components/FormButton";
-import { ThemeSwitch } from "../components/ThemeSwitch";
 const loginSchema = Yup.object({
   email: Yup.string()
     .email("Please enter a valid email address")
@@ -21,13 +20,10 @@ const Login = () => {
   const envisionLogo = new URL("/assets/images/logo.png", import.meta.url).href;
 
   return (
-    <div className="flex min-h-screen flex-col justify-center bg-gray-100 py-6 sm:py-12 dark:bg-gray-900">
+    <div className="flex flex-col  h-full  justify-center py-3 sm:py-6">
       <div className="relative py-3 sm:mx-auto">
         <div className="absolute inset-0 -skew-y-6 transform bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg sm:-rotate-6 sm:skew-y-0 sm:rounded-3xl"></div>
-        <div className="relative bg-white p-10 pt-0 shadow-lg sm:rounded-3xl  dark:bg-gray-800">
-          <div className="w-full flex justify-end align-center py-4 ">
-            <ThemeSwitch />
-          </div>
+        <div className="relative bg-white p-10 shadow-lg sm:rounded-3xl  dark:bg-gray-800">
           <div className="mx-auto max-w-lg space-y-4">
             <div className="mx-auto flex w-70 justify-center">
               <img

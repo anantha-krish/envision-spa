@@ -12,11 +12,13 @@ const App = () => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
   return (
-    <div className="transition-theme duration-1000 ease-in-out">
+    <div className="transition-all duration-1000 ease-in-out bg-gray-100 dark:bg-gray-900">
       <Loader />
       <Navbar />
       <Toaster position="top-right" />
-      <Outlet />
+      <div className="h-screen-minus-nav">
+        <Outlet />
+      </div>
     </div>
   );
 };

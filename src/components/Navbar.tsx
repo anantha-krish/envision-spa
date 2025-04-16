@@ -1,24 +1,30 @@
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../features/auth/authSlice";
+import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { ThemeSwitchBar } from "./ThemeSwitchBar";
 
 const Navbar = () => {
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const token = useSelector((state: RootState) => state.auth.accessToken);
 
-  if (!token) return;
-
+  if (!token) return <ThemeSwitchBar />;
+  const envisionLogo = new URL("/assets/images/logo.png", import.meta.url).href;
   return (
-    <nav className="bg-blue-600 text-white p-4 flex justify-between items-center">
-      <div className="font-bold text-xl">IdeaApp</div>
-      <div className="flex gap-4">
-        <Link to="/" className="hover:underline">
+    <nav className="navbar bg-base-100 shadow-sm w-full flex justify-end align-center py-2.5 px-6">
+      <div className="navbar-start">
+        <div className="flex-none">
+          <img src={envisionLogo} alt="Envision Logo" className="h-6 w-auto " />
+        </div>
+
+        <span className="text-lg  uppercase">ENVISION</span>
+      </div>
+      <div className="navbar-end flex gap-4">
+        <Link to="/" className="btn-sm btn-ghost">
           Home
         </Link>
         <button
-          onClick={() => dispatch(logout())}
-          className="bg-white text-blue-600 px-3 py-1 rounded-md hover:bg-gray-100"
+          onClick={() => navigate({ to: "/logout" })}
+          className="btn-sm btn-secondary"
         >
           Logout
         </button>

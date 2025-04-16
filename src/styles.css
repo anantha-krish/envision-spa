@@ -89,3 +89,7 @@ html[data-theme='dark']{
 html {
     transition: background-color 1s ease, color 1s ease;
 }
+
+@utility h-screen-minus-nav {
+ min-height: calc(100vh - 64px);
+}
