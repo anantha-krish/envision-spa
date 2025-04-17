@@ -14,7 +14,7 @@ const getInitialAuthState = (): AuthState => {
     (accessToken?.length ?? 0) > 0 ? decodeJwt(accessToken!) : null;
   return {
     accessToken,
-    role: decodedToken?.role ?? "user",
+    role: decodedToken?.role ?? "USER",
     isAuthenticated: !!accessToken,
     userId: decodedToken?.user_id ?? -1,
   };
@@ -34,9 +34,11 @@ const authSlice = createSlice({
       sessionStorage.setItem("accessToken", action.payload.accessToken);
     },
     logout: (state) => {
-      state.accessToken = null;
-      state.isAuthenticated = false;
       sessionStorage.removeItem("accessToken");
+      state.accessToken = "";
+      state.role = "USER";
+      state.userId = -1;
+      state.isAuthenticated = false;
     },
   },
 });

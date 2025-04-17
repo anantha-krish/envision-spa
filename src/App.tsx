@@ -5,9 +5,11 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { RootState } from "./store";
 import Loader from "./components/Loader";
+import { useDynamicTitle } from "./utils/useDynamicPageTitle";
 
 const App = () => {
   const theme = useSelector((state: RootState) => state.app.theme);
+  useDynamicTitle();
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);

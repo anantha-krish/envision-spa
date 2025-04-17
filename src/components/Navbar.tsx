@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { ThemeSwitchBar } from "./ThemeSwitchBar";
+import { ThemeSwitch } from "./ThemeSwitch";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -22,11 +23,15 @@ const Navbar = () => {
         <Link to="/" className="btn-sm btn-ghost">
           Home
         </Link>
+
         <button
           onClick={() => navigate({ to: "/logout" })}
           className="btn-sm btn-secondary"
         >
           Logout
+        </button>
+        <button className="btn">
+          <ThemeSwitch />
         </button>
       </div>
     </nav>

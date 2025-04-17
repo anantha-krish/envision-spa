@@ -1,17 +1,70 @@
 import { createRoute, redirect } from "@tanstack/react-router";
 import { lazy } from "react";
 import Home from "../pages/Home";
-import { requireAuth } from "../utils/authGuard";
 import { rootRoute } from "./__root";
 import { Logout } from "../pages/Logout";
+import { PermissionError } from "../pages/PermissionError";
 
 const Login = lazy(() => import("../pages/Login"));
 const Register = lazy(() => import("../pages/Register"));
 
-export const indexRoute = createRoute({
+const requireAuth = (context: { auth: { isAuthenticated: boolean } }) => {
+  if (!context.auth.isAuthenticated) {
+    throw redirect({ to: "/login" });
+  }
+};
+
+const requireRole = (
+  context: { auth: { role: string; isAuthenticated: boolean } },
+  allowedRoles: string[]
+) => {
+  if (!allowedRoles.includes(context.auth.role)) {
+    throw redirect({ to: "/permission-error" });
+  }
+  requireAuth(context);
+};
+const redirectIfAuthenticated = ({
+  context,
+}: {
+  context: { auth: { isAuthenticated: boolean } };
+}) => {
+  if (context.auth.isAuthenticated) {
+    throw redirect({ to: "/" });
+  }
+};
+
+export const indexedRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
-  beforeLoad: requireAuth,
+  beforeLoad: ({ context }) => {
+    if (["ADMIN", "MANAGER"].includes(context.auth.role)) {
+      throw redirect({ to: "/dashboard" });
+    }
+    throw redirect({ to: "/ideas" });
+  },
+});
+
+export const dashBoardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/dashboard",
+  beforeLoad: ({ context }) => {
+    requireRole(context, ["ADMIN", "MANAGER"]);
+  },
+  component: () => <div>Dashboard</div>,
+});
+
+export const permissionErrorRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/permission-error",
+  component: () => <PermissionError />,
+});
+
+export const ideasRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/ideas",
+  beforeLoad: ({ context }) => {
+    requireAuth(context);
+  },
   component: Home,
 });
 
@@ -19,24 +72,13 @@ export const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/login",
   component: Login,
-  beforeLoad: ({ context }) => {
-    const isAuthenticated = context.auth.isAuthenticated;
-    if (isAuthenticated) {
-      throw redirect({ to: "/" });
-    }
-  },
+  beforeLoad: redirectIfAuthenticated,
 });
 
 export const registerRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/register",
   component: Register,
-  beforeLoad: ({ context }) => {
-    const isAuthenticated = context.auth.isAuthenticated;
-    if (isAuthenticated) {
-      throw redirect({ to: "/" });
-    }
-  },
 });
 
 export const logoutRoute = createRoute({

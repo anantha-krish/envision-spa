@@ -12,6 +12,7 @@ import {
 import { useEffect } from "react";
 import { RootState } from "../store";
 import { useNavigate } from "@tanstack/react-router";
+import clsx from "clsx";
 
 const registerSchema = Yup.object({
   email: Yup.string()
@@ -52,7 +53,17 @@ const Register = () => {
     };
   }, [dispatch]);
 
+  const auth = useSelector((state: RootState) => state.auth);
+  const isAuthenticated = auth.isAuthenticated;
+  const isAdminMode = auth.role === "ADMIN";
+
   const roles = useSelector((state: RootState) => state.app.dropdowns.roles);
+
+  let filterRoles = roles;
+  if (!isAdminMode) {
+    filterRoles = filterRoles.filter((role) => role.roleCode != "ADMIN");
+  }
+
   const designations = useSelector(
     (state: RootState) => state.app.dropdowns.designations
   );
@@ -61,14 +72,25 @@ const Register = () => {
   );
   const navigate = useNavigate();
   return (
-    <div className="flex h-full -mt-3 flex-col justify-center items-center">
+    <div
+      className={clsx("flex h-full flex-col justify-center items-center", {
+        "-mt-3": !isAuthenticated,
+        "mt-6": isAuthenticated,
+      })}
+    >
       <div className="relative sm:mx-auto">
-        <div className="absolute inset-0 -skew-y-6 transform bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg sm:-rotate-6 sm:skew-y-0 sm:rounded-3xl"></div>
+        {!isAuthenticated && (
+          <div className="absolute inset-0 -skew-y-6 transform bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg sm:-rotate-6 sm:skew-y-0 sm:rounded-3xl"></div>
+        )}
         <div className="relative w-xl bg-white px-10 py-5 shadow-lg sm:rounded-3xl  dark:bg-gray-800">
           <div className="flex flex-row gap-4 pb-3 items-center">
             <div className="flex flex-col flex-2/3 shrink-0 ">
-              <div className="text-2xl font-medium">
-                Join Envision — Registration
+              <div className="text-xl font-medium">
+                {isAdminMode
+                  ? "Create an Admin Account | Envision"
+                  : isAuthenticated
+                    ? "Create an User Account | Envision"
+                    : "Join Envision — Create Your Account"}
               </div>
             </div>
           </div>
@@ -157,7 +179,7 @@ const Register = () => {
                         errors={errors}
                         touched={touched}
                       >
-                        {roles.map((role) => (
+                        {filterRoles.map((role) => (
                           <option key={`role-${role.id}`} value={role.roleCode}>
                             {role.roleName}
                           </option>
