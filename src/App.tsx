@@ -1,6 +1,5 @@
 import { Outlet, useNavigate } from "@tanstack/react-router";
 import Navbar from "./components/Navbar";
-import toast, { resolveValue, Toaster, useToaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { RootState } from "./store";

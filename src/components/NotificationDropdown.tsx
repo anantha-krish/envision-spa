@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useNotificationSocket } from "../utils/useNotificationSocket";
+import { useEffect, useRef, useState } from "react";
 
 const BellIcon = () => (
   <svg
@@ -25,12 +26,34 @@ export const NotificationDropdown: React.FC = () => {
   const unreadCount = useSelector(
     (state: RootState) => state.app.unreadNotificationCount
   );
+  const [isOpen, setIsOpen] = useState(false); // Track the open/close state of the dropdown
+  const dropdownRef = useRef<HTMLUListElement | null>(null); // Reference for the dropdown element
 
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen); // Toggle the dropdown state
+  };
+
+  // Close the dropdown if the user clicks outside of it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false); // Close the dropdown if click is outside
+        console.log(isOpen);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [isOpen]);
   return (
     <>
       <button
         className="btn btn-ghost btn-circle"
         popoverTarget="popover-1"
+        onClick={toggleDropdown}
         style={{ anchorName: "--anchor-1" } as React.CSSProperties}
       >
         <div className="indicator">
@@ -43,6 +66,7 @@ export const NotificationDropdown: React.FC = () => {
         </div>
       </button>
       <ul
+        ref={dropdownRef}
         className="dropdown dropdown-end menu w-sm rounded-box bg-base-100 shadow-sm"
         popover="auto"
         id="popover-1"
