@@ -1,12 +1,13 @@
-// src/features/theme/themeSlice.ts
 import { createSlice } from "@reduxjs/toolkit";
 import { Designation, Role, UserProfile } from "../../types/models";
+import { Notification } from "../../types/models";
 
 const savedTheme = sessionStorage.getItem("theme") || "light";
 interface appState {
   theme: string;
   activeRequests: number;
   navigationTarget: string | null;
+  notifications: Notification[];
   sessionCountdown: number;
   showSessionExpiryModal: boolean;
   sessionExpiryTime: number | null;
@@ -23,6 +24,7 @@ const appSlice = createSlice({
   initialState: {
     activeRequests: 0,
     unreadNotificationCount: 0,
+    notifications: [],
     sessionCountdown: 0,
     navigationTarget: null,
     showSessionExpiryModal: false,
@@ -63,6 +65,14 @@ const appSlice = createSlice({
         managers: [],
       };
     },
+    fetchNotificationSuccess: (state, action) => {
+      state.notifications = action.payload.notifications;
+      state.unreadNotificationCount = action.payload.unreadCount;
+    },
+    fetchNotificationFailure: (state) => {
+      state.notifications = [];
+      state.unreadNotificationCount = 0;
+    },
     setSessionExpiryTime(state, action) {
       state.sessionExpiryTime = action.payload;
     },
@@ -102,5 +112,7 @@ export const {
   showSessionExpiryModal,
   navigateTo,
   clearNavigationTarget,
+  fetchNotificationFailure,
+  fetchNotificationSuccess,
 } = appSlice.actions;
 export default appSlice.reducer;

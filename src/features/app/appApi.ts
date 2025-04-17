@@ -1,5 +1,10 @@
 import api from "../../api/axiosInstance";
-import { Designation, Role, UserProfile } from "../../types/models";
+import {
+  Designation,
+  NotificationResponse,
+  Role,
+  UserProfile,
+} from "../../types/models";
 
 export const fetchManagersApi = async () => {
   const res = await api.get("/users?roleCode=MANAGER");
@@ -12,4 +17,19 @@ export const fetchDesignationsApi = async () => {
 export const fetchRolesApi = async () => {
   const res = await api.get("/users/roles");
   return res.data as Role[];
+};
+
+export const fetchNotificationsApi = async () => {
+  const res = await api.get("/notifications?limit=5");
+  return res.data as NotificationResponse;
+};
+
+export const fetchUserNames = async (userIds: number[]) => {
+  const params = new URLSearchParams();
+
+  userIds.forEach((value) => {
+    params.append(`userIds`, value.toString());
+  });
+  const res = await api.get("/users", { params });
+  return res.data as UserProfile[];
 };

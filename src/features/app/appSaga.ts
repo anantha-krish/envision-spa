@@ -3,13 +3,22 @@ import { all, call, put, takeLatest } from "redux-saga/effects";
 import {
   fetchDesignationsApi,
   fetchManagersApi,
+  fetchNotificationsApi,
   fetchRolesApi,
+  fetchUserNames,
 } from "./appApi";
 
 import toast from "react-hot-toast";
-import { Designation, Role, UserProfile } from "../../types/models";
+import {
+  Designation,
+  NotificationResponse,
+  Role,
+  UserProfile,
+} from "../../types/models";
 import {
   clearRegisterPageDropDownOptions,
+  fetchNotificationFailure,
+  fetchNotificationSuccess,
   fetchRegisterPageDropDownOptionsSuccess,
 } from "./appSlice";
 
@@ -48,6 +57,45 @@ function* clearRegisterPageDropdownOptionsSaga(): Generator<
     }
   }
 }
+function* fetchNotificationSaga() {
+  try {
+    const response = (yield call(
+      fetchNotificationsApi
+    )) as NotificationResponse;
+    const { unreadCount, notifications } = response;
+    const actorsArray = [
+      ...new Set(notifications.map((item) => item.actorIds[0])),
+    ];
+    const profiles = (yield call(fetchUserNames, actorsArray)) as UserProfile[];
+    const userMap = new Map(
+      profiles.map((user) => [`USER-${user.userId}`, user.firstName])
+    );
+    const updateNotifications = notifications.map((item) => {
+      return { ...item, message: replacePlaceholders(item.message, userMap) };
+    });
+
+    yield put(
+      fetchNotificationSuccess({
+        unreadCount,
+        notifications: updateNotifications,
+      })
+    );
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      toast.error(error.message);
+      yield put(fetchNotificationFailure());
+    }
+  }
+}
+function replacePlaceholders(
+  message: string,
+  map: Map<string, string>
+): string {
+  return message.replace(/%USER-\d+%/g, (match) => {
+    const key = match.replace(/%/g, ""); // remove `%`
+    return map.get(key) || match; // fallback to original if not found
+  });
+}
 
 export default function* appSaga() {
   yield takeLatest(
@@ -58,4 +106,5 @@ export default function* appSaga() {
     "CLEAR_REGISTER_DROPDOWN_OPTIONS",
     clearRegisterPageDropdownOptionsSaga
   );
+  yield takeLatest("FETCH_NOTIFICATIONS", fetchNotificationSaga);
 }

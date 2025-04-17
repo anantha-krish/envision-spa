@@ -1,7 +1,8 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useNotificationSocket } from "../utils/useNotificationSocket";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchNotifications } from "../features/app/appActions";
 
 const BellIcon = () => (
   <svg
@@ -23,37 +24,29 @@ const BellIcon = () => (
 export const NotificationDropdown: React.FC = () => {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
   useNotificationSocket(accessToken ?? "");
+
+  const [isOpen, setIsOpen] = useState(false); // Track the open/close state of the dropdown
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchNotifications());
+  }, [dispatch]);
   const unreadCount = useSelector(
     (state: RootState) => state.app.unreadNotificationCount
   );
-  const [isOpen, setIsOpen] = useState(false); // Track the open/close state of the dropdown
-  const dropdownRef = useRef<HTMLUListElement | null>(null); // Reference for the dropdown element
+  const notifications = useSelector(
+    (state: RootState) => state.app.notifications
+  );
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen); // Toggle the dropdown state
-  };
-
-  // Close the dropdown if the user clicks outside of it
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false); // Close the dropdown if click is outside
-        console.log(isOpen);
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [isOpen]);
   return (
     <>
       <button
         className="btn btn-ghost btn-circle"
         popoverTarget="popover-1"
-        onClick={toggleDropdown}
         style={{ anchorName: "--anchor-1" } as React.CSSProperties}
       >
         <div className="indicator">
@@ -66,18 +59,17 @@ export const NotificationDropdown: React.FC = () => {
         </div>
       </button>
       <ul
-        ref={dropdownRef}
-        className="dropdown dropdown-end menu w-sm rounded-box bg-base-100 shadow-sm"
+        className="dropdown dropdown-end menu w-sm rounded-box bg-base-100 shadow-sm p-8"
         popover="auto"
+        onToggle={toggleDropdown}
         id="popover-1"
         style={{ positionAnchor: "--anchor-1" } as React.CSSProperties}
       >
-        <li>
-          <a>Item 1</a>
-        </li>
-        <li>
-          <a>Item 2</a>
-        </li>
+        {notifications?.map((notification) => (
+          <li key={notification.id} className="min-h-10 p-2 shadow-blue-500">
+            {notification.message}
+          </li>
+        ))}
       </ul>
     </>
   );

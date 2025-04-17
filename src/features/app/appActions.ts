@@ -9,3 +9,7 @@ export const clearRegisterDropDownOptions = () => ({
 export const requestRefreshAccessToken = () => ({
   type: "REQUEST_ACCESS_TOKEN_REFRESH",
 });
+
+export const fetchNotifications = () => ({
+  type: "FETCH_NOTIFICATIONS",
+});

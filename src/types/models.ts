@@ -12,7 +12,26 @@ export interface Designation {
 
 export interface UserProfile {
   userId: number;
-  email: string;
+  email?: string;
   firstName: string;
   lastName: string;
 }
+
+export type Notification = {
+  id: string;
+  category: string;
+  ideaId: number;
+  type: string;
+  actorIds: number[];
+  message: string;
+  count: number;
+  updatedAt: string;
+  isRead: false;
+};
+
+export type NotificationResponse = {
+  unreadCount: number;
+  notifications: Notification[];
+  total: number;
+  hasMore: boolean;
+};
