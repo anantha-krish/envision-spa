@@ -12,3 +12,8 @@ export const registerAPI = async (data: {
 }) => {
   await api.post("http://localhost:8080/users/register", data);
 };
+
+export const refreshAccessTokenApi = async () => {
+  const res = await api.post("http://localhost:8080/users/refresh");
+  return res.data as { accessToken: string };
+};

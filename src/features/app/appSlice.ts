@@ -5,7 +5,9 @@ import { Designation, Role, UserProfile } from "../../types/models";
 const savedTheme = sessionStorage.getItem("theme") || "light";
 interface appState {
   theme: string;
+  showSessionExpiryModal: boolean;
   activeRequests: number;
+  unreadNotificationCount: number;
   dropdowns: {
     roles: Role[];
     designations: Designation[];
@@ -14,8 +16,11 @@ interface appState {
 }
 const appSlice = createSlice({
   name: "app",
+
   initialState: {
     activeRequests: 0,
+    unreadNotificationCount: 0,
+    showSessionExpiryModal: false,
     theme: savedTheme,
     dropdowns: {
       roles: [],
@@ -27,8 +32,17 @@ const appSlice = createSlice({
     requestStart: (state) => {
       state.activeRequests += 1;
     },
+    setNotificationCount: (state, action) => {
+      state.unreadNotificationCount = action.payload;
+    },
     requestEnd: (state) => {
       state.activeRequests = Math.max(state.activeRequests - 1, 0);
+    },
+    showSessionExpiryModal: (state) => {
+      state.showSessionExpiryModal = true;
+    },
+    hideSessionExpiryModal: (state) => {
+      state.showSessionExpiryModal = false;
     },
     fetchRegisterPageDropDownOptionsSuccess: (state, action) => {
       state.dropdowns.roles = action.payload.roles;
@@ -60,5 +74,8 @@ export const {
   clearRegisterPageDropDownOptions,
   requestStart,
   requestEnd,
+  setNotificationCount,
+  showSessionExpiryModal,
+  hideSessionExpiryModal,
 } = appSlice.actions;
 export default appSlice.reducer;

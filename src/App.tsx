@@ -14,7 +14,7 @@ const App = () => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
   return (
-    <div className="transition-all duration-1000 ease-in-out bg-gray-100 dark:bg-gray-900">
+    <div className=" relative transition-all duration-1000 ease-in-out bg-gray-100 dark:bg-gray-900">
       <Loader />
       <Navbar />
       <Toaster position="top-right" />

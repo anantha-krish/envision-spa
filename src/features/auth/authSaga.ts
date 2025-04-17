@@ -1,8 +1,8 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import toast from "react-hot-toast";
 import { AUTH_LOGIN_REQUEST, AUTH_REGISTER_REQUEST } from "./AuthActions";
-import { loginAPI, registerAPI } from "./authApi";
-import { loginSuccess } from "./authSlice";
+import { loginAPI, refreshAccessTokenApi, registerAPI } from "./authApi";
+import { loginSuccess, logout } from "./authSlice";
 import { router } from "../../router/rootRouter";
 
 type ActionWithPayload = {
@@ -33,7 +33,25 @@ function* handleRegister(action: ActionWithPayload): Generator {
   }
 }
 
+function* refreshAccessTokenSaga(): Generator<
+  unknown,
+  void,
+  { accessToken: string }
+> {
+  try {
+    const response = yield call(refreshAccessTokenApi);
+    yield put(loginSuccess(response));
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      toast.error("Session expired. Please log in again.");
+      yield put(logout());
+      window.location.href = "/login";
+    }
+  }
+}
+
 export default function* authSaga() {
   yield takeLatest(AUTH_LOGIN_REQUEST, handleLogin);
   yield takeLatest(AUTH_REGISTER_REQUEST, handleRegister);
+  yield takeLatest("REQUEST_ACCESS_TOKEN_REFRESH", refreshAccessTokenSaga);
 }

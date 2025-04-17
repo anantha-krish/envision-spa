@@ -21,7 +21,7 @@ export const ThemeSwitch = () => {
         onChange={() => dispatch(toggleTheme())}
         className="peer opacity-0 w-0 h-0"
       />
-      <span className="absolute inset-0 bg-gray-200 rounded-full cursor-pointer transition-colors duration-500 peer-checked:bg-sky-500 border border-sky-500"></span>
+      <span className="absolute inset-0 bg-gray-200 rounded-full cursor-pointer transition-colors duration-500 peer-checked:bg-sky-500 border border-sky-700"></span>
 
       <span className={radioStyle}>
         {theme === "dark" ? (
