@@ -5,8 +5,11 @@ import { Designation, Role, UserProfile } from "../../types/models";
 const savedTheme = sessionStorage.getItem("theme") || "light";
 interface appState {
   theme: string;
-  showSessionExpiryModal: boolean;
   activeRequests: number;
+  navigationTarget: string | null;
+  sessionCountdown: number;
+  showSessionExpiryModal: boolean;
+  sessionExpiryTime: number | null;
   unreadNotificationCount: number;
   dropdowns: {
     roles: Role[];
@@ -20,7 +23,10 @@ const appSlice = createSlice({
   initialState: {
     activeRequests: 0,
     unreadNotificationCount: 0,
+    sessionCountdown: 0,
+    navigationTarget: null,
     showSessionExpiryModal: false,
+    sessionExpiryTime: null,
     theme: savedTheme,
     dropdowns: {
       roles: [],
@@ -32,18 +38,19 @@ const appSlice = createSlice({
     requestStart: (state) => {
       state.activeRequests += 1;
     },
+    navigateTo: (state, action) => {
+      state.navigationTarget = action.payload;
+    },
+    clearNavigationTarget: (state) => {
+      state.navigationTarget = null;
+    },
     setNotificationCount: (state, action) => {
       state.unreadNotificationCount = action.payload;
     },
     requestEnd: (state) => {
       state.activeRequests = Math.max(state.activeRequests - 1, 0);
     },
-    showSessionExpiryModal: (state) => {
-      state.showSessionExpiryModal = true;
-    },
-    hideSessionExpiryModal: (state) => {
-      state.showSessionExpiryModal = false;
-    },
+
     fetchRegisterPageDropDownOptionsSuccess: (state, action) => {
       state.dropdowns.roles = action.payload.roles;
       state.dropdowns.managers = action.payload.managers;
@@ -55,6 +62,20 @@ const appSlice = createSlice({
         designations: [],
         managers: [],
       };
+    },
+    setSessionExpiryTime(state, action) {
+      state.sessionExpiryTime = action.payload;
+    },
+    clearSessionExpiryData(state) {
+      state.sessionExpiryTime = null;
+      state.sessionCountdown = 0;
+      state.showSessionExpiryModal = false;
+    },
+    showSessionExpiryModal(state) {
+      state.showSessionExpiryModal = true;
+    },
+    updateSessionCountdown(state, action) {
+      state.sessionCountdown = action.payload;
     },
     toggleTheme: (state) => {
       state.theme = state.theme === "dark" ? "light" : "dark";
@@ -75,7 +96,11 @@ export const {
   requestStart,
   requestEnd,
   setNotificationCount,
+  clearSessionExpiryData,
+  setSessionExpiryTime,
+  updateSessionCountdown,
   showSessionExpiryModal,
-  hideSessionExpiryModal,
+  navigateTo,
+  clearNavigationTarget,
 } = appSlice.actions;
 export default appSlice.reducer;

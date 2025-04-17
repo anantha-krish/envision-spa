@@ -7,11 +7,11 @@ import {
 } from "./appApi";
 
 import toast from "react-hot-toast";
+import { Designation, Role, UserProfile } from "../../types/models";
 import {
   clearRegisterPageDropDownOptions,
   fetchRegisterPageDropDownOptionsSuccess,
 } from "./appSlice";
-import { Designation, Role, UserProfile } from "../../types/models";
 
 function* fetchRegisterPageDropdownOptionsSaga(): Generator<
   unknown,

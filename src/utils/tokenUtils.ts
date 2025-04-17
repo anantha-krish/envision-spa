@@ -27,9 +27,21 @@ export function decodeJwt(token: string): JwtPayload | null {
  * @returns true if expired, false otherwise.
  */
 export function isJwtExpired(token: string): boolean {
+  if (!token) return true;
   const decoded = decodeJwt(token);
   if (!decoded || !decoded.exp) return true;
 
   const currentTime = Math.floor(Date.now() / 1000);
   return decoded.exp < currentTime;
+}
+
+export function getExpiryTimeFromToken(token: string): number | null {
+  try {
+    const decoded = jwtDecode<{ exp: number }>(token);
+    if (!decoded.exp) return null;
+    return decoded.exp * 1000; // convert to milliseconds
+  } catch (error) {
+    console.error("Invalid JWT token:", error);
+    return null;
+  }
 }

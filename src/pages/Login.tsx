@@ -43,6 +43,7 @@ const Login = () => {
             validationSchema={loginSchema}
             onSubmit={(values) => {
               dispatch(loginRequest(values));
+              navigate({ to: "/" });
             }}
           >
             {({ errors, touched }) => (

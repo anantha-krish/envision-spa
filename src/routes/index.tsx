@@ -1,9 +1,9 @@
 import { createRoute, redirect } from "@tanstack/react-router";
 import { lazy } from "react";
 import Home from "../pages/Home";
-import { rootRoute } from "./__root";
 import { Logout } from "../pages/Logout";
 import { PermissionError } from "../pages/PermissionError";
+import { rootRoute } from "./__root";
 
 const Login = lazy(() => import("../pages/Login"));
 const Register = lazy(() => import("../pages/Register"));

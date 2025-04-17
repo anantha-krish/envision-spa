@@ -1,5 +1,6 @@
 export const AUTH_LOGIN_REQUEST = "AUTH_LOGIN_REQUEST";
 export const AUTH_REGISTER_REQUEST = "AUTH_REGISTER_REQUEST";
+export const REQUEST_ACCESS_TOKEN_REFRESH = "REQUEST_ACCESS_TOKEN_REFRESH";
 
 export const loginRequest = ({
   email,

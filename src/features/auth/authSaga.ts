@@ -1,9 +1,10 @@
-import { call, put, takeLatest } from "redux-saga/effects";
 import toast from "react-hot-toast";
+import { call, put, takeLatest } from "redux-saga/effects";
+
 import { AUTH_LOGIN_REQUEST, AUTH_REGISTER_REQUEST } from "./AuthActions";
 import { loginAPI, refreshAccessTokenApi, registerAPI } from "./authApi";
 import { loginSuccess, logout } from "./authSlice";
-import { router } from "../../router/rootRouter";
+import { navigateTo } from "../app/appSlice";
 
 type ActionWithPayload = {
   type: string;
@@ -14,12 +15,15 @@ type ActionWithPayload = {
 function* handleLogin(action: ActionWithPayload): Generator {
   try {
     const response = yield call(loginAPI, action.payload);
+    if (!response.accessToken) {
+      throw new Error("Token missing");
+    }
     yield put(loginSuccess(response));
     toast.success("Login successful!");
-    router.navigate({ to: "/" });
+    yield put(navigateTo("/"));
   } catch (err) {
-    toast.error("Login failed ");
-    console.log(err);
+    toast.error("Login failed");
+    console.error(err);
   }
 }
 
@@ -49,7 +53,6 @@ function* refreshAccessTokenSaga(): Generator<
     }
   }
 }
-
 export default function* authSaga() {
   yield takeLatest(AUTH_LOGIN_REQUEST, handleLogin);
   yield takeLatest(AUTH_REGISTER_REQUEST, handleRegister);
