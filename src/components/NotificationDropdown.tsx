@@ -65,11 +65,15 @@ export const NotificationDropdown: React.FC = () => {
         id="popover-1"
         style={{ positionAnchor: "--anchor-1" } as React.CSSProperties}
       >
-        {notifications?.map((notification) => (
-          <li key={notification.id} className="min-h-10 p-2 shadow-blue-500">
-            {notification.message}
-          </li>
-        ))}
+        {notifications.length > 0 ? (
+          notifications?.map((notification) => (
+            <li key={notification.id} className="min-h-10 p-2 shadow-blue-500">
+              {notification.message}
+            </li>
+          ))
+        ) : (
+          <li>There are no notifications to show.</li>
+        )}
       </ul>
     </>
   );

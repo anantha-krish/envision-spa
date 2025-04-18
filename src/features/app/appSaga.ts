@@ -63,16 +63,23 @@ function* fetchNotificationSaga() {
       fetchNotificationsApi
     )) as NotificationResponse;
     const { unreadCount, notifications } = response;
-    const actorsArray = [
-      ...new Set(notifications.map((item) => item.actorIds[0])),
-    ];
-    const profiles = (yield call(fetchUserNames, actorsArray)) as UserProfile[];
-    const userMap = new Map(
-      profiles.map((user) => [`USER-${user.userId}`, user.firstName])
-    );
-    const updateNotifications = notifications.map((item) => {
-      return { ...item, message: replacePlaceholders(item.message, userMap) };
-    });
+    let updateNotifications = notifications;
+
+    if (notifications.length > 0) {
+      const actorsArray = [
+        ...new Set(notifications.map((item) => item.actorIds[0])),
+      ];
+      const profiles = (yield call(
+        fetchUserNames,
+        actorsArray
+      )) as UserProfile[];
+      const userMap = new Map(
+        profiles.map((user) => [`USER-${user.userId}`, user.firstName])
+      );
+      updateNotifications = notifications.map((item) => {
+        return { ...item, message: replacePlaceholders(item.message, userMap) };
+      });
+    }
 
     yield put(
       fetchNotificationSuccess({
