@@ -1,6 +1,7 @@
 // sagas.ts
 import { all, call, put, takeLatest } from "redux-saga/effects";
 import {
+  fetchAllTagsApi,
   fetchAllUsersApi,
   fetchDesignationsApi,
   fetchManagersApi,
@@ -14,6 +15,7 @@ import {
   Designation,
   NotificationResponse,
   Role,
+  Tag,
   UserProfile,
   UserWithCompleteProfiles,
 } from "../../types/models";
@@ -52,14 +54,15 @@ function* fetchRegisterPageDropdownOptionsSaga(): Generator<
 function* fetchIdeaPageDropdownOptionsSaga(): Generator<
   unknown,
   void,
-  [UserProfile[], UserWithCompleteProfiles[]]
+  [UserProfile[], UserWithCompleteProfiles[], Tag[]]
 > {
   try {
-    const [managers, users] = yield all([
+    const [managers, users, tags] = yield all([
       call(fetchManagersApi),
       call(fetchAllUsersApi),
+      call(fetchAllTagsApi),
     ]);
-    yield put(fetchIdeaPageDropDownOptionsSuccess({ managers, users }));
+    yield put(fetchIdeaPageDropDownOptionsSuccess({ managers, users, tags }));
   } catch (error: unknown) {
     if (error instanceof Error) {
       yield put(clearIdeaPageDropDownOptions());

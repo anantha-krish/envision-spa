@@ -1,13 +1,22 @@
 import { Formik, FormikProps } from "formik";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { fetchIdeaDropDownOptions } from "../features/app/appActions";
+import {
+  createNewTagApi,
+  submitNewIdeaApi,
+  uploadNewAttachementsApi,
+} from "../features/app/appApi";
+import { addNewTagOnSuccess } from "../features/app/appSlice";
 import { RootState } from "../store";
 import { ConfirmationPopup } from "./ConfirmPopup";
+import { CreatableFormSelect, SelectOptionType } from "./CreateableFormSelect";
 import { FormButton } from "./FormButton";
 import { FormInput } from "./FormInput";
+import { IdeaFileInputUploader } from "./IdeaFileInputUploader";
 import { SearchableFormSelect } from "./SearchableFormSelect";
 
 const IdeaSchema = Yup.object({
@@ -44,15 +53,18 @@ const SubmitNewIdeaModal = ({
 
   const loggedInUserId = useSelector((state: RootState) => state.auth.userId);
   const users = useSelector((state: RootState) => state.app.dropdowns.users);
+  const tagList = useSelector((state: RootState) => state.app.dropdowns.tags);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const initialValues = {
     title: "",
     summary: "",
     description: "",
-    statusId: -1,
+    statusId: 1,
     tags: [] as number[],
     managerId: -1,
     submittedBy: [loggedInUserId] as number[],
   };
+
   const handleAttemptClose = () => {
     const formik = formikRef.current;
     if (
@@ -111,8 +123,18 @@ const SubmitNewIdeaModal = ({
             initialValues={{ ...initialValues, submittedBy: [loggedInUserId] }}
             validationSchema={IdeaSchema}
             enableReinitialize
-            onSubmit={(values) => {
-              console.log(values);
+            onSubmit={async (values) => {
+              const formData = new FormData();
+              if (selectedFiles.length > 0) {
+                selectedFiles.forEach((file: File) =>
+                  formData.append("files", file)
+                );
+              }
+              const { status, data } = await submitNewIdeaApi(values);
+              if (status === 201 && data.ideaId) {
+                await uploadNewAttachementsApi(data.ideaId, formData);
+              }
+              toast.success(`Idea: ${data.title} created successfully `);
             }}
           >
             {({ handleSubmit, errors, touched }) => (
@@ -139,6 +161,24 @@ const SubmitNewIdeaModal = ({
                         maxLength={300}
                         touched={touched}
                       />
+                      <CreatableFormSelect
+                        name="tags"
+                        label="Tag"
+                        isMulti
+                        onCreateOption={async (val) => {
+                          const { id, name } = await createNewTagApi(val);
+                          dispatch(addNewTagOnSuccess({ id, name }));
+                          const newOption: SelectOptionType = {
+                            label: name,
+                            value: id,
+                          };
+                          return Promise.resolve(newOption);
+                        }}
+                        options={tagList.map(({ id, name }) => ({
+                          value: id,
+                          label: name,
+                        }))}
+                      />
                       <FormInput
                         name="description"
                         label="Description"
@@ -148,6 +188,10 @@ const SubmitNewIdeaModal = ({
                         maxLength={300}
                         touched={touched}
                       />
+                      <IdeaFileInputUploader
+                        setSelectedFiles={setSelectedFiles}
+                      />
+
                       <SearchableFormSelect
                         name="managerId"
                         label="Reporting Manager"

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   Designation,
   Role,
+  Tag,
   UserProfile,
   UserWithCompleteProfiles,
 } from "../../types/models";
@@ -22,6 +23,7 @@ interface appState {
     designations: Designation[];
     managers: UserProfile[];
     users: UserWithCompleteProfiles[];
+    tags: Tag[];
   };
 }
 const appSlice = createSlice({
@@ -41,6 +43,7 @@ const appSlice = createSlice({
       designations: [],
       managers: [],
       users: [],
+      tags: [],
     },
   } as appState,
   reducers: {
@@ -68,9 +71,15 @@ const appSlice = createSlice({
     fetchIdeaPageDropDownOptionsSuccess: (state, action) => {
       state.dropdowns.managers = action.payload.managers;
       state.dropdowns.users = action.payload.users;
+      state.dropdowns.tags = action.payload.tags;
+    },
+    addNewTagOnSuccess: (state, action) => {
+      state.dropdowns.tags = [...state.dropdowns.tags, action.payload];
     },
     clearIdeaPageDropDownOptions: (state) => {
       state.dropdowns.managers = [];
+      state.dropdowns.users = [];
+      state.dropdowns.tags = [];
     },
     clearRegisterPageDropDownOptions: (state) => {
       state.dropdowns.roles = [];
@@ -128,5 +137,6 @@ export const {
   clearNavigationTarget,
   fetchNotificationFailure,
   fetchNotificationSuccess,
+  addNewTagOnSuccess,
 } = appSlice.actions;
 export default appSlice.reducer;

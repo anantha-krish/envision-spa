@@ -41,3 +41,20 @@ export type NotificationResponse = {
   total: number;
   hasMore: boolean;
 };
+export type Tag = {
+  id: string;
+  name: string;
+};
+export type IdeaDetailsReq = {
+  title: string;
+  summary: string;
+  description: string;
+  statusId: number;
+  tags: number[];
+  managerId: number;
+  submittedBy: number[];
+};
+
+export interface IdeaDetailsResponse extends IdeaDetailsReq {
+  ideaId: number;
+}
