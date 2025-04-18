@@ -94,3 +94,20 @@ html {
 @utility h-screen-minus-nav {
  min-height: calc(100vh - 64px);
 }
+.quill.custom-quill .ql-snow{
+border:none;
+}
+
+.custom-quill {
+    width: 100%;
+    min-height: 0;
+    padding: 0;
+}
+
+.custom-quill .ql-snow .ql-editor {
+    --line-height: 1.42;
+    padding-inline: 12px;
+    min-height: calc(3 * 0.875rem * var(--line-height) + 24px);
+    max-height: calc(10 * 0.875rem * var(--line-height)+ 24px);
+}
+

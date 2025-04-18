@@ -7,9 +7,15 @@ import { FormInput } from "./FormInput";
 const IdeaSchema = Yup.object({
   title: Yup.string().required("Idea title is required."),
   summary: Yup.string().required("Idea Summary is required."),
-  tags: Yup.array().of(Yup.number()).min(1),
+  description: Yup.string()
+    .transform((value) => {
+      const text = value.replace(/<[^>]*>/g, "").trim(); // strip HTML
+      return text;
+    })
+    .required("Idea Description is required."),
+  /* tags: Yup.array().of(Yup.number()).min(1),
   managerId: Yup.number().optional(),
-  submittedBy: Yup.array().of(Yup.number()).min(1),
+  submittedBy: Yup.array().of(Yup.number()).min(1),*/
 });
 
 const initialValues = {
@@ -61,7 +67,7 @@ const SubmitNewIdeaModal = ({
         {/* Formik Form */}
         <Formik
           initialValues={initialValues}
-          // validationSchema={IdeaSchema}
+          validationSchema={IdeaSchema}
           onSubmit={(values) => {
             console.log(values);
           }}
@@ -74,7 +80,8 @@ const SubmitNewIdeaModal = ({
                   label="Title"
                   type="textarea"
                   errors={errors}
-                  rows={1}
+                  minRows={1}
+                  maxRows={2}
                   maxLength={100}
                   touched={touched}
                 />
@@ -84,6 +91,7 @@ const SubmitNewIdeaModal = ({
                   label="Summary"
                   type="textarea"
                   errors={errors}
+                  minRows={2}
                   rows={5}
                   maxLength={300}
                   touched={touched}

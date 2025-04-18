@@ -1,5 +1,11 @@
 import clsx from "clsx";
-import { ErrorMessage, Field, FormikErrors, FormikValues } from "formik";
+import {
+  ErrorMessage,
+  Field,
+  FieldProps,
+  FormikErrors,
+  FormikValues,
+} from "formik";
 import TextareaAutosize from "react-textarea-autosize";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
@@ -14,6 +20,9 @@ interface FormInputProps {
   rows?: number;
   enableResize?: boolean;
   maxLength?: number;
+  values?: FormikValues;
+  minRows?: number;
+  maxRows?: number;
 }
 
 export const FormInput = ({
@@ -24,6 +33,8 @@ export const FormInput = ({
   touched = {},
   autoComplete,
   rows = 3,
+  minRows = 3,
+  maxRows = 3,
   enableResize = false,
   maxLength = 0,
 }: FormInputProps) => {
@@ -33,6 +44,8 @@ export const FormInput = ({
         <Field
           as={TextareaAutosize}
           rows={rows}
+          minRows={minRows}
+          maxRows={maxRows}
           name={name}
           autoComplete={autoComplete}
           className={clsx(
@@ -46,29 +59,29 @@ export const FormInput = ({
           )}
           placeholder={label}
           {...(maxLength > 0 && { maxLength })}
-          required
         />
       );
     } else if (type === "quilltextarea") {
       return (
-        <Field
-          as={ReactQuill}
-          rows={rows}
-          name={name}
-          autoComplete={autoComplete}
-          className={clsx(
-            "rounded-xl",
-            {
-              "border-2 border-red-400": errors[name] && touched[name],
-            },
-            {
-              "resize-none ": !enableResize,
-            }
-          )}
-          placeholder={label}
-          {...(maxLength > 0 && { maxLength })}
-          required
-        />
+        <Field name={name}>
+          {({ field, form }: FieldProps) => {
+            return (
+              <ReactQuill
+                className={clsx("textarea textarea-primary custom-quill ", {
+                  "textarea-error": form.errors[name] && form.touched[name],
+                })}
+                theme={"snow"}
+                value={field.value}
+                onChange={(val) => form.setFieldValue(name, val)}
+                onBlur={async () => {
+                  await form.setFieldTouched(name, true, false);
+                  await form.validateField(name);
+                }}
+                placeholder={label}
+              />
+            );
+          }}
+        </Field>
       );
     }
 
@@ -93,7 +106,9 @@ export const FormInput = ({
       >
         <span>{label}</span>
         {type === "textarea" && maxLength > 0 && (
-          <span className="text-cyan-600">(Max {maxLength} characters)</span>
+          <span className="text-gray-400 text-xs align-bottom">
+            *Max {maxLength} chars
+          </span>
         )}
       </label>
       {InputComponent()}
