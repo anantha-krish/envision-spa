@@ -46,7 +46,7 @@ const Login = () => {
               navigate({ to: "/" });
             }}
           >
-            {({ errors, touched }) => (
+            {({ errors, touched, values, handleBlur, handleChange }) => (
               <Form className="divide-y divide-gray-200">
                 <div className="space-y-1 pt-6 text-base leading-6 sm:text-lg sm:leading-7">
                   <FormInput

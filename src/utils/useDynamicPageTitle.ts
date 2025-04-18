@@ -8,7 +8,7 @@ export function useDynamicTitle() {
 
   useEffect(() => {
     const titles: Record<string, string> = {
-      "/desktop": "Home",
+      "/ideas": "Ideas",
       "/dashboard": "Dashboard",
       "/login": "Login",
       "/logout": "Logout",
