@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Designation, Role, UserProfile } from "../../types/models";
+import {
+  Designation,
+  Role,
+  UserProfile,
+  UserWithCompleteProfiles,
+} from "../../types/models";
 import { Notification } from "../../types/models";
 
 const savedTheme = sessionStorage.getItem("theme") || "light";
@@ -16,6 +21,7 @@ interface appState {
     roles: Role[];
     designations: Designation[];
     managers: UserProfile[];
+    users: UserWithCompleteProfiles[];
   };
 }
 const appSlice = createSlice({
@@ -34,6 +40,7 @@ const appSlice = createSlice({
       roles: [],
       designations: [],
       managers: [],
+      users: [],
     },
   } as appState,
   reducers: {
@@ -58,12 +65,17 @@ const appSlice = createSlice({
       state.dropdowns.managers = action.payload.managers;
       state.dropdowns.designations = action.payload.designations;
     },
+    fetchIdeaPageDropDownOptionsSuccess: (state, action) => {
+      state.dropdowns.managers = action.payload.managers;
+      state.dropdowns.users = action.payload.users;
+    },
+    clearIdeaPageDropDownOptions: (state) => {
+      state.dropdowns.managers = [];
+    },
     clearRegisterPageDropDownOptions: (state) => {
-      state.dropdowns = {
-        roles: [],
-        designations: [],
-        managers: [],
-      };
+      state.dropdowns.roles = [];
+      state.dropdowns.managers = [];
+      state.dropdowns.designations = [];
     },
     fetchNotificationSuccess: (state, action) => {
       state.notifications = action.payload.notifications;
@@ -102,7 +114,9 @@ export const {
   toggleTheme,
   setTheme,
   fetchRegisterPageDropDownOptionsSuccess,
+  fetchIdeaPageDropDownOptionsSuccess,
   clearRegisterPageDropDownOptions,
+  clearIdeaPageDropDownOptions,
   requestStart,
   requestEnd,
   setNotificationCount,

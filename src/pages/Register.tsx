@@ -103,7 +103,7 @@ const Register = () => {
                 dispatch(registerRequest(values));
               }}
             >
-              {({ handleSubmit, handleChange, resetForm, errors, touched }) => (
+              {({ handleSubmit, resetForm, errors, touched }) => (
                 <form autoComplete="off" onSubmit={handleSubmit}>
                   <div className="flex flex-row gap-4">
                     <div className="flex flex-col flex-1/2">
@@ -172,13 +172,7 @@ const Register = () => {
                   </div>
                   <div className="flex flex-row gap-4">
                     <div className="flex flex-col flex-1/2">
-                      <FormSelect
-                        name="role"
-                        label="Select Role"
-                        onChange={handleChange}
-                        errors={errors}
-                        touched={touched}
-                      >
+                      <FormSelect name="role" label="Select Role">
                         {filterRoles.map((role) => (
                           <option key={`role-${role.id}`} value={role.roleCode}>
                             {role.roleName}
@@ -187,13 +181,7 @@ const Register = () => {
                       </FormSelect>
                     </div>
                     <div className="flex flex-col flex-1/2">
-                      <FormSelect
-                        name="designation"
-                        label="Select Designation"
-                        onChange={handleChange}
-                        errors={errors}
-                        touched={touched}
-                      >
+                      <FormSelect name="designation" label="Select Designation">
                         {designations.map((designation) => (
                           <option
                             key={`designation-${designation.id}`}
@@ -207,13 +195,7 @@ const Register = () => {
                   </div>
                   <div className="flex flex-row gap-4">
                     <div className="flex flex-col flex-1/2">
-                      <FormSelect
-                        name="managerId"
-                        label="Reporting Manager"
-                        onChange={handleChange}
-                        errors={errors}
-                        touched={touched}
-                      >
+                      <FormSelect name="managerId" label="Reporting Manager">
                         {managers.map((manager) => (
                           <option
                             key={`manager-${manager.userId}`}

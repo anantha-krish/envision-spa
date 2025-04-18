@@ -1,25 +1,17 @@
-import { ErrorMessage } from "formik";
+import { ErrorMessage, Field, FieldProps } from "formik";
 import { PropsWithChildren } from "react";
+
 interface FormSelectProps {
   name: string;
   label: string;
   type?: string;
-  defaultValue?: string;
-  touched?: Record<string, boolean>;
-  errors?: Record<string, string>;
-  onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   autoComplete?: string;
-  options?: Array<{ key: string; value: string; label: string }>;
 }
 
 export const FormSelect = ({
   name,
   label,
   children,
-  errors = {},
-  onChange,
-  touched = {},
-  defaultValue = "",
   autoComplete,
 }: FormSelectProps & PropsWithChildren) => {
   return (
@@ -30,20 +22,27 @@ export const FormSelect = ({
       >
         {label}
       </label>
-      <select
-        name={name}
-        defaultValue={defaultValue}
-        autoComplete={autoComplete}
-        onChange={onChange}
-        className={`select select-primary ${
-          errors[name] && touched[name]
-            ? "border-red-500! focus:ring-red-500!"
-            : ""
-        }`}
-      >
-        <option value="">Please select</option>
-        {children}
-      </select>
+      <Field name={name}>
+        {({ field, form }: FieldProps) => (
+          <select
+            id={name}
+            name={name}
+            value={field.value}
+            autoComplete={autoComplete}
+            onChange={(event) => {
+              form.setFieldValue(name, event.target.value);
+            }}
+            className={`select select-primary ${
+              form.errors[name] && form.touched[name]
+                ? "border-red-500 focus:ring-red-500"
+                : ""
+            }`}
+          >
+            <option value="">Please select</option>
+            {children}
+          </select>
+        )}
+      </Field>
       <div className="mt-1 min-h-6">
         <ErrorMessage
           name={name}

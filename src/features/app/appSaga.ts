@@ -1,6 +1,7 @@
 // sagas.ts
 import { all, call, put, takeLatest } from "redux-saga/effects";
 import {
+  fetchAllUsersApi,
   fetchDesignationsApi,
   fetchManagersApi,
   fetchNotificationsApi,
@@ -14,9 +15,12 @@ import {
   NotificationResponse,
   Role,
   UserProfile,
+  UserWithCompleteProfiles,
 } from "../../types/models";
 import {
+  clearIdeaPageDropDownOptions,
   clearRegisterPageDropDownOptions,
+  fetchIdeaPageDropDownOptionsSuccess,
   fetchNotificationFailure,
   fetchNotificationSuccess,
   fetchRegisterPageDropDownOptionsSuccess,
@@ -40,6 +44,35 @@ function* fetchRegisterPageDropdownOptionsSaga(): Generator<
   } catch (error: unknown) {
     if (error instanceof Error) {
       yield put(clearRegisterPageDropDownOptions());
+      toast.error(error.message);
+    }
+  }
+}
+
+function* fetchIdeaPageDropdownOptionsSaga(): Generator<
+  unknown,
+  void,
+  [UserProfile[], UserWithCompleteProfiles[]]
+> {
+  try {
+    const [managers, users] = yield all([
+      call(fetchManagersApi),
+      call(fetchAllUsersApi),
+    ]);
+    yield put(fetchIdeaPageDropDownOptionsSuccess({ managers, users }));
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      yield put(clearIdeaPageDropDownOptions());
+      toast.error(error.message);
+    }
+  }
+}
+
+function* clearIdeaPageDropdownOptionsSaga(): Generator<unknown, void, void> {
+  try {
+    yield put(clearIdeaPageDropDownOptions());
+  } catch (error: unknown) {
+    if (error instanceof Error) {
       toast.error(error.message);
     }
   }
@@ -112,6 +145,14 @@ export default function* appSaga() {
   yield takeLatest(
     "CLEAR_REGISTER_DROPDOWN_OPTIONS",
     clearRegisterPageDropdownOptionsSaga
+  );
+  yield takeLatest(
+    "FETCH_IDEA_DROPDOWN_OPTIONS",
+    fetchIdeaPageDropdownOptionsSaga
+  );
+  yield takeLatest(
+    "CLEAR_IDEA_DROPDOWN_OPTIONS",
+    clearIdeaPageDropdownOptionsSaga
   );
   yield takeLatest("FETCH_NOTIFICATIONS", fetchNotificationSaga);
 }

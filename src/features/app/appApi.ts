@@ -4,6 +4,7 @@ import {
   NotificationResponse,
   Role,
   UserProfile,
+  UserWithCompleteProfiles,
 } from "../../types/models";
 
 export const fetchManagersApi = async () => {
@@ -32,4 +33,9 @@ export const fetchUserNames = async (userIds: number[]) => {
   });
   const res = await api.get("/users", { params });
   return res.data as UserProfile[];
+};
+
+export const fetchAllUsersApi = async () => {
+  const res = await api.get("/users");
+  return res.data as UserWithCompleteProfiles[];
 };

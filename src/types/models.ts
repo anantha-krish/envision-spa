@@ -16,6 +16,12 @@ export interface UserProfile {
   firstName: string;
   lastName: string;
 }
+export interface UserWithCompleteProfiles extends UserProfile {
+  email: string;
+  roleCode: Pick<Role, "roleCode">;
+  designationCode: Pick<Designation, "designationCode">;
+  managerId?: number;
+}
 
 export type Notification = {
   id: string;
