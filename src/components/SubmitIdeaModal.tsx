@@ -24,16 +24,6 @@ const IdeaSchema = Yup.object({
   submittedBy: Yup.array().of(Yup.number()).min(1),*/
 });
 
-const initialValues = {
-  title: "",
-  summary: "",
-  description: "",
-  statusId: -1,
-  tags: [] as number[],
-  managerId: -1,
-  submittedBy: [] as number[],
-};
-
 const SubmitNewIdeaModal = ({
   isOpen,
   onClose,
@@ -47,6 +37,18 @@ const SubmitNewIdeaModal = ({
   const managers = useSelector(
     (state: RootState) => state.app.dropdowns.managers
   );
+
+  const loggedInUserId = useSelector((state: RootState) => state.auth.userId);
+  const users = useSelector((state: RootState) => state.app.dropdowns.users);
+  const initialValues = {
+    title: "",
+    summary: "",
+    description: "",
+    statusId: -1,
+    tags: [] as number[],
+    managerId: -1,
+    submittedBy: [loggedInUserId] as number[],
+  };
   const handleAttemptClose = () => {
     const formik = formikRef.current;
     if (
@@ -59,10 +61,10 @@ const SubmitNewIdeaModal = ({
     }
   };
   const dispatch = useDispatch();
-
+  const refetch = managers.length == 0 || users.length == 0;
   useEffect(() => {
     if (isOpen) {
-      if (managers.length == 0) {
+      if (refetch) {
         dispatch(fetchIdeaDropDownOptions());
       }
       document.body.classList.add("modal-open");
@@ -73,7 +75,7 @@ const SubmitNewIdeaModal = ({
       modalRef.current?.close();
     }
     return () => document.body.classList.remove("modal-open");
-  }, [dispatch, isOpen, managers.length]);
+  }, [dispatch, isOpen, refetch]);
 
   return ReactDOM.createPortal(
     <>
@@ -94,8 +96,9 @@ const SubmitNewIdeaModal = ({
             innerRef={(instance) => {
               formikRef.current = instance;
             }}
-            initialValues={initialValues}
+            initialValues={{ ...initialValues, submittedBy: [loggedInUserId] }}
             validationSchema={IdeaSchema}
+            enableReinitialize
             onSubmit={(values) => {
               console.log(values);
             }}
@@ -148,16 +151,16 @@ const SubmitNewIdeaModal = ({
                           </option>
                         ))}
                       </FormSelect>
-                      <FormSelect name="managerId" label="Reporting Manager">
-                        {managers.map((manager) => (
+                      <FormSelect name="submittedBy" label="Contributors">
+                        {users.map((user) => (
                           <option
-                            key={`manager-${manager.userId}`}
-                            value={manager.userId}
+                            key={`user-${user.userId}`}
+                            value={user.userId}
                           >
                             {[
-                              manager.firstName,
-                              manager.lastName,
-                              `<${manager.email}>`,
+                              user.firstName,
+                              user.lastName,
+                              `<${user.email}>`,
                             ].join(" ")}
                           </option>
                         ))}
