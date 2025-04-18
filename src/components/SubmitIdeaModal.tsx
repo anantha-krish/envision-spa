@@ -1,14 +1,14 @@
 import { Formik, FormikProps } from "formik";
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
-import * as Yup from "yup";
-import { FormInput } from "./FormInput";
-import { ConfirmationPopup } from "./ConfirmPopup";
-import { FormSelect } from "./FormSelect";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
+import * as Yup from "yup";
 import { fetchIdeaDropDownOptions } from "../features/app/appActions";
+import { RootState } from "../store";
+import { ConfirmationPopup } from "./ConfirmPopup";
 import { FormButton } from "./FormButton";
+import { FormInput } from "./FormInput";
+import { SearchableFormSelect } from "./SearchableFormSelect";
 
 const IdeaSchema = Yup.object({
   title: Yup.string().required("Idea title is required."),
@@ -19,9 +19,12 @@ const IdeaSchema = Yup.object({
       return text;
     })
     .required("Idea Description is required."),
-  /* tags: Yup.array().of(Yup.number()).min(1),
+  tags: Yup.array().of(Yup.number()).min(1),
   managerId: Yup.number().optional(),
-  submittedBy: Yup.array().of(Yup.number()).min(1),*/
+  submittedBy: Yup.array()
+    .of(Yup.number())
+    .min(1)
+    .required("Submitted by is required"),
 });
 
 const SubmitNewIdeaModal = ({
@@ -34,6 +37,7 @@ const SubmitNewIdeaModal = ({
   const modalRef = useRef<null | HTMLDialogElement>(null);
   const formikRef = useRef<FormikProps<typeof initialValues> | null>(null);
   const confirmRef = useRef<null | HTMLDialogElement>(null);
+
   const managers = useSelector(
     (state: RootState) => state.app.dropdowns.managers
   );
@@ -70,6 +74,13 @@ const SubmitNewIdeaModal = ({
       document.body.classList.add("modal-open");
       modalRef.current?.showModal();
       formikRef.current?.resetForm();
+      setTimeout(() => {
+        const focusable = modalRef.current?.querySelectorAll(
+          "input, select, textarea, button"
+        );
+        const first = focusable?.[0] as HTMLInputElement | null;
+        first?.focus();
+      }, 300);
     } else {
       document.body.classList.remove("modal-open");
       modalRef.current?.close();
@@ -80,10 +91,11 @@ const SubmitNewIdeaModal = ({
   return ReactDOM.createPortal(
     <>
       <dialog ref={modalRef} className="modal">
-        <div className="modal-box w-10/12 px-0 pr-0.5 relative max-w-5xl flex flex-col max-h-[90vh]">
+        <div className="modal-box  bg-gray-100 dark:bg-gray-900 w-10/12 px-0 pr-0.5 relative max-w-5xl flex flex-col max-h-[90vh]">
           <div className="flex justify-between items-center mb-2 px-6">
             <h2 className="text-lg font-semibold">Submit Idea</h2>
             <button
+              autoFocus
               onClick={handleAttemptClose}
               className="absolute top-3 right-3 btn btn-sm btn-circle btn-ghost"
             >
@@ -112,7 +124,6 @@ const SubmitNewIdeaModal = ({
                         name="title"
                         label="Title"
                         type="textarea"
-                        errors={errors}
                         minRows={1}
                         maxRows={2}
                         maxLength={100}
@@ -137,34 +148,34 @@ const SubmitNewIdeaModal = ({
                         maxLength={300}
                         touched={touched}
                       />
-                      <FormSelect name="managerId" label="Reporting Manager">
-                        {managers.map((manager) => (
-                          <option
-                            key={`manager-${manager.userId}`}
-                            value={manager.userId}
-                          >
-                            {[
-                              manager.firstName,
-                              manager.lastName,
-                              `<${manager.email}>`,
-                            ].join(" ")}
-                          </option>
-                        ))}
-                      </FormSelect>
-                      <FormSelect name="submittedBy" label="Contributors">
-                        {users.map((user) => (
-                          <option
-                            key={`user-${user.userId}`}
-                            value={user.userId}
-                          >
-                            {[
-                              user.firstName,
-                              user.lastName,
-                              `<${user.email}>`,
-                            ].join(" ")}
-                          </option>
-                        ))}
-                      </FormSelect>
+                      <SearchableFormSelect
+                        name="managerId"
+                        label="Reporting Manager"
+                        options={managers.map((user) => ({
+                          value: user.userId,
+                          hint: [user.firstName, user.lastName].join(" "),
+                          label: [
+                            user.firstName,
+                            user.lastName,
+                            `<${user.email}>`,
+                          ].join(" "),
+                        }))}
+                      />
+
+                      <SearchableFormSelect
+                        name="submittedBy"
+                        label="Contributors"
+                        isMulti
+                        options={users.map((user) => ({
+                          value: user.userId,
+                          hint: [user.firstName, user.lastName].join(" "),
+                          label: [
+                            user.firstName,
+                            user.lastName,
+                            `<${user.email}>`,
+                          ].join(" "),
+                        }))}
+                      />
                     </div>
                   </form>
                 </div>

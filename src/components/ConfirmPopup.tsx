@@ -12,7 +12,7 @@ export const ConfirmationPopup = ({
   message: string;
 }) => (
   <dialog ref={dialogRef} className="modal">
-    <div className="modal-box max-w-xl p-6">
+    <div className="modal-box  bg-gray-100 dark:bg-gray-900 max-w-xl p-6">
       <strong className="font-semibold">
         <p className=" text-center text-lg">
           <ExclamationTriangleIcon className="h-20 mb-2 inline-block text-yellow-500" />

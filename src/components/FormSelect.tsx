@@ -6,6 +6,7 @@ interface FormSelectProps {
   label: string;
   type?: string;
   autoComplete?: string;
+  multiple?: boolean;
 }
 
 export const FormSelect = ({
@@ -13,6 +14,7 @@ export const FormSelect = ({
   label,
   children,
   autoComplete,
+  multiple,
 }: FormSelectProps & PropsWithChildren) => {
   return (
     <div>
@@ -27,6 +29,7 @@ export const FormSelect = ({
           <select
             id={name}
             name={name}
+            multiple={multiple}
             value={field.value}
             autoComplete={autoComplete}
             onChange={(event) => {
