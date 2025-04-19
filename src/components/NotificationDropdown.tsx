@@ -1,12 +1,12 @@
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
-import { useNotificationSocket } from "../utils/useNotificationSocket";
-import { useEffect, useState } from "react";
-import { fetchNotifications } from "../features/app/appActions";
 import { Link } from "@tanstack/react-router";
 import clsx from "clsx";
-import { markAllNotificationAsRead } from "../features/app/appSlice";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchNotifications } from "../features/app/appActions";
 import { markAllNotificationAsRedApi } from "../features/app/appApi";
+import { markAllNotificationAsRead } from "../features/app/appSlice";
+import { RootState } from "../store";
+import { useNotificationSocket } from "../utils/useNotificationSocket";
 
 const NotificationTypeIcon = ({ type }: { type: string }) => {
   switch (type) {
@@ -102,8 +102,11 @@ export const NotificationDropdown: React.FC = () => {
                   {notification.ideaId && (
                     <Link
                       className="font-medium hover:underline pr-1"
-                      to={`/ideas/$ideaId`}
-                      params={{ ideaId: notification.ideaId.toString() }}
+                      to={`/ideas/$ideaId/$mode`}
+                      params={{
+                        ideaId: notification.ideaId.toString(),
+                        mode: "view",
+                      }}
                     >
                       IDEA-{notification.ideaId}
                     </Link>

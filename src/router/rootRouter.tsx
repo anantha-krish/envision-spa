@@ -4,7 +4,7 @@ import { createRouter } from "@tanstack/react-router";
 import {
   dashBoardRoute,
   ideaDetailsRoute,
-  ideaEditRoute,
+  ideasPostNotFoundRoute,
   ideasRoute,
   indexedRoute,
   loginRoute,
@@ -16,19 +16,20 @@ import {
 export const routeTree = rootRoute.addChildren([
   indexedRoute,
   ideasRoute,
+  ideaDetailsRoute,
   dashBoardRoute,
   loginRoute,
   registerRoute,
   logoutRoute,
   permissionErrorRoute,
-  ideaDetailsRoute,
-  ideaEditRoute,
+  ideasPostNotFoundRoute,
 ]);
 
 export const router = createRouter({
   routeTree,
   context: {
     auth: undefined!,
+    dispatch: undefined!,
   },
 
   defaultPreload: "intent",

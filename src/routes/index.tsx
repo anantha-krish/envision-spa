@@ -4,8 +4,8 @@ import Home from "../pages/Home";
 import { Logout } from "../pages/Logout";
 import { PermissionError } from "../pages/PermissionError";
 import { rootRoute } from "./__root";
-import { ViewIdeaDetailsPage } from "../pages/ideaDetails/ViewIdeaDetailsPage";
-import { EditIdeaDetailsPage } from "../pages/ideaDetails/EditIdeaDetailsPage";
+import { IdeaDetailsPage } from "../pages/ideaDetails";
+import { IdeaPostNotFound } from "../pages/ideaDetails/IdeaPostNotFound";
 
 const Login = lazy(() => import("../pages/Login"));
 const Register = lazy(() => import("../pages/Register"));
@@ -48,7 +48,7 @@ export const indexedRoute = createRoute({
 
 export const dashBoardRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/dashboard",
+  path: "dashboard",
   beforeLoad: ({ context }) => {
     requireRole(context, ["ADMIN", "MANAGER"]);
   },
@@ -57,46 +57,63 @@ export const dashBoardRoute = createRoute({
 
 export const permissionErrorRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/permission-error",
+  path: "permission-error",
   component: () => <PermissionError />,
 });
 
 export const ideasRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/ideas",
+  path: "ideas",
   beforeLoad: ({ context }) => {
     requireAuth(context);
   },
   component: Home,
 });
 
-export const ideaDetailsRoute = createRoute({
-  getParentRoute: () => ideasRoute,
-  path: "$ideaId",
-  component: ViewIdeaDetailsPage,
+export const ideasPostNotFoundRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "ideas/not-found",
+  beforeLoad: ({ context }) => {
+    requireAuth(context);
+  },
+  component: IdeaPostNotFound,
 });
 
-export const ideaEditRoute = createRoute({
-  getParentRoute: () => ideasRoute,
-  path: "$ideaId/edit",
-  component: EditIdeaDetailsPage,
+export const ideaDetailsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "ideas/$ideaId/$mode",
+  beforeLoad: ({ context, params }) => {
+    requireAuth(context);
+    const { mode } = params;
+    if (mode && !["edit", "view"].includes(mode)) {
+      throw redirect({ to: "/ideas/not-found" });
+    }
+    // check if idea is available or not else throw not found
+
+    if (mode === "edit") {
+      // call reduxSaga
+      // only manager & submitted user is able to edit
+      // else throw permissionerror
+    }
+  },
+  component: () => <IdeaDetailsPage />,
 });
 
 export const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/login",
+  path: "login",
   component: Login,
   beforeLoad: redirectIfAuthenticated,
 });
 
 export const registerRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/register",
+  path: "register",
   component: Register,
 });
 
 export const logoutRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/logout",
+  path: "logout",
   component: Logout,
 });
