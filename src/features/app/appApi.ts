@@ -62,7 +62,7 @@ export const uploadNewAttachementsApi = async (
   ideaId: number,
   formData: FormData
 ) => {
-  const res = await api.post(`/files/${ideaId}`, formData, {
+  const res = await api.post(`/files/?ideaId=${ideaId}`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
   return res.status;

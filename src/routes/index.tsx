@@ -4,6 +4,8 @@ import Home from "../pages/Home";
 import { Logout } from "../pages/Logout";
 import { PermissionError } from "../pages/PermissionError";
 import { rootRoute } from "./__root";
+import { ViewIdeaDetailsPage } from "../pages/ideaDetails/ViewIdeaDetailsPage";
+import { EditIdeaDetailsPage } from "../pages/ideaDetails/EditIdeaDetailsPage";
 
 const Login = lazy(() => import("../pages/Login"));
 const Register = lazy(() => import("../pages/Register"));
@@ -66,6 +68,18 @@ export const ideasRoute = createRoute({
     requireAuth(context);
   },
   component: Home,
+});
+
+export const ideaDetailsRoute = createRoute({
+  getParentRoute: () => ideasRoute,
+  path: "$ideaId",
+  component: ViewIdeaDetailsPage,
+});
+
+export const ideaEditRoute = createRoute({
+  getParentRoute: () => ideasRoute,
+  path: "$ideaId/edit",
+  component: EditIdeaDetailsPage,
 });
 
 export const loginRoute = createRoute({

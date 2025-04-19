@@ -86,11 +86,9 @@ const Register = () => {
           <div className="flex flex-row gap-4 pb-3 items-center">
             <div className="flex flex-col flex-2/3 shrink-0 ">
               <div className="text-xl font-medium">
-                {isAdminMode
-                  ? "Create an Admin Account | Envision"
-                  : isAuthenticated
-                    ? "Create an User Account | Envision"
-                    : "Join Envision — Create Your Account"}
+                {isAuthenticated
+                  ? `Create an Account ${isAdminMode && "(Admin Mode) "}| Envision`
+                  : "Join Envision — Create Your Account"}
               </div>
             </div>
           </div>
@@ -215,12 +213,14 @@ const Register = () => {
 
                   <div className="flex flex-row justify-between gap-8 px-1 py-2">
                     <div className="flex flex-col flex-1/3">
-                      <FormButton
-                        type="button"
-                        label="Back to Login"
-                        onClick={() => navigate({ to: "/login" })}
-                        color="accent"
-                      />
+                      {!isAuthenticated && (
+                        <FormButton
+                          type="button"
+                          label="Back to Login"
+                          onClick={() => navigate({ to: "/login" })}
+                          color="accent"
+                        />
+                      )}
                     </div>
                     <div className="flex flex-col flex-1/3">
                       <FormButton

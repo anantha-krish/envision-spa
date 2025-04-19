@@ -3,6 +3,7 @@ import { RootState } from "../store";
 import { useNotificationSocket } from "../utils/useNotificationSocket";
 import { useEffect, useState } from "react";
 import { fetchNotifications } from "../features/app/appActions";
+import { Link } from "@tanstack/react-router";
 
 const BellIcon = () => (
   <svg
@@ -68,6 +69,15 @@ export const NotificationDropdown: React.FC = () => {
         {notifications.length > 0 ? (
           notifications?.map((notification) => (
             <li key={notification.id} className="min-h-10 p-2 shadow-blue-500">
+              {notification.ideaId && (
+                <Link
+                  className="link"
+                  to="/ideas/$ideaId"
+                  params={{ ideaId: notification.ideaId.toString() }}
+                >
+                  IDEA-{notification.ideaId}
+                </Link>
+              )}
               {notification.message}
             </li>
           ))
