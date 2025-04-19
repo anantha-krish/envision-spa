@@ -9,13 +9,13 @@ import clsx from "clsx";
 const NotificationTypeIcon = ({ type }: { type: string }) => {
   switch (type) {
     case "STATUS_CHANGE":
-      return <span className="text-info">🔄</span>;
+      return <span>🔄</span>;
     case "COMMENT":
-      return <span className="text-success">💬</span>;
+      return <span>💬</span>;
     case "LIKE":
-      return <span className="text-pink-500">❤️</span>;
+      return <span>👍</span>;
     case "FILE_ADDED":
-      return <span className="text-warning">📎</span>;
+      return <span>📎</span>;
     default:
       return <span>🔔</span>;
   }
@@ -73,7 +73,7 @@ export const NotificationDropdown: React.FC = () => {
       </button>
 
       <ul
-        className="dropdown dropdown-end menu w-80 rounded-box bg-base-100 shadow p-4"
+        className="dropdown dropdown-end w-3/12 menu rounded-box bg-gray-50 dark:bg-gray-900 shadow-sm border-2 border-gray-200 dark:border-gray-700 dark:shadow-gray-700 z-50 p-4 fixed"
         popover="auto"
         onToggle={toggleDropdown}
         id="popover-1"
@@ -84,33 +84,33 @@ export const NotificationDropdown: React.FC = () => {
             <li
               key={notification.id}
               className={clsx(
-                "flex flex-row items-center gap-2 rounded p-2 text-sm",
-                notification.isRead
-                  ? "hover:bg-base-200"
-                  : "bg-blue-50 hover:bg-blue-100"
+                "flex flex-row items-center p-2 text-sm  not-last:border-b-1 border-gray-300 dark:border-gray-700"
               )}
             >
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 px-0 text-xl hover:bg-transparent">
                 <NotificationTypeIcon type={notification.type} />
               </div>
 
-              <div className="flex-1 min-w-0">
-                {notification.ideaId && (
-                  <Link
-                    className="font-medium text-blue-600 hover:underline"
-                    to={`/ideas/$ideaId`}
-                    params={{ ideaId: notification.ideaId.toString() }}
-                  >
-                    IDEA-{notification.ideaId}
-                  </Link>
-                )}
-                <p className="text-gray-700 break-words line-clamp-2">
+              <div className="flex-1 min-w-0 hover:bg-transparent active:bg-transparent">
+                <p className="break-words line-clamp-2">
+                  {notification.ideaId && (
+                    <Link
+                      className="font-medium hover:underline pr-1"
+                      to={`/ideas/$ideaId`}
+                      params={{ ideaId: notification.ideaId.toString() }}
+                    >
+                      IDEA-{notification.ideaId}
+                    </Link>
+                  )}
+
                   {notification.message}
                 </p>
               </div>
 
               {!notification.isRead && (
-                <span className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0"></span>
+                <span className="hover:bg-transparent">
+                  <span className="w-2 h-2 rounded-full bg-secondary" />
+                </span>
               )}
             </li>
           ))
