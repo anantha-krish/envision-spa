@@ -28,6 +28,11 @@ export const fetchNotificationsApi = async () => {
   return res.data as NotificationResponse;
 };
 
+export const markAllNotificationAsRedApi = async () => {
+  const res = await api.post("/notifications/mark-read");
+  return res.status;
+};
+
 export const fetchUserNames = async (userIds: number[]) => {
   const params = new URLSearchParams();
 

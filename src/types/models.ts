@@ -32,7 +32,7 @@ export type Notification = {
   message: string;
   count: number;
   updatedAt: string;
-  isRead: false;
+  isRead: boolean;
 };
 
 export type NotificationResponse = {

@@ -90,6 +90,13 @@ const appSlice = createSlice({
       state.notifications = action.payload.notifications;
       state.unreadNotificationCount = action.payload.unreadCount;
     },
+    markAllNotificationAsRead: (state) => {
+      state.notifications = state.notifications.map((item) => ({
+        ...item,
+        isRead: true,
+      }));
+      state.unreadNotificationCount = 0;
+    },
     fetchNotificationFailure: (state) => {
       state.notifications = [];
       state.unreadNotificationCount = 0;
@@ -138,5 +145,6 @@ export const {
   fetchNotificationFailure,
   fetchNotificationSuccess,
   addNewTagOnSuccess,
+  markAllNotificationAsRead,
 } = appSlice.actions;
 export default appSlice.reducer;

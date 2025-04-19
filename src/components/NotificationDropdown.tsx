@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { fetchNotifications } from "../features/app/appActions";
 import { Link } from "@tanstack/react-router";
 import clsx from "clsx";
+import { markAllNotificationAsRead } from "../features/app/appSlice";
+import { markAllNotificationAsRedApi } from "../features/app/appApi";
 
 const NotificationTypeIcon = ({ type }: { type: string }) => {
   switch (type) {
@@ -26,11 +28,7 @@ export const NotificationDropdown: React.FC = () => {
   useNotificationSocket(accessToken ?? "");
   const [isOpen, setIsOpen] = useState(false); // Track the open/close state of the dropdown
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(fetchNotifications());
   }, [dispatch]);
@@ -41,6 +39,14 @@ export const NotificationDropdown: React.FC = () => {
   const notifications = useSelector(
     (state: RootState) => state.app.notifications
   );
+
+  const toggleDropdown = async () => {
+    setIsOpen(!isOpen);
+    if (isOpen && unreadCount > 0) {
+      await markAllNotificationAsRedApi();
+      dispatch(markAllNotificationAsRead());
+    }
+  };
 
   return (
     <>
