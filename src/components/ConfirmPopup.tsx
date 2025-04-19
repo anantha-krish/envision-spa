@@ -4,12 +4,12 @@ export const ConfirmationPopup = ({
   dialogRef,
   onConfirm,
   onCancel,
-  message,
+  Message,
 }: {
   dialogRef: React.RefObject<HTMLDialogElement | null>;
   onConfirm: VoidFunction;
   onCancel: VoidFunction;
-  message: string;
+  Message: React.ComponentType;
 }) => (
   <dialog ref={dialogRef} className="modal">
     <div className="modal-box  bg-gray-100 dark:bg-gray-900 max-w-xl p-6">
@@ -17,8 +17,7 @@ export const ConfirmationPopup = ({
         <p className=" text-center text-lg">
           <ExclamationTriangleIcon className="h-20 mb-2 inline-block text-yellow-500" />
           <br />
-          {message}
-          <br /> Are you sure you want to close?
+          <Message />
         </p>
       </strong>
       <div className="flex w-full justify-center pt-6 px-10 gap-8">

@@ -16,6 +16,7 @@ interface FormButtonProps {
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   modifier?: "wide" | "block" | "circle" | "square";
   type?: "button" | "submit" | "reset";
+  classNames?: string;
 }
 export const FormButton: React.FC<FormButtonProps> = ({
   label,
@@ -23,6 +24,7 @@ export const FormButton: React.FC<FormButtonProps> = ({
   color = "primary",
   style = "",
   behaviour,
+  classNames,
   modifier,
   size,
   onClick,
@@ -34,7 +36,8 @@ export const FormButton: React.FC<FormButtonProps> = ({
     { [`btn-${modifier}`]: modifier?.length ?? 0 > 0 },
 
     { [`btn-${color}`]: color.length > 0 },
-    { [`btn-${size}`]: size?.length ?? 0 > 0 }
+    { [`btn-${size}`]: size?.length ?? 0 > 0 },
+    classNames
   );
   return (
     <button type={type} className={btnStyles} onClick={onClick}>

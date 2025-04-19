@@ -5,6 +5,7 @@ import {
   IdeaDetailsResponse,
   NotificationResponse,
   Role,
+  S3File,
   Tag,
   UserProfile,
   UserWithCompleteProfiles,
@@ -71,4 +72,13 @@ export const uploadNewAttachementsApi = async (
     headers: { "Content-Type": "multipart/form-data" },
   });
   return res.status;
+};
+
+export const getAllAttachementsApi = async (ideaId: number) => {
+  const res = await api.get(`/files/${ideaId}`);
+  return (res.data.files ?? []) as S3File[];
+};
+
+export const deleteAttachementsApi = async (keys: string[]) => {
+  await Promise.all(keys.map((fileId) => api.delete(`/files/${fileId}`)));
 };

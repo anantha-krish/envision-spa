@@ -245,11 +245,16 @@ const SubmitNewIdeaModal = ({
       </dialog>
       <ConfirmationPopup
         dialogRef={confirmRef}
-        message={"Your idea has not been submitted. All changes will be lost."}
         onConfirm={() => {
           confirmRef.current?.close();
           onClose();
         }}
+        Message={() => (
+          <>
+            "Your idea has not been submitted. All changes will be lost."
+            <br /> Are you sure you want to close?
+          </>
+        )}
         onCancel={() => confirmRef.current?.close()}
       />
     </>,

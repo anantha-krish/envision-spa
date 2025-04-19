@@ -1,8 +1,8 @@
-import { IdeaDetailCommonComponentProps } from ".";
-
 // interface EditIdeaDetailsComponentProps
 //   extends IdeaDetailCommonComponentProps {}
 
+import { IdeaDetailBaseComponentProps } from ".";
+
 export const EditIdeaDetailsComponent: React.FC<
-  IdeaDetailCommonComponentProps
+  IdeaDetailBaseComponentProps
 > = ({ ideaId }) => <>Edit {ideaId}</>;

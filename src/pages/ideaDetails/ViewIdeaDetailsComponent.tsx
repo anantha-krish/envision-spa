@@ -1,5 +1,5 @@
-import { IdeaDetailCommonComponentProps } from ".";
+import { IdeaDetailBaseComponentProps } from ".";
 
-export const ViewIdeaDetailsPage: React.FC<
-  IdeaDetailCommonComponentProps
-> = () => <>View Idea</>;
+export const ViewIdeaDetailsPage: React.FC<IdeaDetailBaseComponentProps> = ({
+  ideaId,
+}) => <>View Idea:{ideaId}</>;

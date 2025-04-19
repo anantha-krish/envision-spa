@@ -34,6 +34,7 @@ export type Notification = {
   updatedAt: string;
   isRead: boolean;
 };
+export type S3File = { key: string; url: string };
 
 export type NotificationResponse = {
   unreadCount: number;
