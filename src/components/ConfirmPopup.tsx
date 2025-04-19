@@ -21,11 +21,11 @@ export const ConfirmationPopup = ({
         </p>
       </strong>
       <div className="flex w-full justify-center pt-6 px-10 gap-8">
-        <button className="btn btn-primary flex-1" onClick={onCancel}>
+        <button className="btn btn-error flex-1" onClick={onCancel}>
           Cancel
         </button>
-        <button className="btn btn-error flex-1" onClick={onConfirm}>
-          Yes, Close
+        <button className="btn btn-primary flex-1" onClick={onConfirm}>
+          Yes
         </button>
       </div>
     </div>

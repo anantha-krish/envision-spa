@@ -26,7 +26,7 @@ export const IdeaDetailsPage: React.FC = () => {
               <ViewIdeaDetailsPage ideaId={ideaId} />
             )}
           </div>
-          <div className="idea_detail_files min-h-30 bg-pink-400">
+          <div className="idea_detail_files">
             <ImageCarousel isEditMode={isEditMode} ideaId={ideaId} />
           </div>
           <div className="idea_detail_comments bg-amber-200 min-h-50">

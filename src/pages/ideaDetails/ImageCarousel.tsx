@@ -64,6 +64,8 @@ export const ImageCarousel: React.FC<IdeaDetailEditableComponentProps> = ({
   const onRefresh = useCallback(async () => {
     const s3Files = await getAllAttachementsApi(+ideaId);
     setImages(s3Files);
+    setSelectedFiles([]);
+    setDeletedFiles([]);
   }, [ideaId]);
 
   useEffect(() => {
@@ -78,12 +80,12 @@ export const ImageCarousel: React.FC<IdeaDetailEditableComponentProps> = ({
             <div key={image.key} className="relative flex-shrink-0 group">
               <img
                 src={image.url}
-                className="w-40 h-40 object-cover rounded-lg shadow"
+                className="w-50 h-50 object-cover rounded-lg shadow "
               />
               {isEditMode && (
                 <FormButton
-                  classNames={
-                    "absolute hidden cursor-pointer top-2 right-2 btn-xs px-1 py-0.5 text-xs group-hover:inline-block rounded"
+                  className={
+                    "absolute hidden cursor-pointer top-1 right-1 btn-xs px-1 py-0.5 text-xs group-hover:inline-block rounded"
                   }
                   color="error"
                   onClick={() => handleUIDelete(index)}
@@ -96,14 +98,15 @@ export const ImageCarousel: React.FC<IdeaDetailEditableComponentProps> = ({
       </div>
       {isEditMode && (
         <div className="w-full">
-          <div className="flex space-x-4 p-4">
+          <div className="flex space-x-4 p-4 pb-0 items-center">
             <IdeaFileInputUploader setSelectedFiles={setSelectedFiles} />
             {isDirty && (
               <>
                 <FormButton
                   label="Save"
+                  color="primary"
                   type="button"
-                  onClick={handleFileModifications}
+                  onClick={handleAttemptFileModifications}
                 />
                 <FormButton
                   label="Cancel"
@@ -121,7 +124,7 @@ export const ImageCarousel: React.FC<IdeaDetailEditableComponentProps> = ({
         Message={() => "Are you sure about the attachement modifications? "}
         onConfirm={() => {
           confirmRef.current?.close();
-          handleAttemptFileModifications();
+          handleFileModifications();
           onRefresh();
         }}
         onCancel={() => {
