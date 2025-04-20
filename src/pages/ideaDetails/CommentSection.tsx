@@ -9,6 +9,18 @@ import {
 } from "../../features/idea/ideaActions";
 import { clearComments } from "../../features/idea/ideaSlice";
 import { RootState } from "../../store";
+import {
+  HandThumbUpIcon as OutlineLikeIcon,
+  ChatBubbleBottomCenterTextIcon as OutlineCommentIcon,
+} from "@heroicons/react/24/outline";
+import {
+  HandThumbUpIcon as SolidLikeIcon,
+  ChatBubbleBottomCenterTextIcon as SolidCommentIcon,
+  EyeIcon,
+} from "@heroicons/react/24/solid";
+
+import TextareaAutosize from "react-textarea-autosize";
+import clsx from "clsx";
 
 export const CommentSection: React.FC<IdeaDetailBaseComponentProps> = ({
   ideaId,
@@ -37,24 +49,36 @@ export const CommentSection: React.FC<IdeaDetailBaseComponentProps> = ({
   return (
     <div className="w-10/12  p-4 px-8 ">
       {/* Toolbar */}
-      <div className="comment_toolBar flex items-center justify-between border-b pb-2 mb-3">
-        <div className="flex space-x-4">
+      <div className="comment_toolBar flex border-b-2  border-t-2 border-gray-300 dark:border-gray-800 p-2 pl-14 mb-3">
+        <div className="space-x-8">
           <button
-            className="btn btn-lg text-xl btn-ghost"
+            className="btn btn-ghost"
             onClick={() => dispatch(toggleLikeEvent(+ideaId, isLiked))}
           >
-            👍
-            <span className="ml-1">{engagementCount.likes}</span> Likes (
-            {isLiked ? "Liked" : "Disliked"})
+            <span className="w-6">
+              {isLiked ? <SolidLikeIcon /> : <OutlineLikeIcon />}
+            </span>
+            <span className="p-2">{engagementCount.likes} Likes</span>
           </button>
           <button
-            className="btn btn-lg text-xl btn-ghost"
-            onClick={() => setShowCommentBox(!showCommentBox)}
+            className="btn btn-ghost"
+            onClick={() => {
+              if (newComment.length > 0) {
+                setNewComment("");
+              }
+              setShowCommentBox(!showCommentBox);
+            }}
           >
-            💬 <span className="ml-1">{engagementCount.comments}</span>Comment
+            <span className="w-6">
+              {showCommentBox ? <SolidCommentIcon /> : <OutlineCommentIcon />}
+            </span>
+            <span className="p-2">{engagementCount.comments} Comments</span>
           </button>
-          <button className=" btn-lg text-xl btn-ghost font-semibold ">
-            👁️ <span className="ml-1">{engagementCount.views}</span> Views
+          <button className="btn btn-ghost pointer-events-none">
+            <span className="w-6 text-gray-500">
+              <EyeIcon />
+            </span>
+            <span className="p-2">{engagementCount.views} Views</span>
           </button>
         </div>
       </div>
@@ -62,14 +86,22 @@ export const CommentSection: React.FC<IdeaDetailBaseComponentProps> = ({
       {/* Comment Box */}
       {showCommentBox && (
         <div className="comment_box flex items-center gap-2 mb-4">
-          <input
-            type="text"
-            className="input input-bordered w-full"
+          <TextareaAutosize
+            minRows={2}
+            maxRows={5}
+            className={clsx(
+              "textarea textarea-primary w-full min-h-0",
+              "resize-none"
+            )}
             placeholder="Write a comment..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
           />
-          <button className="btn btn-primary" onClick={handleAddComment}>
+
+          <button
+            className="btn btn-primary flex-1/5"
+            onClick={handleAddComment}
+          >
             Post
           </button>
         </div>
@@ -77,9 +109,9 @@ export const CommentSection: React.FC<IdeaDetailBaseComponentProps> = ({
 
       <div className="comment_list space-y-4">
         {comments.map(({ id, text, createdAt, userName }) => (
-          <div key={id} className="flex items-center gap-3">
+          <div key={id} className="flex items-center gap-4">
             <div className="avatar">
-              <div className="w-10 rounded-full ring ring-gray-500 ring-offset-base-100 ring-offset-2">
+              <div className="w-10 rounded-full ring ring-gray-500 dark:ring-offset-gray-700 ring-offset-base-100 ring-offset-2">
                 <img
                   src={`https://api.dicebear.com/7.x/initials/svg?seed=${userName}`}
                   className="inline "
@@ -89,7 +121,7 @@ export const CommentSection: React.FC<IdeaDetailBaseComponentProps> = ({
             </div>
             <div>
               <p className="opacity-80  text-xs pb-1">{userName}</p>
-              <div className="bg-gray-200 p-2 pr-5 rounded-lg ">
+              <div className="bg-gray-200 dark:bg-gray-800 p-2 pb-3 pr-5 rounded-lg ">
                 <p>{text}</p>
               </div>
               <time className="text-xs opacity-70">{createdAt}</time>
