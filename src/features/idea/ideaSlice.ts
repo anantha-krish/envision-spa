@@ -123,12 +123,12 @@ const ideaSlice = createSlice({
     },
     incrementCount: (state, action: PayloadAction<keyof EngagementCount>) => {
       const field = action.payload;
-      state[field] += 1;
+      state[field] = Number(state[field]) + 1;
     },
     decrementCount: (state, action: PayloadAction<keyof EngagementCount>) => {
       const field = action.payload;
       if (state[field] > 0) {
-        state[field] -= 1;
+        state[field] = Number(state[field]) - 1;
       }
     },
   },

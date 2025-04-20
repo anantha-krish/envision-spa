@@ -20,5 +20,5 @@ export const postNewCommentEvent = (ideaId: number, content: string) => ({
 
 export const toggleLikeEvent = (ideaId: number, liked: boolean) => ({
   type: "LIKE",
-  payload: { ideaId, liked: !liked },
+  payload: { ideaId, liked: liked },
 });

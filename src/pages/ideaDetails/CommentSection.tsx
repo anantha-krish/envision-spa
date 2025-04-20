@@ -55,7 +55,7 @@ export const CommentSection: React.FC<IdeaDetailBaseComponentProps> = ({
         <div className="space-x-8">
           <button
             className="btn btn-ghost"
-            onClick={() => dispatch(toggleLikeEvent(+ideaId, isLiked))}
+            onClick={() => dispatch(toggleLikeEvent(+ideaId, !isLiked))}
           >
             <span className="w-6">
               {isLiked ? <SolidLikeIcon /> : <OutlineLikeIcon />}
