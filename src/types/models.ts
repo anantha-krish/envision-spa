@@ -75,3 +75,33 @@ export interface LikeResponse {
   totalCount: number;
   message: string;
 }
+
+export const validSortOptions = [
+  "popular",
+  "trend",
+  "most_liked",
+  "most_viewed",
+  "recent",
+] as const;
+export type SortOption = (typeof validSortOptions)[number];
+export type SortOrder = "ASC" | "DESC";
+
+export interface IdeaItem {
+  id: number;
+  title: string;
+  summary: string;
+  status: string;
+  likes: number;
+  comments: number;
+  views: number;
+  createdAt: string;
+  tags: string[];
+}
+
+export type IdeaDetail = IdeaItem & {
+  description: string;
+  managerId: number;
+  createdAt: string;
+  updatedAt: string;
+  submittedBy: number[];
+};
