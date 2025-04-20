@@ -3,6 +3,11 @@ export const fetchComments = (ideaId: number) => ({
   payload: ideaId,
 });
 
+export const fetchIdeaDetails = (ideaId: number, isEditMode: boolean) => ({
+  type: "FETCH_IDEA_DETAILS",
+  payload: { ideaId, isEditMode },
+});
+
 export const fetchLikeStatus = (ideaId: number) => ({
   type: "FETCH_LIKE_STATUS",
   payload: ideaId,

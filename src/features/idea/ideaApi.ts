@@ -1,8 +1,11 @@
+import { AxiosResponse } from "axios";
 import api from "../../api/axiosInstance";
 import {
   CommentResponse,
+  IdeaDetail,
   IdeaDetailsReq,
   IdeaDetailsResponse,
+  IdeaItem,
   LikeResponse,
   S3File,
   SortOption,
@@ -99,10 +102,10 @@ export const fetchIdeaList = async (
   if (sortBy) params.append("sortBy", sortBy);
   if (sortOrder) params.append("sortOrder", sortOrder);
   const res = await api.get(`/ideas?${params.toString()}`);
-  return res.data;
+  return res.data as IdeaItem;
 };
 
 export const fetchIdeaDetailsById = async (ideadId: number) => {
   const res = await api.get(`/ideas/${ideadId}`);
-  return res.data;
+  return res as AxiosResponse<IdeaDetail>;
 };

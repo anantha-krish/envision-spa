@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   Designation,
   Role,
@@ -7,6 +7,7 @@ import {
   UserWithCompleteProfile,
 } from "../../types/models";
 import { Notification } from "../../types/models";
+import { EnvisionRoutePaths } from "../../types/router";
 
 const savedTheme = sessionStorage.getItem("theme") || "light";
 interface appState {
@@ -58,7 +59,7 @@ const appSlice = createSlice({
     showLoader: (state) => {
       state.hideLoader = false;
     },
-    navigateTo: (state, action) => {
+    navigateTo: (state, action: PayloadAction<EnvisionRoutePaths>) => {
       state.navigationTarget = action.payload;
     },
     clearNavigationTarget: (state) => {

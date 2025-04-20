@@ -6,6 +6,7 @@ import { PermissionError } from "../pages/PermissionError";
 import { rootRoute } from "./__root";
 import { IdeaDetailsPage } from "../pages/ideaDetails";
 import { IdeaPostNotFound } from "../pages/ideaDetails/IdeaPostNotFound";
+import { fetchIdeaDetails } from "../features/idea/ideaActions";
 
 const Login = lazy(() => import("../pages/Login"));
 const Register = lazy(() => import("../pages/Register"));
@@ -84,17 +85,12 @@ export const ideaDetailsRoute = createRoute({
   path: "ideas/$ideaId/$mode",
   beforeLoad: ({ context, params }) => {
     requireAuth(context);
-    const { mode } = params;
+    const { mode, ideaId } = params;
     if (mode && !["edit", "view"].includes(mode)) {
       throw redirect({ to: "/ideas/not-found" });
     }
-    // check if idea is available or not else throw not found
-
-    if (mode === "edit") {
-      // call reduxSaga
-      // only manager & submitted user is able to edit
-      // else throw permissionerror
-    }
+    const dispatch = context.dispatch;
+    dispatch(fetchIdeaDetails(+ideaId, mode === "edit"));
   },
   component: () => <IdeaDetailsPage />,
 });

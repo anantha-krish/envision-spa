@@ -35,11 +35,13 @@ export const CommentSection: React.FC<IdeaDetailBaseComponentProps> = ({
     };
   }, [dispatch, ideaId]);
 
-  const engagementCount = useSelector((state: RootState) => state.idea.count);
+  const likes = useSelector((state: RootState) => state.idea.likes);
+  const comments = useSelector((state: RootState) => state.idea.comments);
+  const views = useSelector((state: RootState) => state.idea.views);
   const isLiked = useSelector((state: RootState) => state.idea.isLiked);
 
   const [showCommentBox, setShowCommentBox] = useState(false);
-  const comments = useSelector((state: RootState) => state.idea.comments);
+  const commentList = useSelector((state: RootState) => state.idea.commentList);
   const [newComment, setNewComment] = useState("");
   const handleAddComment = async () => {
     setShowCommentBox(false);
@@ -58,7 +60,7 @@ export const CommentSection: React.FC<IdeaDetailBaseComponentProps> = ({
             <span className="w-6">
               {isLiked ? <SolidLikeIcon /> : <OutlineLikeIcon />}
             </span>
-            <span className="p-2">{engagementCount.likes} Likes</span>
+            <span className="p-2">{likes} Likes</span>
           </button>
           <button
             className="btn btn-ghost"
@@ -72,13 +74,13 @@ export const CommentSection: React.FC<IdeaDetailBaseComponentProps> = ({
             <span className="w-6">
               {showCommentBox ? <SolidCommentIcon /> : <OutlineCommentIcon />}
             </span>
-            <span className="p-2">{engagementCount.comments} Comments</span>
+            <span className="p-2">{comments} Comments</span>
           </button>
           <button className="btn btn-ghost pointer-events-none">
             <span className="w-6 text-gray-500">
               <EyeIcon />
             </span>
-            <span className="p-2">{engagementCount.views} Views</span>
+            <span className="p-2">{views} Views</span>
           </button>
         </div>
       </div>
@@ -108,7 +110,7 @@ export const CommentSection: React.FC<IdeaDetailBaseComponentProps> = ({
       )}
 
       <div className="comment_list space-y-4">
-        {comments.map(({ id, text, createdAt, userName }) => (
+        {commentList.map(({ id, text, createdAt, userName }) => (
           <div key={id} className="flex items-center gap-4">
             <div className="avatar">
               <div className="w-10 rounded-full ring ring-gray-500 dark:ring-offset-gray-700 ring-offset-base-100 ring-offset-2">

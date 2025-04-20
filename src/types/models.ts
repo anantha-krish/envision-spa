@@ -90,7 +90,7 @@ export interface IdeaItem {
   id: number;
   title: string;
   summary: string;
-  status: string;
+  statusName: string;
   likes: number;
   comments: number;
   views: number;
@@ -100,7 +100,7 @@ export interface IdeaItem {
 
 export type IdeaDetail = IdeaItem & {
   description: string;
-  managerId: number;
+  managerId: number | null;
   createdAt: string;
   updatedAt: string;
   submittedBy: number[];

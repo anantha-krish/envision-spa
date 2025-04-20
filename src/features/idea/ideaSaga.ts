@@ -4,12 +4,18 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import toast from "react-hot-toast";
 import { call, put, select, takeLatest } from "redux-saga/effects";
 import { RootState } from "../../store";
-import { CommentResponse, LikeResponse, UserProfile } from "../../types/models";
+import {
+  CommentResponse,
+  IdeaDetail,
+  LikeResponse,
+  UserProfile,
+} from "../../types/models";
 import { fetchUserNames } from "../app/appApi";
-import { hideLoader, showLoader } from "../app/appSlice";
+import { hideLoader, navigateTo, showLoader } from "../app/appSlice";
 import {
   addNewCommentsForIdeaApi,
   addNewLikeForIdeaApi,
+  fetchIdeaDetailsById,
   fetchLikeStatusForIdeaApi,
   getAllCommentsForIdea,
 } from "./ideaApi";
@@ -18,11 +24,14 @@ import {
   decrementCount,
   incrementCount,
   loadComments,
+  loadIdeaDetailsState,
   postNewCommentFinal,
   postNewCommentInitial,
+  updateCanEditStatus,
   updateCount,
   updateLikeStatus,
 } from "./ideaSlice";
+import { AxiosResponse } from "axios";
 
 dayjs.extend(relativeTime);
 
@@ -153,9 +162,43 @@ function* handleFetchLikeStatusSaga(action: PayloadAction<number>): Generator {
   }
 }
 
+function* handleFetchIdeaDetailsSaga(
+  action: PayloadAction<{ ideaId: number; isEditMode: boolean }>
+): Generator {
+  try {
+    const { ideaId, isEditMode } = action.payload;
+    const response: AxiosResponse<IdeaDetail> = yield call(
+      fetchIdeaDetailsById,
+      ideaId
+    );
+    if (response.status === 404) {
+      yield put(navigateTo("/ideas/not-found"));
+    }
+    yield put(loadIdeaDetailsState(response.data));
+
+    const loggedInUserId = yield select(
+      (state: RootState) => state.auth.userId
+    );
+    const submittersId = yield select(
+      (state: RootState) => state.idea.submittedBy
+    );
+    const managerId = yield select((state: RootState) => state.idea.managerId);
+    const canEdit = [...submittersId, managerId].includes(loggedInUserId);
+    yield put(updateCanEditStatus(canEdit));
+    if (isEditMode && ![...submittersId, managerId].includes(loggedInUserId)) {
+      yield put(navigateTo("/permission-error"));
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      toast.error(error.message);
+    }
+  }
+}
+
 export default function* ideaSaga() {
   yield takeLatest("FETCH_COMMENTS", handlefetchCommentsSaga);
   yield takeLatest("COMMENT", handleAddNewCommentSaga);
   yield takeLatest("LIKE", handleNewLikeSaga);
   yield takeLatest("FETCH_LIKE_STATUS", handleFetchLikeStatusSaga);
+  yield takeLatest("FETCH_IDEA_DETAILS", handleFetchIdeaDetailsSaga);
 }
