@@ -47,7 +47,7 @@ export const IdeaDetailsPage: React.FC = () => {
           <div className="idea_detail_files">
             <ImageCarousel isEditMode={isEditMode} ideaId={ideaId} />
           </div>
-          <div className="idea_detail_comments bg-amber-200 min-h-50">
+          <div className="idea_detail_comments">
             <CommentSection ideaId={ideaId} />
           </div>
         </div>
