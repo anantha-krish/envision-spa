@@ -37,8 +37,15 @@ export const IdeaDetailsPage: React.FC = () => {
   );
   const tags = useSelector((state: RootState) => state.idea.tags);
   const statusName = useSelector((state: RootState) => state.idea.statusName);
-  const submittedBy = useSelector((state: RootState) => state.idea.submittedBy);
-  const managerId = useSelector((state: RootState) => state.idea.managerId);
+  const lazyLoader = useSelector((state: RootState) => state.app.lazyLoader);
+
+  const manager = useSelector((state: RootState) => state.idea.manager);
+  const submitters = useSelector((state: RootState) => state.idea.submitters);
+  const pocTeamMembers = useSelector(
+    (state: RootState) => state.idea.pocTeamMembers
+  );
+  const approver = useSelector((state: RootState) => state.idea.approver);
+  const pocTeamName = useSelector((state: RootState) => state.idea.pocTeamName);
 
   useEffect(() => {
     dispatch(addRecipients([loggedInUser]));
@@ -68,8 +75,10 @@ export const IdeaDetailsPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="idea_right_box flex-1/3">
-        <div className="flex flex-col items-start gap-4 pl-8">
+      <div
+        className={clsx("idea_right_box flex-1/3", { skeleton: lazyLoader })}
+      >
+        <div className="flex flex-col items-start gap-6 pl-8">
           <div className="flex w-full justify-center">
             {canEdit && (
               <button
@@ -97,8 +106,13 @@ export const IdeaDetailsPage: React.FC = () => {
           <div className="tag_container">
             <h2 className="mb-2 font-semibold text-gray-600">Tags</h2>
             <div className="tags flex flex-wrap gap-2">
-              {tags.map((tag) => (
-                <div className="badge bg-gray-300 badge-lg p-4">{tag}</div>
+              {tags.map((tag, index) => (
+                <div
+                  key={`tag-${index}`}
+                  className="badge bg-gray-300 badge-lg p-4"
+                >
+                  {tag}
+                </div>
               ))}
             </div>
           </div>
@@ -106,34 +120,88 @@ export const IdeaDetailsPage: React.FC = () => {
             <h2 className="mb-2 font-semibold  text-gray-600">Status</h2>
             <div className="badge bg-gray-300 badge-lg p-4">{statusName}</div>
           </div>
-          <div className="submittedby_block">
+          <div className="flex gap-15 w-32">
+            {manager && (
+              <div className="manager">
+                <h2 className="mb-2 font-semibold  text-gray-600">Manager</h2>
+                <div className="flex flex-col items-center">
+                  <div className="avatar">
+                    <div className="w-12 rounded-full ring ring-gray-500 dark:ring-offset-gray-700 ring-offset-base-100 ring-offset-2">
+                      <img
+                        src={`https://api.dicebear.com/7.x/initials/svg?seed=${`${manager.firstName} ${manager.lastName}`}`}
+                        className="inline "
+                      />
+                    </div>
+                  </div>
+                  <div className="opacity-80 mt-0.5">{manager.firstName}</div>
+                </div>
+              </div>
+            )}
+            {approver && (
+              <div className="approver">
+                <h2 className="mb-2 font-semibold  text-gray-600">Approver</h2>
+                <div className="flex flex-col items-center">
+                  <div className="avatar">
+                    <div className="w-12 rounded-full ring ring-gray-500 dark:ring-offset-gray-700 ring-offset-base-100 ring-offset-2">
+                      <img
+                        src={`https://api.dicebear.com/7.x/initials/svg?seed=${`${approver.firstName} ${approver.lastName}`}`}
+                        className="inline "
+                      />
+                    </div>
+                  </div>
+                  <div className="opacity-80 mt-0.5">{approver.firstName}</div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div>
             <h2 className="mb-2 font-semibold  text-gray-600">Contributors</h2>
             <div className="tags flex flex-wrap space-x-2 gap-2">
-              {submittedBy.map((id) => (
-                <div className="avatar">
-                  <div className="w-20 rounded-full ring ring-gray-500 dark:ring-offset-gray-700 ring-offset-base-100 ring-offset-2">
-                    <img
-                      src={`https://api.dicebear.com/7.x/initials/svg?seed=${id}`}
-                      className="inline "
-                    />
+              {submitters.map(({ firstName, lastName, userId }) => (
+                <div
+                  key={`author-${userId}`}
+                  className="flex flex-col items-center"
+                >
+                  <div className="avatar">
+                    <div className="w-12 rounded-full ring ring-gray-500 dark:ring-offset-gray-700 ring-offset-base-100 ring-offset-2">
+                      <img
+                        src={`https://api.dicebear.com/7.x/initials/svg?seed=${`${firstName} ${lastName}`}`}
+                        className="inline "
+                      />
+                    </div>
                   </div>
+                  <div className="opacity-80 mt-0.5">{firstName}</div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="manager">
-            <h2 className="mb-2 font-semibold  text-gray-600">Manager</h2>
-            <div className="avatar">
-              <div className="w-20 rounded-full ring ring-gray-500 dark:ring-offset-gray-700 ring-offset-base-100 ring-offset-2">
-                <img
-                  src={`https://api.dicebear.com/7.x/initials/svg?seed=${managerId}`}
-                  className="inline "
-                />
+          {pocTeamMembers && (
+            <div>
+              <h2 className="mb-2 font-semibold  text-gray-600">
+                Team: {pocTeamName}
+              </h2>
+              <div className=" flex flex-wrap space-x-4 gap-2">
+                {pocTeamMembers.map(({ firstName, lastName, userId }) => (
+                  <div
+                    key={`team-${userId}`}
+                    className="flex flex-col items-center"
+                  >
+                    <div className="avatar">
+                      <div className="w-12 rounded-full ring ring-gray-500 dark:ring-offset-gray-700 ring-offset-base-100 ring-offset-2">
+                        <img
+                          src={`https://api.dicebear.com/7.x/initials/svg?seed=${`${firstName} ${lastName}`}`}
+                          className="inline "
+                        />
+                      </div>
+                    </div>
+                    <div className="opacity-80 mt-0.5">{firstName}</div>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-          <div className="approver"></div>
+          )}
         </div>
       </div>
     </div>

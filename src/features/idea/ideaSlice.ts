@@ -18,6 +18,7 @@ interface Participants {
   submitters: UserProfile[];
   manager: UserProfile | null;
   pocTeamMembers: UserProfile[];
+  pocTeamName: string;
 }
 interface IdeaState extends EngagementCount, IdeaDetail, Participants {
   commentList: Comment[];
@@ -48,6 +49,7 @@ const initialState: IdeaState = {
   submitters: [],
   manager: null,
   pocTeamMembers: [],
+  pocTeamName: "",
 };
 
 const ideaSlice = createSlice({
@@ -123,6 +125,7 @@ const ideaSlice = createSlice({
       state.approver = initialState.approver;
       state.submitters = initialState.submitters;
       state.manager = initialState.manager;
+      state.pocTeamName = initialState.pocTeamName;
     },
     resetCounts: (state) => {
       state.likes = initialState.likes;
@@ -156,6 +159,9 @@ const ideaSlice = createSlice({
     setPocTeamMembers: (state, action: PayloadAction<UserProfile[]>) => {
       state.pocTeamMembers = action.payload;
     },
+    setPocTeamName: (state, action: PayloadAction<string>) => {
+      state.pocTeamName = action.payload;
+    },
     clearAllParticpants: (state) => {
       state.approver = null;
       state.submitters = [];
@@ -188,5 +194,6 @@ export const {
   setManager,
   setPocTeamMembers,
   setSubmitters,
+  setPocTeamName,
 } = ideaSlice.actions;
 export default ideaSlice.reducer;

@@ -13,6 +13,7 @@ const savedTheme = sessionStorage.getItem("theme") || "light";
 interface appState {
   theme: string;
   hideLoader: boolean;
+  lazyLoader: boolean;
   activeRequests: number;
   navigationTarget: string | null;
   notifications: Notification[];
@@ -33,6 +34,7 @@ const appSlice = createSlice({
 
   initialState: {
     hideLoader: false,
+    lazyLoader: false,
     activeRequests: 0,
     unreadNotificationCount: 0,
     notifications: [],
@@ -55,9 +57,11 @@ const appSlice = createSlice({
     },
     hideLoader: (state) => {
       state.hideLoader = true;
+      state.lazyLoader = true;
     },
     showLoader: (state) => {
       state.hideLoader = false;
+      state.lazyLoader = false;
     },
     navigateTo: (state, action: PayloadAction<EnvisionRoutePaths>) => {
       state.navigationTarget = action.payload;

@@ -35,6 +35,7 @@ import {
   setApprover,
   setManager,
   setPocTeamMembers,
+  setPocTeamName,
   setSubmitters,
   updateCanEditStatus,
   updateCount,
@@ -168,11 +169,13 @@ function* handleFetchParticipantsDetailsSaga(
       fetchPocTeamForIdea,
       ideaId
     );
+    yield put(setPocTeamName(pocTeamMembers[0].teamName));
     const approverId = approver.userId;
     const pocTeamMemberIds = pocTeamMembers.map((item) => item.userId);
     const submittersIds = yield select(
       (state: RootState) => state.idea.submittedBy
     );
+
     const managerId = yield select((state: RootState) => state.idea.managerId);
     const recipientsForIdea = [
       ...new Set([
