@@ -1,7 +1,13 @@
+import { useEffect } from "react";
 import { ideaDetailsRoute } from "../../routes";
-import { EditIdeaDetailsComponent } from "./EditIdeaDetailsComponent copy";
+import { CommentSection } from "./CommentSection";
+
+import { EditIdeaDetailsComponent } from "./EditIdeaDetailsComponent";
 import { ImageCarousel } from "./ImageCarousel";
 import { ViewIdeaDetailsPage } from "./ViewIdeaDetailsComponent";
+import { useDispatch, useSelector } from "react-redux";
+import { addRecipients, clearIdeaState } from "../../features/idea/ideaSlice";
+import { RootState } from "../../store";
 
 export interface IdeaDetailBaseComponentProps {
   ideaId: string;
@@ -15,6 +21,18 @@ export interface IdeaDetailEditableComponentProps
 export const IdeaDetailsPage: React.FC = () => {
   const { ideaId, mode } = ideaDetailsRoute.useParams();
   const isEditMode = mode == "edit";
+  const dispatch = useDispatch();
+  const loggedInUser: number = useSelector(
+    (state: RootState) => state.auth.userId
+  );
+  useEffect(() => {
+    dispatch(addRecipients([loggedInUser]));
+    return () => {
+      //idea state cleanup
+      dispatch(clearIdeaState());
+    };
+  }, [dispatch]);
+
   return (
     <div className="idea_detail_container flex w-full p-6">
       <div className="idea_left_box flex-2/3">
@@ -30,9 +48,7 @@ export const IdeaDetailsPage: React.FC = () => {
             <ImageCarousel isEditMode={isEditMode} ideaId={ideaId} />
           </div>
           <div className="idea_detail_comments bg-amber-200 min-h-50">
-            <div className="comment_toolBar"></div>
-            <div className="comment_toolbox"></div>
-            <div className="comment_list"></div>
+            <CommentSection ideaId={ideaId} />
           </div>
         </div>
       </div>

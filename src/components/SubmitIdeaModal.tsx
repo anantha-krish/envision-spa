@@ -9,7 +9,7 @@ import {
   createNewTagApi,
   submitNewIdeaApi,
   uploadNewAttachementsApi,
-} from "../features/app/appApi";
+} from "../features/idea/ideaApi";
 import { addNewTagOnSuccess } from "../features/app/appSlice";
 import { RootState } from "../store";
 import { ConfirmationPopup } from "./ConfirmPopup";
@@ -132,7 +132,13 @@ const SubmitNewIdeaModal = ({
               }
               const { status, data } = await submitNewIdeaApi(values);
               if (status === 201 && data.ideaId) {
-                await uploadNewAttachementsApi(data.ideaId, formData);
+                //no alert for creation
+                await uploadNewAttachementsApi(
+                  data.ideaId,
+                  formData,
+                  [],
+                  false
+                );
               }
               toast.success(`Idea: ${data.title} created successfully `);
             }}

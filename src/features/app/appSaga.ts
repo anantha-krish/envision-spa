@@ -1,7 +1,6 @@
 // sagas.ts
 import { all, call, put, takeLatest } from "redux-saga/effects";
 import {
-  fetchAllTagsApi,
   fetchAllUsersApi,
   fetchDesignationsApi,
   fetchManagersApi,
@@ -27,6 +26,7 @@ import {
   fetchNotificationSuccess,
   fetchRegisterPageDropDownOptionsSuccess,
 } from "./appSlice";
+import { fetchAllTagsApi } from "../idea/ideaApi";
 
 function* fetchRegisterPageDropdownOptionsSaga(): Generator<
   unknown,

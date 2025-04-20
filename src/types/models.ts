@@ -36,6 +36,14 @@ export type Notification = {
 };
 export type S3File = { key: string; url: string };
 
+export interface CommentResponse {
+  id: number;
+  userId: number;
+  ideaId: number;
+  content: string;
+  createdAt: string;
+}
+
 export type NotificationResponse = {
   unreadCount: number;
   notifications: Notification[];

@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import authReducer from "./features/auth/authSlice";
 import appReducer from "./features/app/appSlice";
+import ideaReducer from "./features/idea/ideaSlice";
 import rootSaga from "./rootSaga";
 
 const sagaMiddleware = createSagaMiddleware();
@@ -10,6 +11,7 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     app: appReducer,
+    idea: ideaReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),

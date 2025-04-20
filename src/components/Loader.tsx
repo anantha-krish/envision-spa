@@ -6,16 +6,17 @@ const Loader = () => {
   const activeRequests = useSelector(
     (state: RootState) => state.app.activeRequests
   );
+  const hideLoader = useSelector((state: RootState) => state.app.hideLoader);
   const envisionLogo = new URL("/assets/images/logo.png", import.meta.url).href;
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    if (activeRequests > 0) {
+    if (activeRequests > 0 && !hideLoader) {
       dialogRef.current?.showModal();
     } else {
       dialogRef.current?.close();
     }
-  }, [activeRequests]);
+  }, [activeRequests, hideLoader]);
 
   return (
     <dialog

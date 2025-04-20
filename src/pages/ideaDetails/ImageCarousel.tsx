@@ -1,15 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FormButton } from "../../components/FormButton";
 import { IdeaDetailEditableComponentProps } from ".";
 import { ConfirmationPopup } from "../../components/ConfirmPopup";
+import { FormButton } from "../../components/FormButton";
 import { IdeaFileInputUploader } from "../../components/IdeaFileInputUploader";
+
+import toast from "react-hot-toast";
 import {
   deleteAttachementsApi,
   getAllAttachementsApi,
   uploadNewAttachementsApi,
-} from "../../features/app/appApi";
-import toast from "react-hot-toast";
+} from "../../features/idea/ideaApi";
 import { S3File } from "../../types/models";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 export const ImageCarousel: React.FC<IdeaDetailEditableComponentProps> = ({
   isEditMode,
@@ -19,13 +22,14 @@ export const ImageCarousel: React.FC<IdeaDetailEditableComponentProps> = ({
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [deletedFiles, setDeletedFiles] = useState<S3File[]>([]);
   const [images, setImages] = useState<S3File[]>([]);
+  const recipients = useSelector((state: RootState) => state.idea.recipients);
 
   const handleNewFileUpload = async () => {
     const formData = new FormData();
     if (selectedFiles.length > 0) {
       selectedFiles.forEach((file: File) => formData.append("files", file));
     }
-    await uploadNewAttachementsApi(+ideaId, formData);
+    await uploadNewAttachementsApi(+ideaId, formData, recipients, isEditMode);
     toast.success(`New files uploaded successfully `);
   };
 

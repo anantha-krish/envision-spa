@@ -1,12 +1,8 @@
 import api from "../../api/axiosInstance";
 import {
   Designation,
-  IdeaDetailsReq,
-  IdeaDetailsResponse,
   NotificationResponse,
   Role,
-  S3File,
-  Tag,
   UserProfile,
   UserWithCompleteProfiles,
 } from "../../types/models";
@@ -47,38 +43,4 @@ export const fetchUserNames = async (userIds: number[]) => {
 export const fetchAllUsersApi = async () => {
   const res = await api.get("/users");
   return res.data as UserWithCompleteProfiles[];
-};
-
-export const fetchAllTagsApi = async () => {
-  const res = await api.get("/ideas/tags");
-  return res.data as Tag[];
-};
-
-export const createNewTagApi = async (tagName: string) => {
-  const res = await api.post("/ideas/tags", { tagName });
-  return res.data as Tag;
-};
-
-export const submitNewIdeaApi = async (ideaDetails: IdeaDetailsReq) => {
-  const res = await api.post("/ideas", ideaDetails);
-  return { status: res.status, data: res.data as IdeaDetailsResponse };
-};
-
-export const uploadNewAttachementsApi = async (
-  ideaId: number,
-  formData: FormData
-) => {
-  const res = await api.post(`/files/?ideaId=${ideaId}`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-  return res.status;
-};
-
-export const getAllAttachementsApi = async (ideaId: number) => {
-  const res = await api.get(`/files/${ideaId}`);
-  return (res.data.files ?? []) as S3File[];
-};
-
-export const deleteAttachementsApi = async (keys: string[]) => {
-  await Promise.all(keys.map((fileId) => api.delete(`/files/${fileId}`)));
 };

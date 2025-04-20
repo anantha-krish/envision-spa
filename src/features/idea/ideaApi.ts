@@ -1,0 +1,80 @@
+import api from "../../api/axiosInstance";
+import {
+  CommentResponse,
+  IdeaDetailsReq,
+  IdeaDetailsResponse,
+  S3File,
+  Tag,
+} from "../../types/models";
+
+export const fetchAllTagsApi = async () => {
+  const res = await api.get("/ideas/tags");
+  return res.data as Tag[];
+};
+
+export const createNewTagApi = async (tagName: string) => {
+  const res = await api.post("/ideas/tags", { tagName });
+  return res.data as Tag;
+};
+
+export const submitNewIdeaApi = async (ideaDetails: IdeaDetailsReq) => {
+  const res = await api.post("/ideas", ideaDetails);
+  return { status: res.status, data: res.data as IdeaDetailsResponse };
+};
+
+export const getAllCommentsForIdea = async (
+  ideaId: string
+): Promise<CommentResponse[]> => {
+  const res = await api.get(`/engagement/comments/${ideaId}`);
+  return res.data.comments as CommentResponse[];
+};
+export const NewCommentsForIdea = async (
+  ideaId: string,
+  content: string,
+  recipients: number
+): Promise<CommentResponse[]> => {
+  const res = await api.post(`/engagement/comments/${ideaId}`, {
+    content,
+    recipients,
+  });
+  return res.data.comments as CommentResponse[];
+};
+
+export const NewLikeForIdea = async (
+  ideaId: string,
+  recipients: number
+): Promise<CommentResponse[]> => {
+  const res = await api.post(`/engagement/likes/${ideaId}`, {
+    recipients,
+  });
+  return res.data.comments as CommentResponse[];
+};
+
+export const uploadNewAttachementsApi = async (
+  ideaId: number,
+  formData: FormData,
+  recipients: number[],
+  isEditMode: boolean
+) => {
+  const query = new URLSearchParams({ ideaId: ideaId.toString() });
+  if (isEditMode) {
+    query.append("edit", "true");
+  }
+  const res = await api.post(
+    `/files/?${query.toString()}`,
+    { formData, recipients },
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+    }
+  );
+  return res.status;
+};
+
+export const getAllAttachementsApi = async (ideaId: number) => {
+  const res = await api.get(`/files/${ideaId}`);
+  return (res.data.files ?? []) as S3File[];
+};
+
+export const deleteAttachementsApi = async (keys: string[]) => {
+  await Promise.all(keys.map((fileId) => api.delete(`/files/${fileId}`)));
+};

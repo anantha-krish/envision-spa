@@ -11,6 +11,7 @@ import { Notification } from "../../types/models";
 const savedTheme = sessionStorage.getItem("theme") || "light";
 interface appState {
   theme: string;
+  hideLoader: boolean;
   activeRequests: number;
   navigationTarget: string | null;
   notifications: Notification[];
@@ -30,6 +31,7 @@ const appSlice = createSlice({
   name: "app",
 
   initialState: {
+    hideLoader: false,
     activeRequests: 0,
     unreadNotificationCount: 0,
     notifications: [],
@@ -49,6 +51,12 @@ const appSlice = createSlice({
   reducers: {
     requestStart: (state) => {
       state.activeRequests += 1;
+    },
+    hideLoader: (state) => {
+      state.hideLoader = true;
+    },
+    showLoader: (state) => {
+      state.hideLoader = false;
     },
     navigateTo: (state, action) => {
       state.navigationTarget = action.payload;
@@ -146,5 +154,7 @@ export const {
   fetchNotificationSuccess,
   addNewTagOnSuccess,
   markAllNotificationAsRead,
+  hideLoader,
+  showLoader,
 } = appSlice.actions;
 export default appSlice.reducer;
