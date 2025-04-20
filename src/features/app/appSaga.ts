@@ -16,7 +16,7 @@ import {
   Role,
   Tag,
   UserProfile,
-  UserWithCompleteProfiles,
+  UserWithCompleteProfile,
 } from "../../types/models";
 import {
   clearIdeaPageDropDownOptions,
@@ -54,7 +54,7 @@ function* fetchRegisterPageDropdownOptionsSaga(): Generator<
 function* fetchIdeaPageDropdownOptionsSaga(): Generator<
   unknown,
   void,
-  [UserProfile[], UserWithCompleteProfiles[], Tag[]]
+  [UserProfile[], UserWithCompleteProfile[], Tag[]]
 > {
   try {
     const [managers, users, tags] = yield all([
@@ -93,6 +93,7 @@ function* clearRegisterPageDropdownOptionsSaga(): Generator<
     }
   }
 }
+
 function* fetchNotificationSaga() {
   try {
     const response = (yield call(

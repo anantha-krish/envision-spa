@@ -21,6 +21,10 @@ export const fetchNotifications = () => ({
   type: "FETCH_NOTIFICATIONS",
 });
 
+export const fetchLoggedInUserProfile = () => ({
+  type: "FETCH_LOGGED_IN_USER_PROFILE",
+});
+
 export const postNewIdea = (
   ideaDetails: IdeaDetailsReq,
   attachments: FormData

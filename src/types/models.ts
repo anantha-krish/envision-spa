@@ -16,10 +16,12 @@ export interface UserProfile {
   firstName: string;
   lastName: string;
 }
-export interface UserWithCompleteProfiles extends UserProfile {
+export interface UserWithCompleteProfile extends UserProfile {
   email: string;
-  roleCode: Pick<Role, "roleCode">;
-  designationCode: Pick<Designation, "designationCode">;
+  roleCode: Role["roleCode"];
+  designationCode: Designation["designationCode"];
+  roleName?: string;
+  designationName?: string;
   managerId?: number;
 }
 

@@ -1,10 +1,17 @@
 import toast from "react-hot-toast";
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, put, select, takeLatest } from "redux-saga/effects";
 
+import { RootState } from "../../store";
+import { UserWithCompleteProfile } from "../../types/models";
+import { fetchUserNames } from "../app/appApi";
+import { navigateTo } from "../app/appSlice";
 import { AUTH_LOGIN_REQUEST, AUTH_REGISTER_REQUEST } from "./AuthActions";
 import { loginAPI, refreshAccessTokenApi, registerAPI } from "./authApi";
-import { loginSuccess, logout } from "./authSlice";
-import { navigateTo } from "../app/appSlice";
+import {
+  fetchLoggedInUserProfileSuccess,
+  loginSuccess,
+  logout,
+} from "./authSlice";
 
 type ActionWithPayload = {
   type: string;
@@ -53,8 +60,30 @@ function* refreshAccessTokenSaga(): Generator<
     }
   }
 }
+
+function* fetchLoggedInUserProfileSaga(): Generator {
+  try {
+    const userId: number = yield select(
+      (state: RootState) => state.auth.userId
+    );
+    const [loggedInUser]: UserWithCompleteProfile[] = yield call(
+      fetchUserNames,
+      [userId]
+    );
+    yield put(fetchLoggedInUserProfileSuccess(loggedInUser));
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      toast.error(error.message);
+    }
+  }
+}
+
 export default function* authSaga() {
   yield takeLatest(AUTH_LOGIN_REQUEST, handleLogin);
   yield takeLatest(AUTH_REGISTER_REQUEST, handleRegister);
   yield takeLatest("REQUEST_ACCESS_TOKEN_REFRESH", refreshAccessTokenSaga);
+  yield takeLatest(
+    "FETCH_LOGGED_IN_USER_PROFILE",
+    fetchLoggedInUserProfileSaga
+  );
 }

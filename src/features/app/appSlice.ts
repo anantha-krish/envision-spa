@@ -4,7 +4,7 @@ import {
   Role,
   Tag,
   UserProfile,
-  UserWithCompleteProfiles,
+  UserWithCompleteProfile,
 } from "../../types/models";
 import { Notification } from "../../types/models";
 
@@ -23,7 +23,7 @@ interface appState {
     roles: Role[];
     designations: Designation[];
     managers: UserProfile[];
-    users: UserWithCompleteProfiles[];
+    users: UserWithCompleteProfile[];
     tags: Tag[];
   };
 }

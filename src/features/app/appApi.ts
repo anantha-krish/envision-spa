@@ -4,7 +4,7 @@ import {
   NotificationResponse,
   Role,
   UserProfile,
-  UserWithCompleteProfiles,
+  UserWithCompleteProfile,
 } from "../../types/models";
 
 export const fetchManagersApi = async () => {
@@ -32,15 +32,12 @@ export const markAllNotificationAsRedApi = async () => {
 
 export const fetchUserNames = async (userIds: number[]) => {
   const params = new URLSearchParams();
-
-  userIds.forEach((value) => {
-    params.append(`userIds`, value.toString());
-  });
+  params.append(`userIds`, userIds.join(","));
   const res = await api.get("/users", { params });
   return res.data as UserProfile[];
 };
 
 export const fetchAllUsersApi = async () => {
   const res = await api.get("/users");
-  return res.data as UserWithCompleteProfiles[];
+  return res.data as UserWithCompleteProfile[];
 };

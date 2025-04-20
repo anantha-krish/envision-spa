@@ -1,9 +1,11 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useNavigate } from "@tanstack/react-router";
 import { ThemeSwitchBar } from "./ThemeSwitchBar";
 import { ThemeSwitch } from "./ThemeSwitch";
 import { NotificationDropdown } from "./NotificationDropdown";
+import { useEffect } from "react";
+import { fetchLoggedInUserProfile } from "../features/app/appActions";
 
 const Navbar = ({
   openSubmitIdeaModal,
@@ -11,9 +13,21 @@ const Navbar = ({
   openSubmitIdeaModal: VoidFunction;
 }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const role = useSelector((state: RootState) => state.auth.role);
+  const user = useSelector((state: RootState) => state.auth);
+  const fullName =
+    user.isAuthenticated && user.firstName
+      ? [user.firstName, user.lastName].join(" ")
+      : "";
   const isAdminRole = role === "ADMIN";
+
+  useEffect(() => {
+    if (user.isAuthenticated) {
+      dispatch(fetchLoggedInUserProfile());
+    }
+  }, [dispatch, user.isAuthenticated]);
 
   if (!token) return <ThemeSwitchBar />;
   const envisionLogo = new URL("/assets/images/logo.png", import.meta.url).href;
@@ -57,7 +71,22 @@ const Navbar = ({
         </button>
 
         <NotificationDropdown />
-
+        {user && (
+          <>
+            <button className="btn pointer-events-none">
+              Hi, {user.firstName}
+            </button>
+            <div className="avatar">
+              <div className="w-9 rounded-full ring ring-gray-500 dark:ring-offset-gray-700 ring-offset-base-100 ring-offset-2">
+                <img
+                  src={`https://api.dicebear.com/7.x/initials/svg?seed=${fullName}`}
+                  className="inline "
+                  alt={fullName}
+                />
+              </div>
+            </div>
+          </>
+        )}
         <button
           onClick={() => navigate({ to: "/logout" })}
           className="btn  btn-ghost"
