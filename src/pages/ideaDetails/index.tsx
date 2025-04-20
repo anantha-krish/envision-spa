@@ -16,7 +16,7 @@ import {
 import { useNavigate } from "@tanstack/react-router";
 import clsx from "clsx";
 import { fetchParticpantsDetails } from "../../features/idea/ideaActions";
-
+import StatusBadge, { Status } from "../../components/StatusBadge";
 export interface IdeaDetailBaseComponentProps {
   ideaId: string;
 }
@@ -36,7 +36,11 @@ export const IdeaDetailsPage: React.FC = () => {
     (state: RootState) => state.auth.userId
   );
   const tags = useSelector((state: RootState) => state.idea.tags);
-  const statusName = useSelector((state: RootState) => state.idea.statusName);
+
+  const statusName = useSelector(
+    (state: RootState) => state.idea.statusName
+  ) as Status;
+
   const lazyLoader = useSelector((state: RootState) => state.app.lazyLoader);
 
   const manager = useSelector((state: RootState) => state.idea.manager);
@@ -60,11 +64,11 @@ export const IdeaDetailsPage: React.FC = () => {
     <div className="idea_detail_container flex w-full p-6">
       <div className="idea_left_box flex-2/3">
         <div className="flex flex-col">
-          <div className="idea_detail_content bg-gray-700 min-h-56">
+          <div className="idea_detail_content">
             {isEditMode ? (
-              <EditIdeaDetailsComponent ideaId={ideaId} />
+              <EditIdeaDetailsComponent />
             ) : (
-              <ViewIdeaDetailsPage ideaId={ideaId} />
+              <ViewIdeaDetailsPage />
             )}
           </div>
           <div className="idea_detail_files">
@@ -104,12 +108,14 @@ export const IdeaDetailsPage: React.FC = () => {
             )}
           </div>
           <div className="tag_container">
-            <h2 className="mb-2 font-semibold text-gray-600">Tags</h2>
+            <h2 className="mb-2 font-semibold text-gray-600 dark:text-gray-400">
+              Tags
+            </h2>
             <div className="tags flex flex-wrap gap-2">
               {tags.map((tag, index) => (
                 <div
                   key={`tag-${index}`}
-                  className="badge bg-gray-300 badge-lg p-4"
+                  className="badge bg-gray-300 dark:bg-gray-800 badge-lg p-4"
                 >
                   {tag}
                 </div>
@@ -117,13 +123,17 @@ export const IdeaDetailsPage: React.FC = () => {
             </div>
           </div>
           <div className="status_row">
-            <h2 className="mb-2 font-semibold  text-gray-600">Status</h2>
-            <div className="badge bg-gray-300 badge-lg p-4">{statusName}</div>
+            <h2 className="mb-2 font-semibold  text-gray-600 dark:text-gray-400">
+              Status
+            </h2>
+            <StatusBadge status={statusName} />
           </div>
           <div className="flex gap-15 w-32">
             {manager && (
               <div className="manager">
-                <h2 className="mb-2 font-semibold  text-gray-600">Manager</h2>
+                <h2 className="mb-2 font-semibold  text-gray-600 dark:text-gray-400">
+                  Manager
+                </h2>
                 <div className="flex flex-col items-center">
                   <div className="avatar">
                     <div className="w-12 rounded-full ring ring-gray-500 dark:ring-offset-gray-700 ring-offset-base-100 ring-offset-2">
@@ -139,7 +149,9 @@ export const IdeaDetailsPage: React.FC = () => {
             )}
             {approver && (
               <div className="approver">
-                <h2 className="mb-2 font-semibold  text-gray-600">Approver</h2>
+                <h2 className="mb-2 font-semibold  text-gray-600 dark:text-gray-400">
+                  Approver
+                </h2>
                 <div className="flex flex-col items-center">
                   <div className="avatar">
                     <div className="w-12 rounded-full ring ring-gray-500 dark:ring-offset-gray-700 ring-offset-base-100 ring-offset-2">
@@ -156,7 +168,9 @@ export const IdeaDetailsPage: React.FC = () => {
           </div>
 
           <div>
-            <h2 className="mb-2 font-semibold  text-gray-600">Contributors</h2>
+            <h2 className="mb-2 font-semibold  text-gray-600 dark:text-gray-400">
+              Contributors
+            </h2>
             <div className="tags flex flex-wrap space-x-2 gap-2">
               {submitters.map(({ firstName, lastName, userId }) => (
                 <div
@@ -179,7 +193,7 @@ export const IdeaDetailsPage: React.FC = () => {
 
           {pocTeamMembers && (
             <div>
-              <h2 className="mb-2 font-semibold  text-gray-600">
+              <h2 className="mb-2 font-semibold  text-gray-600 dark:text-gray-400">
                 Team: {pocTeamName}
               </h2>
               <div className=" flex flex-wrap space-x-4 gap-2">
