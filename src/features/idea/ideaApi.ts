@@ -60,6 +60,10 @@ export const fetchLikeStatusForIdeaApi = async (ideaId: number) => {
   const res = await api.get(`/engagement/likes/${ideaId}/status`);
   return res.data.liked as boolean;
 };
+export const fetchLikeCountForIdeaApi = async (ideaId: number) => {
+  const res = await api.get(`/engagement/likes/${ideaId}`);
+  return res.data.likes as number;
+};
 
 export const uploadNewAttachementsApi = async (
   ideaId: number,

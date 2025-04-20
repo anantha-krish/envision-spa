@@ -16,6 +16,7 @@ import {
   addNewCommentsForIdeaApi,
   addNewLikeForIdeaApi,
   fetchIdeaDetailsById,
+  fetchLikeCountForIdeaApi,
   fetchLikeStatusForIdeaApi,
   getAllCommentsForIdea,
 } from "./ideaApi";
@@ -153,7 +154,9 @@ function* handleFetchLikeStatusSaga(action: PayloadAction<number>): Generator {
     const ideaId = action.payload;
     yield put(hideLoader());
     const status: boolean = yield call(fetchLikeStatusForIdeaApi, ideaId);
+    const count: number = yield call(fetchLikeCountForIdeaApi, ideaId);
     yield put(updateLikeStatus(status));
+    yield put(updateCount({ likes: count }));
     yield put(showLoader());
   } catch (error: unknown) {
     if (error instanceof Error) {
