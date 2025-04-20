@@ -67,3 +67,9 @@ export type IdeaDetailsReq = {
 export interface IdeaDetailsResponse extends IdeaDetailsReq {
   ideaId: number;
 }
+
+export interface LikeResponse {
+  liked: boolean;
+  totalCount: number;
+  message: string;
+}

@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchNotifications } from "../features/app/appActions";
 import { markAllNotificationAsRedApi } from "../features/app/appApi";
-import { markAllNotificationAsRead } from "../features/app/appSlice";
+import {
+  hideLoader,
+  markAllNotificationAsRead,
+  showLoader,
+} from "../features/app/appSlice";
 import { RootState } from "../store";
 import { useNotificationSocket } from "../utils/useNotificationSocket";
 
@@ -43,8 +47,10 @@ export const NotificationDropdown: React.FC = () => {
   const toggleDropdown = async () => {
     setIsOpen(!isOpen);
     if (isOpen && unreadCount > 0) {
+      dispatch(hideLoader());
       await markAllNotificationAsRedApi();
       dispatch(markAllNotificationAsRead());
+      dispatch(showLoader());
     }
   };
 

@@ -3,8 +3,9 @@ import { IdeaDetailBaseComponentProps } from ".";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchComments,
+  fetchLikeStatus,
   postNewCommentEvent,
-  postNewLikeEvent,
+  toggleLikeEvent,
 } from "../../features/idea/ideaActions";
 import { clearComments } from "../../features/idea/ideaSlice";
 import { RootState } from "../../store";
@@ -14,6 +15,7 @@ export const CommentSection: React.FC<IdeaDetailBaseComponentProps> = ({
 }) => {
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(fetchLikeStatus(+ideaId));
     dispatch(fetchComments(+ideaId));
     return () => {
       //cleanup
@@ -22,6 +24,7 @@ export const CommentSection: React.FC<IdeaDetailBaseComponentProps> = ({
   }, [dispatch, ideaId]);
 
   const engagementCount = useSelector((state: RootState) => state.idea.count);
+  const isLiked = useSelector((state: RootState) => state.idea.isLiked);
 
   const [showCommentBox, setShowCommentBox] = useState(false);
   const comments = useSelector((state: RootState) => state.idea.comments);
@@ -38,10 +41,11 @@ export const CommentSection: React.FC<IdeaDetailBaseComponentProps> = ({
         <div className="flex space-x-4">
           <button
             className="btn btn-lg text-xl btn-ghost"
-            onClick={() => dispatch(postNewLikeEvent(+ideaId))}
+            onClick={() => dispatch(toggleLikeEvent(+ideaId, isLiked))}
           >
             👍
-            <span className="ml-1">{engagementCount.likes}</span> Likes
+            <span className="ml-1">{engagementCount.likes}</span> Likes (
+            {isLiked ? "Liked" : "Disliked"})
           </button>
           <button
             className="btn btn-lg text-xl btn-ghost"

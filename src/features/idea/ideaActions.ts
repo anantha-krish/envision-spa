@@ -3,12 +3,17 @@ export const fetchComments = (ideaId: number) => ({
   payload: ideaId,
 });
 
+export const fetchLikeStatus = (ideaId: number) => ({
+  type: "FETCH_LIKE_STATUS",
+  payload: ideaId,
+});
+
 export const postNewCommentEvent = (ideaId: number, content: string) => ({
   type: "COMMENT",
   payload: { ideaId, content },
 });
 
-export const postNewLikeEvent = (ideaId: number) => ({
+export const toggleLikeEvent = (ideaId: number, liked: boolean) => ({
   type: "LIKE",
-  payload: ideaId,
+  payload: { ideaId, liked: !liked },
 });

@@ -3,6 +3,7 @@ import {
   CommentResponse,
   IdeaDetailsReq,
   IdeaDetailsResponse,
+  LikeResponse,
   S3File,
   Tag,
 } from "../../types/models";
@@ -23,13 +24,13 @@ export const submitNewIdeaApi = async (ideaDetails: IdeaDetailsReq) => {
 };
 
 export const getAllCommentsForIdea = async (
-  ideaId: string
+  ideaId: number
 ): Promise<CommentResponse[]> => {
   const res = await api.get(`/engagement/comments/${ideaId}`);
   return res.data.comments as CommentResponse[];
 };
 export const addNewCommentsForIdeaApi = async (
-  ideaId: string,
+  ideaId: number,
   content: string,
   recipients: number[]
 ): Promise<CommentResponse> => {
@@ -41,13 +42,18 @@ export const addNewCommentsForIdeaApi = async (
 };
 
 export const addNewLikeForIdeaApi = async (
-  ideaId: string,
+  ideaId: number,
   recipients: number[]
 ) => {
   const res = await api.post(`/engagement/likes/${ideaId}`, {
     recipients,
   });
-  return res;
+  return res.data as LikeResponse;
+};
+
+export const fetchLikeStatusForIdeaApi = async (ideaId: number) => {
+  const res = await api.get(`/engagement/likes/${ideaId}/status`);
+  return res.data.liked as boolean;
 };
 
 export const uploadNewAttachementsApi = async (

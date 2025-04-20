@@ -4,26 +4,29 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import toast from "react-hot-toast";
 import { call, put, select, takeLatest } from "redux-saga/effects";
 import { RootState } from "../../store";
-import { CommentResponse, UserProfile } from "../../types/models";
+import { CommentResponse, LikeResponse, UserProfile } from "../../types/models";
 import { fetchUserNames } from "../app/appApi";
 import { hideLoader, showLoader } from "../app/appSlice";
 import {
   addNewCommentsForIdeaApi,
   addNewLikeForIdeaApi,
+  fetchLikeStatusForIdeaApi,
   getAllCommentsForIdea,
 } from "./ideaApi";
 import {
   addRecipients,
+  decrementCount,
   incrementCount,
   loadComments,
   postNewCommentFinal,
   postNewCommentInitial,
   updateCount,
+  updateLikeStatus,
 } from "./ideaSlice";
 
 dayjs.extend(relativeTime);
 
-function* handlefetchCommentsSaga(action: PayloadAction<string>): Generator {
+function* handlefetchCommentsSaga(action: PayloadAction<number>): Generator {
   try {
     const comments: CommentResponse[] = yield call(
       getAllCommentsForIdea,
@@ -59,7 +62,7 @@ function* handlefetchCommentsSaga(action: PayloadAction<string>): Generator {
 }
 
 function* handleAddNewCommentSaga(
-  action: PayloadAction<{ ideaId: string; content: string }>
+  action: PayloadAction<{ ideaId: number; content: string }>
 ): Generator {
   try {
     yield put(hideLoader());
@@ -110,16 +113,38 @@ function* handleAddNewCommentSaga(
   }
 }
 
-function* handleNewLikeSaga(action: PayloadAction<string>): Generator {
+function* handleNewLikeSaga(
+  action: PayloadAction<{ ideaId: number; liked: boolean }>
+): Generator {
   try {
+    const { ideaId, liked } = action.payload;
     yield put(hideLoader());
-    yield put(incrementCount("likes"));
+    yield put(updateLikeStatus(liked));
+    yield put(liked ? incrementCount("likes") : decrementCount("likes"));
+
     const recipients: number[] = yield select(
       (state: RootState) => state.idea.recipients
     );
-    const ideaId = action.payload;
-    yield call(addNewLikeForIdeaApi, ideaId, recipients);
+    const result: LikeResponse = yield call(
+      addNewLikeForIdeaApi,
+      ideaId,
+      recipients
+    );
+    yield put(updateCount({ likes: result.totalCount }));
+    yield put(showLoader());
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      //     toast.error(error.message);
+    }
+  }
+}
 
+function* handleFetchLikeStatusSaga(action: PayloadAction<number>): Generator {
+  try {
+    const ideaId = action.payload;
+    yield put(hideLoader());
+    const status: boolean = yield call(fetchLikeStatusForIdeaApi, ideaId);
+    yield put(updateLikeStatus(status));
     yield put(showLoader());
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -132,4 +157,5 @@ export default function* ideaSaga() {
   yield takeLatest("FETCH_COMMENTS", handlefetchCommentsSaga);
   yield takeLatest("COMMENT", handleAddNewCommentSaga);
   yield takeLatest("LIKE", handleNewLikeSaga);
+  yield takeLatest("FETCH_LIKE_STATUS", handleFetchLikeStatusSaga);
 }

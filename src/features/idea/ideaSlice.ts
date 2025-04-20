@@ -17,11 +17,13 @@ interface IdeaState {
   comments: Comment[];
   recipients: number[];
   count: EngagementCount;
+  isLiked: boolean;
 }
 const initialState: IdeaState = {
   comments: [],
   recipients: [],
   count: { likes: 0, comments: 0, views: 0 },
+  isLiked: false,
 };
 
 const ideaSlice = createSlice({
@@ -30,6 +32,15 @@ const ideaSlice = createSlice({
   reducers: {
     addRecipients: (state, action: PayloadAction<number[]>) => {
       state.recipients = [...new Set([...state.recipients, ...action.payload])];
+    },
+    updateLikeStatus: (state, action: PayloadAction<boolean>) => {
+      state.isLiked = action.payload;
+    },
+    toggleLikeStatus: (state) => {
+      state.isLiked = !state.isLiked;
+    },
+    resetLikeStatus: (state) => {
+      state.isLiked = initialState.isLiked;
     },
     clearRecipients: (state) => {
       state.recipients = [];
@@ -45,10 +56,6 @@ const ideaSlice = createSlice({
     },
     postNewCommentFinal: (state, action: PayloadAction<Comment>) => {
       state.comments[0] = action.payload;
-      state.comments.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
     },
     clearIdeaState: (state) => {
       state.comments = initialState.comments;
@@ -65,6 +72,12 @@ const ideaSlice = createSlice({
       const field = action.payload;
       state.count[field] += 1;
     },
+    decrementCount: (state, action: PayloadAction<keyof EngagementCount>) => {
+      const field = action.payload;
+      if (state.count[field] > 0) {
+        state.count[field] -= 1;
+      }
+    },
   },
 });
 
@@ -79,5 +92,7 @@ export const {
   resetCounts,
   updateCount,
   incrementCount,
+  decrementCount,
+  updateLikeStatus,
 } = ideaSlice.actions;
 export default ideaSlice.reducer;
