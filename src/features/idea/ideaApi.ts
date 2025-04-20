@@ -28,26 +28,26 @@ export const getAllCommentsForIdea = async (
   const res = await api.get(`/engagement/comments/${ideaId}`);
   return res.data.comments as CommentResponse[];
 };
-export const NewCommentsForIdea = async (
+export const addNewCommentsForIdeaApi = async (
   ideaId: string,
   content: string,
-  recipients: number
-): Promise<CommentResponse[]> => {
+  recipients: number[]
+): Promise<CommentResponse> => {
   const res = await api.post(`/engagement/comments/${ideaId}`, {
     content,
     recipients,
   });
-  return res.data.comments as CommentResponse[];
+  return res.data as CommentResponse;
 };
 
-export const NewLikeForIdea = async (
+export const addNewLikeForIdeaApi = async (
   ideaId: string,
-  recipients: number
-): Promise<CommentResponse[]> => {
+  recipients: number[]
+) => {
   const res = await api.post(`/engagement/likes/${ideaId}`, {
     recipients,
   });
-  return res.data.comments as CommentResponse[];
+  return res;
 };
 
 export const uploadNewAttachementsApi = async (

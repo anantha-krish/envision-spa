@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { IdeaDetailBaseComponentProps } from ".";
-import { HandThumbUpIcon } from "@heroicons/react/24/solid";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchComments } from "../../features/idea/ideaActions";
+import {
+  fetchComments,
+  postNewCommentEvent,
+  postNewLikeEvent,
+} from "../../features/idea/ideaActions";
 import { clearComments } from "../../features/idea/ideaSlice";
 import { RootState } from "../../store";
 
@@ -18,17 +21,14 @@ export const CommentSection: React.FC<IdeaDetailBaseComponentProps> = ({
     };
   }, [dispatch, ideaId]);
 
+  const engagementCount = useSelector((state: RootState) => state.idea.count);
+
   const [showCommentBox, setShowCommentBox] = useState(false);
   const comments = useSelector((state: RootState) => state.idea.comments);
   const [newComment, setNewComment] = useState("");
-  const handleAddComment = () => {
-    if (!newComment.trim()) return;
-    /*  setComments([
-      ...comments,
-      { id: Date.now(), user: "You", text: newComment },
-    ]);
-    */
-    setNewComment("");
+  const handleAddComment = async () => {
+    setShowCommentBox(false);
+    dispatch(postNewCommentEvent(+ideaId, newComment));
   };
 
   return (
@@ -36,19 +36,21 @@ export const CommentSection: React.FC<IdeaDetailBaseComponentProps> = ({
       {/* Toolbar */}
       <div className="comment_toolBar flex items-center justify-between border-b pb-2 mb-3">
         <div className="flex space-x-4">
-          <button className="btn btn-lg text-xl btn-ghost">
+          <button
+            className="btn btn-lg text-xl btn-ghost"
+            onClick={() => dispatch(postNewLikeEvent(+ideaId))}
+          >
             👍
-            <HandThumbUpIcon />
-            <span className="ml-1">12</span> Likes
+            <span className="ml-1">{engagementCount.likes}</span> Likes
           </button>
           <button
             className="btn btn-lg text-xl btn-ghost"
             onClick={() => setShowCommentBox(!showCommentBox)}
           >
-            💬 <span className="ml-1">2</span>Comment
+            💬 <span className="ml-1">{engagementCount.comments}</span>Comment
           </button>
           <button className=" btn-lg text-xl btn-ghost font-semibold ">
-            👁️ <span className="ml-1">34</span> Views
+            👁️ <span className="ml-1">{engagementCount.views}</span> Views
           </button>
         </div>
       </div>
