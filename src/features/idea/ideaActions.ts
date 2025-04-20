@@ -8,6 +8,11 @@ export const fetchIdeaDetails = (ideaId: number, isEditMode: boolean) => ({
   payload: { ideaId, isEditMode },
 });
 
+export const fetchParticpantsDetails = (ideaId: number) => ({
+  type: "FETCH_PARTCIPANTS_DETAILS",
+  payload: ideaId,
+});
+
 export const fetchLikeStatus = (ideaId: number) => ({
   type: "FETCH_LIKE_STATUS",
   payload: ideaId,

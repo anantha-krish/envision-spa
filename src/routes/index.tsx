@@ -92,6 +92,7 @@ export const ideaDetailsRoute = createRoute({
     const dispatch = context.dispatch;
     dispatch(fetchIdeaDetails(+ideaId, mode === "edit"));
   },
+
   component: () => <IdeaDetailsPage />,
 });
 

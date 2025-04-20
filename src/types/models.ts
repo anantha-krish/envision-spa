@@ -105,3 +105,17 @@ export type IdeaDetail = IdeaItem & {
   updatedAt: string;
   submittedBy: number[];
 };
+
+export interface Approver {
+  userId: number;
+  name: string;
+  ideaId: number;
+  assignedAt: string;
+}
+export interface PocTeamMember {
+  userId: number;
+  name: string;
+  role: string;
+  teamName: string;
+  ideaId: number;
+}

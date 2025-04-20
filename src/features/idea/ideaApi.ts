@@ -1,12 +1,14 @@
 import { AxiosResponse } from "axios";
 import api from "../../api/axiosInstance";
 import {
+  Approver,
   CommentResponse,
   IdeaDetail,
   IdeaDetailsReq,
   IdeaDetailsResponse,
   IdeaItem,
   LikeResponse,
+  PocTeamMember,
   S3File,
   SortOption,
   SortOrder,
@@ -112,4 +114,14 @@ export const fetchIdeaList = async (
 export const fetchIdeaDetailsById = async (ideadId: number) => {
   const res = await api.get(`/ideas/${ideadId}`);
   return res as AxiosResponse<IdeaDetail>;
+};
+
+export const fetchPocTeamForIdea = async (ideaId: number) => {
+  const res = await api.get(`/ideas/teams/poc-teams?ideaId=${ideaId}`);
+  return res.data as PocTeamMember[];
+};
+
+export const fetchApproverForIdea = async (ideaId: number) => {
+  const res = await api.get(`/ideas/approvers?ideaId=${ideaId}`);
+  return res.data[0] as Approver;
 };

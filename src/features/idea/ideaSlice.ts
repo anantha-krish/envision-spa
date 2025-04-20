@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IdeaDetail } from "../../types/models";
+import { IdeaDetail, UserProfile } from "../../types/models";
 interface Comment {
   id: number;
   ideaId: number;
@@ -13,7 +13,13 @@ interface EngagementCount {
   comments: number;
   views: number;
 }
-interface IdeaState extends EngagementCount, IdeaDetail {
+interface Participants {
+  approver: UserProfile | null;
+  submitters: UserProfile[];
+  manager: UserProfile | null;
+  pocTeamMembers: UserProfile[];
+}
+interface IdeaState extends EngagementCount, IdeaDetail, Participants {
   commentList: Comment[];
   recipients: number[];
   isLiked: boolean;
@@ -38,6 +44,10 @@ const initialState: IdeaState = {
   recipients: [],
   isLiked: false,
   canEdit: false,
+  approver: null,
+  submitters: [],
+  manager: null,
+  pocTeamMembers: [],
 };
 
 const ideaSlice = createSlice({
@@ -110,6 +120,9 @@ const ideaSlice = createSlice({
       state.recipients = initialState.recipients;
       state.isLiked = initialState.isLiked;
       state.canEdit = initialState.canEdit;
+      state.approver = initialState.approver;
+      state.submitters = initialState.submitters;
+      state.manager = initialState.manager;
     },
     resetCounts: (state) => {
       state.likes = initialState.likes;
@@ -130,6 +143,24 @@ const ideaSlice = createSlice({
       if (state[field] > 0) {
         state[field] = Number(state[field]) - 1;
       }
+    },
+    setApprover: (state, action: PayloadAction<UserProfile | null>) => {
+      state.approver = action.payload;
+    },
+    setSubmitters: (state, action: PayloadAction<UserProfile[]>) => {
+      state.submitters = action.payload;
+    },
+    setManager: (state, action: PayloadAction<UserProfile | null>) => {
+      state.manager = action.payload;
+    },
+    setPocTeamMembers: (state, action: PayloadAction<UserProfile[]>) => {
+      state.pocTeamMembers = action.payload;
+    },
+    clearAllParticpants: (state) => {
+      state.approver = null;
+      state.submitters = [];
+      state.manager = null;
+      state.pocTeamMembers = [];
     },
   },
 });
@@ -152,5 +183,10 @@ export const {
   toggleLikeStatus,
   resetCanEditStatus,
   updateCanEditStatus,
+  clearAllParticpants,
+  setApprover,
+  setManager,
+  setPocTeamMembers,
+  setSubmitters,
 } = ideaSlice.actions;
 export default ideaSlice.reducer;

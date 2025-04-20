@@ -5,9 +5,11 @@ import toast from "react-hot-toast";
 import { call, put, select, takeLatest } from "redux-saga/effects";
 import { RootState } from "../../store";
 import {
+  Approver,
   CommentResponse,
   IdeaDetail,
   LikeResponse,
+  PocTeamMember,
   UserProfile,
 } from "../../types/models";
 import { fetchUserNames } from "../app/appApi";
@@ -15,9 +17,11 @@ import { hideLoader, navigateTo, showLoader } from "../app/appSlice";
 import {
   addNewCommentsForIdeaApi,
   addNewLikeForIdeaApi,
+  fetchApproverForIdea,
   fetchIdeaDetailsById,
   fetchLikeCountForIdeaApi,
   fetchLikeStatusForIdeaApi,
+  fetchPocTeamForIdea,
   getAllCommentsForIdea,
 } from "./ideaApi";
 import {
@@ -28,11 +32,15 @@ import {
   loadIdeaDetailsState,
   postNewCommentFinal,
   postNewCommentInitial,
+  setApprover,
+  setManager,
+  setPocTeamMembers,
+  setSubmitters,
   updateCanEditStatus,
   updateCount,
   updateLikeStatus,
 } from "./ideaSlice";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
 dayjs.extend(relativeTime);
 
@@ -149,6 +157,63 @@ function* handleNewLikeSaga(
   }
 }
 
+function* handleFetchParticipantsDetailsSaga(
+  action: PayloadAction<number>
+): Generator {
+  try {
+    const ideaId = action.payload;
+    yield put(hideLoader());
+    const approver: Approver = yield call(fetchApproverForIdea, ideaId);
+    const pocTeamMembers: PocTeamMember[] = yield call(
+      fetchPocTeamForIdea,
+      ideaId
+    );
+    const approverId = approver.userId;
+    const pocTeamMemberIds = pocTeamMembers.map((item) => item.userId);
+    const submittersIds = yield select(
+      (state: RootState) => state.idea.submittedBy
+    );
+    const managerId = yield select((state: RootState) => state.idea.managerId);
+    const recipientsForIdea = [
+      ...new Set([
+        approverId,
+        ...submittersIds,
+        ...pocTeamMemberIds,
+        managerId,
+      ]),
+    ];
+
+    yield put(addRecipients(recipientsForIdea));
+
+    const userProfiles: UserProfile[] = yield call(
+      fetchUserNames,
+      recipientsForIdea
+    );
+    const approverProfile = userProfiles.find(
+      (user) => user.userId === approverId
+    );
+    yield put(setApprover(approverProfile ?? null));
+
+    const manager = userProfiles.find((user) => user.userId === managerId);
+    yield put(setManager(manager ?? null));
+
+    const submitters = userProfiles.filter((user) =>
+      submittersIds.includes(user.userId)
+    );
+    yield put(setSubmitters(submitters));
+
+    const pocTeamMemberProfiles = userProfiles.filter((user) =>
+      pocTeamMemberIds.includes(user.userId)
+    );
+    yield put(setPocTeamMembers(pocTeamMemberProfiles));
+    yield put(showLoader());
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      //     toast.error(error.message);
+    }
+  }
+}
+
 function* handleFetchLikeStatusSaga(action: PayloadAction<number>): Generator {
   try {
     const ideaId = action.payload;
@@ -174,9 +239,7 @@ function* handleFetchIdeaDetailsSaga(
       fetchIdeaDetailsById,
       ideaId
     );
-    if (response.status === 404) {
-      yield put(navigateTo("/ideas/not-found"));
-    }
+
     yield put(loadIdeaDetailsState(response.data));
 
     const loggedInUserId = yield select(
@@ -192,6 +255,12 @@ function* handleFetchIdeaDetailsSaga(
       yield put(navigateTo("/permission-error"));
     }
   } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      if (error.status === 404) {
+        yield put(navigateTo("/ideas/not-found"));
+        return;
+      }
+    }
     if (error instanceof Error) {
       toast.error(error.message);
     }
@@ -204,4 +273,8 @@ export default function* ideaSaga() {
   yield takeLatest("LIKE", handleNewLikeSaga);
   yield takeLatest("FETCH_LIKE_STATUS", handleFetchLikeStatusSaga);
   yield takeLatest("FETCH_IDEA_DETAILS", handleFetchIdeaDetailsSaga);
+  yield takeLatest(
+    "FETCH_PARTCIPANTS_DETAILS",
+    handleFetchParticipantsDetailsSaga
+  );
 }
