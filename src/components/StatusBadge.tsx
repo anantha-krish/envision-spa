@@ -13,7 +13,7 @@ export type Status =
   | "ARCHIVED"
   | "CANCELED";
 
-const statusColorMap: Record<Status, string> = {
+export const statusColorMap: Record<Status, string> = {
   SUBMITTED: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100",
   UNDER_REVIEW:
     "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100",

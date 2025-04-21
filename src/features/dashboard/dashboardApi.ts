@@ -7,7 +7,8 @@ import {
 } from "../../types/models";
 
 export const ideaStatsApi = {
-  fetchTopIdeas: () => api.get<TopIdeasResponse>("/ideas/stats/top-ideas"),
+  fetchTopIdeas: () =>
+    api.get<TopIdeasResponse>("/ideas/stats/top-ideas?limit=3"),
   fetchIdeaStatusDistribution: () =>
     api.get<StatusDistributionResponse>("/ideas/stats/status-distribution"),
   fetchIdeaSubmissionRate: () =>
