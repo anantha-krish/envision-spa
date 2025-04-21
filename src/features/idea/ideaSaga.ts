@@ -172,7 +172,7 @@ function* handleFetchParticipantsDetailsSaga(
     if (pocTeamMembers.length > 0) {
       yield put(setPocTeamName(pocTeamMembers[0].teamName));
     }
-    const approverId = approver.userId;
+    const approverId = approver?.userId;
     const pocTeamMemberIds = pocTeamMembers?.map((item) => item.userId) ?? [];
     const submittersIds = yield select(
       (state: RootState) => state.idea.submittedBy

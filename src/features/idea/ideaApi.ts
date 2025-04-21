@@ -74,9 +74,10 @@ export const uploadNewAttachementsApi = async (
   if (isEditMode) {
     query.append("edit", "true");
   }
+  const recipientString = recipients?.join(",");
   const res = await api.post(
     `/files/?${query.toString()}`,
-    { formData, recipients },
+    { formData, recipients: recipientString },
     {
       headers: { "Content-Type": "multipart/form-data" },
     }
