@@ -15,8 +15,8 @@ import {
 import clsx from "clsx";
 import { FormButton } from "../../components/FormButton";
 import { fetchAllTagsAction } from "../../features/app/appActions";
-import { STATUS_CODES } from "../../utils/constants";
-import StatusBadge, { Status } from "../../components/StatusBadge";
+import { SortOptionsWithLabel, STATUS_CODES } from "../../utils/constants";
+import { Status } from "../../components/StatusBadge";
 
 type IdeaFilterFormValues = typeof initialValues;
 
@@ -111,7 +111,7 @@ export const IdeaFilterForm = () => {
                 >
                   {STATUS_CODES.map((statusCode: Status, index: number) => (
                     <option key={index + 1} value={statusCode}>
-                      <StatusBadge status={statusCode} />
+                      {statusCode.replace(/_/g, " ")}
                     </option>
                   ))}
                 </FormSelect>
@@ -124,11 +124,13 @@ export const IdeaFilterForm = () => {
                   noDefaultOption
                   noValidtion
                 >
-                  {validSortOptions.map((opt) => (
-                    <option key={opt} value={opt}>
-                      {opt}
-                    </option>
-                  ))}
+                  {Object.entries(SortOptionsWithLabel).map(
+                    ([value, label], index) => (
+                      <option key={index} value={value}>
+                        {label}
+                      </option>
+                    )
+                  )}
                 </FormSelect>
               </div>
               <div className="flex">

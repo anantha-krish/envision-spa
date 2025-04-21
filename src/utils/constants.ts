@@ -12,3 +12,11 @@ export const STATUS_CODES: Status[] = [
   "ARCHIVED",
   "CANCELED",
 ];
+
+export const SortOptionsWithLabel = {
+  popular: "Popular Ideas",
+  trend: "Trending Now",
+  most_liked: "Most Liked",
+  most_viewed: "Most Viewed",
+  recent: "Recently Added",
+};
