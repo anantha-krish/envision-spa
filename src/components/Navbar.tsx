@@ -21,7 +21,7 @@ const Navbar = ({
     user.isAuthenticated && user.firstName
       ? [user.firstName, user.lastName].join(" ")
       : "";
-  const isAdminRole = role === "ADMIN";
+  const canViewDashboard = ["ADMIN", "MANAGER"].includes(role);
 
   useEffect(() => {
     if (user.isAuthenticated) {
@@ -51,9 +51,9 @@ const Navbar = ({
           onClick={() => navigate({ to: "/" })}
           className="btn  btn-ghost"
         >
-          {isAdminRole ? "Dashboard" : "Home"}
+          {canViewDashboard ? "Dashboard" : "Home"}
         </button>
-        {isAdminRole && (
+        {canViewDashboard && (
           <button
             onClick={() => navigate({ to: "/ideas" })}
             className="btn  btn-ghost"

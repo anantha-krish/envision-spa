@@ -135,3 +135,33 @@ export interface IdeaListApiResponse {
   ideas: IdeaListItem[];
   totalCount: number;
 }
+
+export interface TopContributor {
+  userId: number;
+  userFullName?: string;
+  ideaCount: number;
+}
+
+export type TopContributorsResponse = TopContributor[];
+
+export interface IdeaSubmission {
+  date: string;
+  count: number;
+}
+
+export type IdeaSubmissionResponse = IdeaSubmission[];
+
+export interface StatusDistribution {
+  statusName: string;
+  count: number;
+}
+
+export type StatusDistributionResponse = StatusDistribution[];
+
+export interface TopIdea {
+  title: string;
+  likes: number;
+  comments: number;
+}
+
+export type TopIdeasResponse = TopIdea[];
