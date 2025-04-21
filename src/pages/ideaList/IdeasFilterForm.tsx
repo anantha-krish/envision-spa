@@ -1,4 +1,4 @@
-import { Field, Form, Formik, useFormikContext } from "formik";
+import { Form, Formik, useFormikContext } from "formik";
 import { SortOption, validSortOptions } from "../../types/models";
 import { FormInput } from "../../components/FormInput";
 import { FormSelect } from "../../components/FormSelect";
