@@ -58,7 +58,7 @@ export const IdeaDetailsPage: React.FC = () => {
       //idea state cleanup
       dispatch(clearIdeaState());
     };
-  }, [dispatch]);
+  }, [dispatch, ideaId, loggedInUser]);
 
   return (
     <div className="idea_detail_container flex w-full p-6">

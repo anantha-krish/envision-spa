@@ -90,7 +90,7 @@ export const validSortOptions = [
 export type SortOption = (typeof validSortOptions)[number];
 export type SortOrder = "ASC" | "DESC";
 
-export interface IdeaItem {
+export interface BaseIdeaItem {
   id: number;
   title: string;
   summary: string;
@@ -99,7 +99,14 @@ export interface IdeaItem {
   comments: number;
   views: number;
   createdAt: string;
+}
+
+export interface IdeaItem extends BaseIdeaItem {
   tags: string[];
+}
+
+export interface IdeaListItem extends BaseIdeaItem {
+  tags: IdeaTag[];
 }
 
 export type IdeaDetail = IdeaItem & {
@@ -122,4 +129,9 @@ export interface PocTeamMember {
   role: string;
   teamName: string;
   ideaId: number;
+}
+
+export interface IdeaListApiResponse {
+  ideas: IdeaListItem[];
+  totalCount: number;
 }

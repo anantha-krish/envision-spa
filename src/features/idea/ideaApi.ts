@@ -6,12 +6,9 @@ import {
   IdeaDetail,
   IdeaDetailsReq,
   IdeaDetailsResponse,
-  IdeaItem,
   LikeResponse,
   PocTeamMember,
   S3File,
-  SortOption,
-  SortOrder,
   Tag,
 } from "../../types/models";
 
@@ -95,22 +92,6 @@ export const getAllAttachementsApi = async (ideaId: number) => {
 export const deleteAttachementsApi = async (keys: string[]) => {
   await Promise.all(keys.map((fileId) => api.delete(`/files/${fileId}`)));
 };
-
-export const fetchIdeaList = async (
-  sortBy: SortOption,
-  page?: number,
-  pageSize?: number,
-  sortOrder?: SortOrder
-) => {
-  const params = new URLSearchParams();
-  if (page !== undefined) params.append("page", page.toString());
-  if (pageSize !== undefined) params.append("pageSize", pageSize.toString());
-  if (sortBy) params.append("sortBy", sortBy);
-  if (sortOrder) params.append("sortOrder", sortOrder);
-  const res = await api.get(`/ideas?${params.toString()}`);
-  return res.data as IdeaItem;
-};
-
 export const fetchIdeaDetailsById = async (ideadId: number) => {
   const res = await api.get(`/ideas/${ideadId}`);
   return res as AxiosResponse<IdeaDetail>;

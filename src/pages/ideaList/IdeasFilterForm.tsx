@@ -17,8 +17,12 @@ import { FormButton } from "../../components/FormButton";
 import { fetchAllTagsAction } from "../../features/app/appActions";
 import { SortOptionsWithLabel, STATUS_CODES } from "../../utils/constants";
 import { Status } from "../../components/StatusBadge";
+import { searchIdeas } from "../../features/ideaList/IdeaListAction";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
-type IdeaFilterFormValues = typeof initialValues;
+export type IdeaFilterFormValues = typeof initialValues;
 
 const initialValues = {
   sortBy: validSortOptions[4] as SortOption,
@@ -32,15 +36,10 @@ const initialValues = {
 };
 
 export const IdeaFilterForm = () => {
-  const handleSubmit = (values: IdeaFilterFormValues) => {
-    console.log(values);
-  };
-
   const dispatch = useDispatch();
-
   useEffect(() => {
     //page load perform operation
-    handleSubmit(initialValues);
+    dispatch(searchIdeas(initialValues));
     dispatch(fetchAllTagsAction());
   }, [dispatch]);
 
@@ -49,11 +48,16 @@ export const IdeaFilterForm = () => {
     <Formik
       initialValues={initialValues}
       enableReinitialize
-      onSubmit={handleSubmit}
+      onSubmit={(values) => {
+        dispatch(searchIdeas(values));
+      }}
     >
-      {({ values, setFieldValue }) => {
+      {({ values, setFieldValue, handleSubmit }) => {
         return (
-          <Form className="p-4 px-6 space-y-4 bg-base-100 rounded-xl shadow-md">
+          <Form
+            onSubmit={handleSubmit}
+            className="p-4 px-6 space-y-4 bg-base-100 rounded-xl shadow-md"
+          >
             <div className="flex gap-10 min-h-20">
               <div className="flex-5/12">
                 <FormInput
@@ -106,7 +110,7 @@ export const IdeaFilterForm = () => {
                 <FormSelect
                   name="statusCode"
                   label="Idea Status"
-                  noDefaultOption
+                  defaultOptionLabel="ALL"
                   noValidtion
                 >
                   {STATUS_CODES.map((statusCode: Status, index: number) => (
@@ -158,7 +162,7 @@ export const IdeaFilterForm = () => {
                         <ArrowDownIcon />
                       )}
                     </span>
-                    {values.sortOrder}
+                    <span className="min-w-[50px]">{values.sortOrder}</span>
                   </button>
                 </div>
               </div>
