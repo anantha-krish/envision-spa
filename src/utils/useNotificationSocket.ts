@@ -39,7 +39,7 @@ export function useNotificationSocket(accessToken: string) {
       (data: NotificationMessage, ack?: (response: string) => void) => {
         console.log("📩 Notification received:", data);
 
-        if (data.type === "unread_count" && typeof data.payload === "number") {
+        if (data.type === "unread_count") {
           dispatch(setNotificationCount(data.payload));
         }
 

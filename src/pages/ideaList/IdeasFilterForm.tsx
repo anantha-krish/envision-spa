@@ -18,9 +18,6 @@ import { fetchAllTagsAction } from "../../features/app/appActions";
 import { SortOptionsWithLabel, STATUS_CODES } from "../../utils/constants";
 import { Status } from "../../components/StatusBadge";
 import { searchIdeas } from "../../features/ideaList/IdeaListAction";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-dayjs.extend(relativeTime);
 
 export type IdeaFilterFormValues = typeof initialValues;
 
@@ -31,8 +28,8 @@ const initialValues = {
   pageSize: 10,
   search: "",
   statusCode: "",
-  tags: "",
-  andTag: false,
+  tags: [] as number[],
+  andTags: false,
 };
 
 export const IdeaFilterForm = () => {
@@ -74,19 +71,19 @@ export const IdeaFilterForm = () => {
                 <div className="flex gap-2 justify-center ">
                   <span className="min-w-20">
                     <label
-                      htmlFor={"andTag"}
+                      htmlFor={"andTags"}
                       className="text-sm mb-2 ml-1 block font-medium text-gray-900 dark:text-white"
                     >
                       Match
                     </label>
                     <button
                       type="button"
-                      onClick={() => setFieldValue("andTag", !values.andTag)}
+                      onClick={() => setFieldValue("andTags", !values.andTags)}
                       className={clsx(
                         "btn btn-primary btn-dash flex items-center gap-2 tracking-widest"
                       )}
                     >
-                      {values.andTag ? "AND" : "OR"}
+                      {values.andTags ? "AND" : "OR"}
                     </button>
                   </span>
                   <span className="flex-1">
@@ -94,8 +91,8 @@ export const IdeaFilterForm = () => {
                       name="tags"
                       label="Tags"
                       isMulti
-                      options={tagList.map(({ id, name }) => ({
-                        value: id,
+                      options={tagList.map(({ name }) => ({
+                        value: name,
                         label: name,
                       }))}
                       noValidtion
@@ -147,12 +144,13 @@ export const IdeaFilterForm = () => {
                   </label>
                   <button
                     type="button"
-                    onClick={() =>
+                    onClick={() => {
                       setFieldValue(
                         "sortOrder",
                         values.sortOrder === "ASC" ? "DESC" : "ASC"
-                      )
-                    }
+                      );
+                      handleSubmit();
+                    }}
                     className="btn btn-dash flex items-center gap-2"
                   >
                     <span className="w-5">

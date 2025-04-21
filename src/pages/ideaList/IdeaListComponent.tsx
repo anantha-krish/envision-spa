@@ -8,6 +8,9 @@ import {
 import { EyeIcon } from "@heroicons/react/24/solid";
 import { RootState } from "../../store";
 import { Link } from "@tanstack/react-router";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 export const IdeaList = () => {
   const ideas = useSelector((state: RootState) => state.ideaList.ideas);
@@ -20,17 +23,21 @@ export const IdeaList = () => {
               key={idea.id}
               className="card bg-base-100 shadow-md hover:shadow-lg transition"
             >
-              <div className="card-body">
+              <div className="card-body ">
                 <Link
                   to={"/ideas/$ideaId/$mode"}
                   params={{ ideaId: idea.id.toString(), mode: "view" }}
                 >
+                  <div className="flex flex-end mb-0.5">
+                    <sup>
+                      <time className="opacity-80">
+                        {/* update format in redux */}
+                        {dayjs(idea.createdAt).fromNow()}
+                      </time>
+                    </sup>
+                  </div>
                   <div className="flex items-center justify-between mb-2">
                     <h2 className="card-title text-lg">{idea.title}</h2>
-                    <StatusBadge
-                      status={idea.statusName as Status}
-                      className="text-xs"
-                    />
                   </div>
 
                   <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
@@ -69,10 +76,10 @@ export const IdeaList = () => {
                         {idea.views}
                       </span>
                     </div>
-                    <time className="text-xs">
-                      {/* update format in redux */}
-                      {new Date(idea.createdAt).toLocaleDateString()}
-                    </time>
+                    <StatusBadge
+                      status={idea.statusName as Status}
+                      className="text-xs"
+                    />
                   </div>
                 </Link>
               </div>
