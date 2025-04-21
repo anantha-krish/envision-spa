@@ -15,6 +15,8 @@ import {
 import clsx from "clsx";
 import { FormButton } from "../../components/FormButton";
 import { fetchAllTagsAction } from "../../features/app/appActions";
+import { STATUS_CODES } from "../../utils/constants";
+import StatusBadge, { Status } from "../../components/StatusBadge";
 
 type IdeaFilterFormValues = typeof initialValues;
 
@@ -99,24 +101,38 @@ export const IdeaFilterForm = () => {
               </div>
             </div>
 
-            <div className="flex flex-wrap justify-between">
-              <div className="flex w-1/3">
-                <div className="flex-1">
-                  <FormSelect
-                    name="sortBy"
-                    label="Sort By"
-                    noDefaultOption
-                    noValidtion
-                  >
-                    {validSortOptions.map((opt) => (
-                      <option key={opt} value={opt}>
-                        {opt}
-                      </option>
-                    ))}
-                  </FormSelect>
-                </div>
+            <div className="flex flex-wrap justify-between gap-4">
+              <div className="flex-1">
+                <FormSelect
+                  name="statusCode"
+                  label="Idea Status"
+                  noDefaultOption
+                  noValidtion
+                >
+                  {STATUS_CODES.map((statusCode: Status, index: number) => (
+                    <option key={index + 1} value={statusCode}>
+                      <StatusBadge status={statusCode} />
+                    </option>
+                  ))}
+                </FormSelect>
+              </div>
 
-                <div className="div">
+              <div className="flex-1">
+                <FormSelect
+                  name="sortBy"
+                  label="Sort By"
+                  noDefaultOption
+                  noValidtion
+                >
+                  {validSortOptions.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </FormSelect>
+              </div>
+              <div className="flex">
+                <div className="flex-1">
                   <label
                     htmlFor={"sortOrder"}
                     className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
@@ -144,61 +160,56 @@ export const IdeaFilterForm = () => {
                   </button>
                 </div>
               </div>
-              <div className="flex flex-1 gap-8 justify-center">
-                <div className="flex items-center gap-2">
-                  <div>
-                    <label
-                      htmlFor={"Pagination"}
-                      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      &nbsp;
-                    </label>
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        className="btn"
-                        disabled={values.page <= 1}
-                        onClick={() => setFieldValue("page", values.page - 1)}
-                      >
-                        <span className="w-6">
-                          <ChevronLeftIcon />
-                        </span>
-                      </button>
 
-                      <span>Page {values.page}</span>
+              <div className="flex flex-1 justify-end">
+                <div className="flex mt-5 p-2 items-center gap-2">
+                  <button
+                    type="button"
+                    className="btn"
+                    disabled={values.page <= 1}
+                    onClick={() => setFieldValue("page", values.page - 1)}
+                  >
+                    <span className="w-6">
+                      <ChevronLeftIcon />
+                    </span>
+                  </button>
 
-                      <button
-                        type="button"
-                        className="btn"
-                        onClick={() => setFieldValue("page", values.page + 1)}
-                      >
-                        <span className="w-6">
-                          <ChevronRightIcon />
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                  <span>Page {values.page}</span>
 
-                <div>
-                  <FormSelect name="pageSize" label={"Page Size"} noValidtion>
-                    {[5, 10, 20, 50].map((size) => (
-                      <option key={size} value={size}>
-                        {size}
-                      </option>
-                    ))}
-                  </FormSelect>
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={() => setFieldValue("page", values.page + 1)}
+                  >
+                    <span className="w-6">
+                      <ChevronRightIcon />
+                    </span>
+                  </button>
                 </div>
               </div>
 
-              <div className="flex pt-6 gap-8 justify-end">
-                <FormButton
-                  type="reset"
-                  color="secondary"
-                  style="outline"
-                  label="Clear"
-                />
-                <FormButton modifier="wide" type="submit" label="Apply" />
+              <div className="flex">
+                <FormSelect name="pageSize" label={"Page Size"} noValidtion>
+                  {[5, 10, 20, 50].map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </FormSelect>
+              </div>
+              <div className="px-4">&nbsp;</div>
+              <div className="flex-1 mt-5 p-2 justify-end">
+                <div className="flex gap-4">
+                  <FormButton
+                    type="reset"
+                    color="secondary"
+                    style="outline"
+                    label="Clear"
+                    className="w-25"
+                  />
+
+                  <FormButton type="submit" className="w-40" label="Apply" />
+                </div>
               </div>
             </div>
           </Form>
