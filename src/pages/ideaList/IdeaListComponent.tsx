@@ -7,6 +7,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { EyeIcon } from "@heroicons/react/24/solid";
 import { RootState } from "../../store";
+import { Link } from "@tanstack/react-router";
 
 export const IdeaList = () => {
   const ideas = useSelector((state: RootState) => state.ideaList.ideas);
@@ -20,52 +21,60 @@ export const IdeaList = () => {
               className="card bg-base-100 shadow-md hover:shadow-lg transition"
             >
               <div className="card-body">
-                <div className="flex items-center justify-between mb-2">
-                  <h2 className="card-title text-lg">{idea.title}</h2>
-                  <StatusBadge status={idea.statusName as Status} />
-                </div>
-
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                  {idea.summary}
-                </p>
-
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {idea.tags.map((tag: IdeaTag) => (
-                    <span
-                      key={tag.tagId}
-                      className="badge py-1 badge-primary dark:bg-sky-900 dark:border-sky-900"
-                    >
-                      {tag.tagName}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mt-4">
-                  <div className="flex items-center gap-4">
-                    <span className="flex items-center gap-1">
-                      <span className="w-7">
-                        <OutlineLikeIcon />
-                      </span>
-                      {idea.likes}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <span className="w-7">
-                        <OutlineCommentIcon fontSize={14} />
-                      </span>
-                      {idea.comments}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <span className="w-7">
-                        <EyeIcon fontSize={14} />
-                      </span>
-                      {idea.views}
-                    </span>
+                <Link
+                  to={"/ideas/$ideaId/$mode"}
+                  params={{ ideaId: idea.id.toString(), mode: "view" }}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h2 className="card-title text-lg">{idea.title}</h2>
+                    <StatusBadge
+                      status={idea.statusName as Status}
+                      className="text-xs"
+                    />
                   </div>
-                  <time className="text-xs">
-                    {/* update format in redux */}
-                    {new Date(idea.createdAt).toLocaleDateString()}
-                  </time>
-                </div>
+
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                    {idea.summary}
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {idea.tags.map((tag: IdeaTag) => (
+                      <span
+                        key={tag.tagId}
+                        className="badge py-1 badge-primary dark:bg-sky-900 dark:border-sky-900"
+                      >
+                        {tag.tagName}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mt-4">
+                    <div className="flex items-center gap-4">
+                      <span className="flex items-center gap-1">
+                        <span className="w-7">
+                          <OutlineLikeIcon />
+                        </span>
+                        {idea.likes}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <span className="w-7">
+                          <OutlineCommentIcon fontSize={14} />
+                        </span>
+                        {idea.comments}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <span className="w-7">
+                          <EyeIcon fontSize={14} />
+                        </span>
+                        {idea.views}
+                      </span>
+                    </div>
+                    <time className="text-xs">
+                      {/* update format in redux */}
+                      {new Date(idea.createdAt).toLocaleDateString()}
+                    </time>
+                  </div>
+                </Link>
               </div>
             </div>
           ))}

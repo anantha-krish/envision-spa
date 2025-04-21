@@ -15,7 +15,10 @@ import {
 } from "@heroicons/react/24/solid";
 import { useNavigate } from "@tanstack/react-router";
 import clsx from "clsx";
-import { fetchParticpantsDetails } from "../../features/idea/ideaActions";
+import {
+  fetchIdeaDetails,
+  fetchParticpantsDetails,
+} from "../../features/idea/ideaActions";
 import StatusBadge, { Status } from "../../components/StatusBadge";
 export interface IdeaDetailBaseComponentProps {
   ideaId: string;
@@ -54,6 +57,7 @@ export const IdeaDetailsPage: React.FC = () => {
   useEffect(() => {
     dispatch(addRecipients([loggedInUser]));
     dispatch(fetchParticpantsDetails(+ideaId));
+    dispatch(fetchIdeaDetails(+ideaId, mode === "edit"));
     return () => {
       //idea state cleanup
       dispatch(clearIdeaState());

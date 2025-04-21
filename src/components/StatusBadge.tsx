@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React from "react";
 
 export type Status =
@@ -31,12 +32,16 @@ const statusColorMap: Record<Status, string> = {
 
 interface StatusBadgeProps {
   status: Status;
+  className?: string;
 }
 
-const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
+const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className }) => {
   return (
     <span
-      className={`px-3 py-1.5 rounded-full text-sm font-semibold badge badge-lg ${statusColorMap[status]}`}
+      className={clsx(
+        `px-3 py-1.5 rounded-full text-sm font-semibold badge badge-lg ${statusColorMap[status]}`,
+        className
+      )}
     >
       {status.replace(/_/g, " ")}
     </span>

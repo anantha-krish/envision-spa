@@ -5,7 +5,6 @@ import { PermissionError } from "../pages/PermissionError";
 import { rootRoute } from "./__root";
 import { IdeaDetailsPage } from "../pages/ideaDetails";
 import { IdeaPostNotFound } from "../pages/ideaDetails/IdeaPostNotFound";
-import { fetchIdeaDetails } from "../features/idea/ideaActions";
 import { Dashboard } from "../pages/Dashboard";
 import { IdeaListPage } from "../pages/ideaList";
 
@@ -86,12 +85,10 @@ export const ideaDetailsRoute = createRoute({
   path: "ideas/$ideaId/$mode",
   beforeLoad: ({ context, params }) => {
     requireAuth(context);
-    const { mode, ideaId } = params;
+    const { mode } = params;
     if (mode && !["edit", "view"].includes(mode)) {
       throw redirect({ to: "/ideas/not-found" });
     }
-    const dispatch = context.dispatch;
-    dispatch(fetchIdeaDetails(+ideaId, mode === "edit"));
   },
 
   component: () => <IdeaDetailsPage />,
