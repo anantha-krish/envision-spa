@@ -23,6 +23,7 @@ interface FormInputProps {
   values?: FormikValues;
   minRows?: number;
   maxRows?: number;
+  noValidtion?: boolean;
 }
 
 export const FormInput = ({
@@ -37,6 +38,7 @@ export const FormInput = ({
   maxRows = 3,
   enableResize = false,
   maxLength = 0,
+  noValidtion,
 }: FormInputProps) => {
   const InputComponent = () => {
     if (type === "textarea") {
@@ -112,13 +114,15 @@ export const FormInput = ({
         )}
       </label>
       {InputComponent()}
-      <div className="mt-1 min-h-6">
-        <ErrorMessage
-          name={name}
-          component="div"
-          className="text-sm text-red-600 px-3"
-        />
-      </div>
+      {!noValidtion && (
+        <div className="mt-1 min-h-6">
+          <ErrorMessage
+            name={name}
+            component="div"
+            className="text-sm text-red-600 px-3"
+          />
+        </div>
+      )}
     </div>
   );
 };

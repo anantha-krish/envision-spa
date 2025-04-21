@@ -1,12 +1,13 @@
 import { createRoute, redirect } from "@tanstack/react-router";
 import { lazy } from "react";
-import Home from "../pages/Home";
 import { Logout } from "../pages/Logout";
 import { PermissionError } from "../pages/PermissionError";
 import { rootRoute } from "./__root";
 import { IdeaDetailsPage } from "../pages/ideaDetails";
 import { IdeaPostNotFound } from "../pages/ideaDetails/IdeaPostNotFound";
 import { fetchIdeaDetails } from "../features/idea/ideaActions";
+import { Dashboard } from "../pages/Dashboard";
+import { IdeaListPage } from "../pages/ideaList";
 
 const Login = lazy(() => import("../pages/Login"));
 const Register = lazy(() => import("../pages/Register"));
@@ -53,7 +54,7 @@ export const dashBoardRoute = createRoute({
   beforeLoad: ({ context }) => {
     requireRole(context, ["ADMIN", "MANAGER"]);
   },
-  component: () => <div>Dashboard</div>,
+  component: () => <Dashboard />,
 });
 
 export const permissionErrorRoute = createRoute({
@@ -68,7 +69,7 @@ export const ideasRoute = createRoute({
   beforeLoad: ({ context }) => {
     requireAuth(context);
   },
-  component: Home,
+  component: IdeaListPage,
 });
 
 export const ideasPostNotFoundRoute = createRoute({

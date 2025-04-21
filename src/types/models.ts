@@ -56,6 +56,10 @@ export type Tag = {
   id: string;
   name: string;
 };
+export type IdeaTag = {
+  tagId: number;
+  tagName: string;
+};
 export type IdeaDetailsReq = {
   title: string;
   summary: string;

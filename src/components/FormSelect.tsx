@@ -7,6 +7,9 @@ interface FormSelectProps {
   type?: string;
   autoComplete?: string;
   multiple?: boolean;
+  defaultOptionLabel?: string;
+  noDefaultOption?: boolean;
+  noValidtion?: boolean;
 }
 
 export const FormSelect = ({
@@ -15,6 +18,9 @@ export const FormSelect = ({
   children,
   autoComplete,
   multiple,
+  defaultOptionLabel,
+  noDefaultOption = false,
+  noValidtion = false,
 }: FormSelectProps & PropsWithChildren) => {
   return (
     <div>
@@ -41,18 +47,22 @@ export const FormSelect = ({
                 : ""
             }`}
           >
-            <option value="">Please select</option>
+            {!noDefaultOption && (
+              <option value="">{defaultOptionLabel ?? "Please select"}</option>
+            )}
             {children}
           </select>
         )}
       </Field>
-      <div className="mt-1 min-h-6">
-        <ErrorMessage
-          name={name}
-          component="div"
-          className="text-sm font-semibold text-red-500"
-        />
-      </div>
+      {!noValidtion && (
+        <div className="mt-1 min-h-6">
+          <ErrorMessage
+            name={name}
+            component="div"
+            className="text-sm font-semibold text-red-500"
+          />
+        </div>
+      )}
     </div>
   );
 };

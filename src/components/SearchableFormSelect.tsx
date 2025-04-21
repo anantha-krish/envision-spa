@@ -12,6 +12,7 @@ interface FormSelectProps {
   label: string;
   options: OptionType[];
   isMulti?: boolean;
+  noValidtion?: boolean;
 }
 
 export const SearchableFormSelect = ({
@@ -19,6 +20,7 @@ export const SearchableFormSelect = ({
   label,
   options,
   isMulti = false,
+  noValidtion = false,
 }: FormSelectProps) => {
   return (
     <div>
@@ -84,13 +86,15 @@ export const SearchableFormSelect = ({
           );
         }}
       </Field>
-      <div className="mt-1 min-h-6">
-        <ErrorMessage
-          name={name}
-          component="div"
-          className="text-sm font-semibold text-red-500"
-        />
-      </div>
+      {!noValidtion && (
+        <div className="mt-1 min-h-6">
+          <ErrorMessage
+            name={name}
+            component="div"
+            className="text-sm font-semibold text-red-500"
+          />
+        </div>
+      )}
     </div>
   );
 };
