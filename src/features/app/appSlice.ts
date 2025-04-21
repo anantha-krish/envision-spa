@@ -89,6 +89,9 @@ const appSlice = createSlice({
     addNewTagOnSuccess: (state, action) => {
       state.dropdowns.tags = [...state.dropdowns.tags, action.payload];
     },
+    updateTagsOnSuccess: (state, action: PayloadAction<Tag[]>) => {
+      state.dropdowns.tags = action.payload;
+    },
     clearIdeaPageDropDownOptions: (state) => {
       state.dropdowns.managers = [];
       state.dropdowns.users = [];
@@ -160,6 +163,7 @@ export const {
   addNewTagOnSuccess,
   markAllNotificationAsRead,
   hideLoader,
+  updateTagsOnSuccess,
   showLoader,
 } = appSlice.actions;
 export default appSlice.reducer;

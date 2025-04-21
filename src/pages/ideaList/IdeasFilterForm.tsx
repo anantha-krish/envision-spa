@@ -1,8 +1,8 @@
-import { Form, Formik, useFormikContext } from "formik";
+import { Form, Formik } from "formik";
 import { SortOption, validSortOptions } from "../../types/models";
 import { FormInput } from "../../components/FormInput";
 import { FormSelect } from "../../components/FormSelect";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useEffect } from "react";
 import { SearchableFormSelect } from "../../components/SearchableFormSelect";
@@ -14,6 +14,9 @@ import {
 } from "@heroicons/react/24/solid";
 import clsx from "clsx";
 import { FormButton } from "../../components/FormButton";
+import { fetchAllTagsAction } from "../../features/app/appActions";
+
+type IdeaFilterFormValues = typeof initialValues;
 
 const initialValues = {
   sortBy: validSortOptions[4] as SortOption,
@@ -26,18 +29,19 @@ const initialValues = {
   andTag: false,
 };
 
-type IdeaFilterFormValues = typeof initialValues;
-
-const AutoSubmitForm = () => {
-  const { values, submitForm } = useFormikContext();
-  useEffect(() => {}, [values, submitForm]);
-  return null;
-};
-
 export const IdeaFilterForm = () => {
   const handleSubmit = (values: IdeaFilterFormValues) => {
     console.log(values);
   };
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    //page load perform operation
+    handleSubmit(initialValues);
+    dispatch(fetchAllTagsAction());
+  }, [dispatch]);
+
   const tagList = useSelector((state: RootState) => state.app.dropdowns.tags);
   return (
     <Formik
@@ -48,20 +52,20 @@ export const IdeaFilterForm = () => {
       {({ values, setFieldValue }) => {
         return (
           <Form className="p-4 px-6 space-y-4 bg-base-100 rounded-xl shadow-md">
-            <div className="flex gap-10">
+            <div className="flex gap-10 min-h-20">
               <div className="flex-5/12">
                 <FormInput
                   name="search"
                   type="textarea"
                   minRows={1}
-                  maxRows={2}
+                  maxRows={3}
                   label="Search"
                   noValidtion
                 />
               </div>
 
-              <div className="flex-2/3 items-center">
-                <div className="flex gap-2 items-center justify-center ">
+              <div className="flex-2/3">
+                <div className="flex gap-2 justify-center ">
                   <span className="min-w-20">
                     <label
                       htmlFor={"andTag"}
@@ -72,7 +76,9 @@ export const IdeaFilterForm = () => {
                     <button
                       type="button"
                       onClick={() => setFieldValue("andTag", !values.andTag)}
-                      className={clsx("btn flex items-center gap-2 ")}
+                      className={clsx(
+                        "btn btn-primary btn-dash flex items-center gap-2 tracking-widest"
+                      )}
                     >
                       {values.andTag ? "AND" : "OR"}
                     </button>
@@ -125,7 +131,7 @@ export const IdeaFilterForm = () => {
                         values.sortOrder === "ASC" ? "DESC" : "ASC"
                       )
                     }
-                    className="btn flex items-center gap-2"
+                    className="btn btn-dash flex items-center gap-2"
                   >
                     <span className="w-5">
                       {values.sortOrder === "ASC" ? (
@@ -186,11 +192,15 @@ export const IdeaFilterForm = () => {
               </div>
 
               <div className="flex pt-6 gap-8 justify-end">
-                <FormButton type="reset" label="Cancel" />
-                <FormButton type="submit" label="Search" />
+                <FormButton
+                  type="reset"
+                  color="secondary"
+                  style="outline"
+                  label="Clear"
+                />
+                <FormButton modifier="wide" type="submit" label="Apply" />
               </div>
             </div>
-            <AutoSubmitForm />
           </Form>
         );
       }}

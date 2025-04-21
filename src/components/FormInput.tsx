@@ -24,6 +24,7 @@ interface FormInputProps {
   minRows?: number;
   maxRows?: number;
   noValidtion?: boolean;
+  customStyles?: string;
 }
 
 export const FormInput = ({
@@ -39,6 +40,7 @@ export const FormInput = ({
   enableResize = false,
   maxLength = 0,
   noValidtion,
+  customStyles,
 }: FormInputProps) => {
   const InputComponent = () => {
     if (type === "textarea") {
@@ -57,7 +59,8 @@ export const FormInput = ({
             },
             {
               "resize-none ": !enableResize,
-            }
+            },
+            customStyles
           )}
           placeholder={label}
           {...(maxLength > 0 && { maxLength })}
@@ -69,9 +72,13 @@ export const FormInput = ({
           {({ field, form }: FieldProps) => {
             return (
               <ReactQuill
-                className={clsx("textarea textarea-primary custom-quill ", {
-                  "textarea-error": form.errors[name] && form.touched[name],
-                })}
+                className={clsx(
+                  "textarea textarea-primary custom-quill ",
+                  {
+                    "textarea-error": form.errors[name] && form.touched[name],
+                  },
+                  customStyles
+                )}
                 theme={"snow"}
                 value={field.value}
                 onChange={(val) => form.setFieldValue(name, val)}
@@ -92,9 +99,13 @@ export const FormInput = ({
         type={type}
         name={name}
         autoComplete={autoComplete}
-        className={clsx("input input-primary", {
-          "input-error": errors[name] && touched[name],
-        })}
+        className={clsx(
+          "input input-primary",
+          {
+            "input-error": errors[name] && touched[name],
+          },
+          customStyles
+        )}
         placeholder={label}
         required
       />

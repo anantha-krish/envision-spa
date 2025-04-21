@@ -25,6 +25,10 @@ export const fetchLoggedInUserProfile = () => ({
   type: "FETCH_LOGGED_IN_USER_PROFILE",
 });
 
+export const fetchAllTagsAction = () => ({
+  type: "FETCH_TAGS",
+});
+
 export const postNewIdea = (
   ideaDetails: IdeaDetailsReq,
   attachments: FormData

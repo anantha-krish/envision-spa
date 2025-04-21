@@ -43,7 +43,6 @@ export const SearchableFormSelect = ({
           return (
             <Select
               id={name}
-              tabIndex={-1}
               name={name}
               options={options}
               isMulti={isMulti}
@@ -61,7 +60,7 @@ export const SearchableFormSelect = ({
               }}
               classNames={{
                 control: ({ isFocused }) =>
-                  `select h-auto  select-primary w-full p-2 ${
+                  `select h-auto  select-primary w-full p-2 ring-2 ring-transparent  ${
                     isFocused ? "ring-2 ring-primary" : ""
                   }`,
                 indicatorsContainer: () => "px-1",

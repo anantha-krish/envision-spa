@@ -25,6 +25,7 @@ import {
   fetchNotificationFailure,
   fetchNotificationSuccess,
   fetchRegisterPageDropDownOptionsSuccess,
+  updateTagsOnSuccess,
 } from "./appSlice";
 import { fetchAllTagsApi } from "../idea/ideaApi";
 
@@ -141,6 +142,18 @@ function replacePlaceholders(
   });
 }
 
+function* fetchTagsSaga(): Generator<unknown, void, Tag[]> {
+  try {
+    const tags = yield call(fetchAllTagsApi);
+    yield put(updateTagsOnSuccess(tags));
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      toast.error(error.message);
+      yield put(fetchNotificationFailure());
+    }
+  }
+}
+
 export default function* appSaga() {
   yield takeLatest(
     "FETCH_REGISTER_DROPDOWN_OPTIONS",
@@ -159,4 +172,5 @@ export default function* appSaga() {
     clearIdeaPageDropdownOptionsSaga
   );
   yield takeLatest("FETCH_NOTIFICATIONS", fetchNotificationSaga);
+  yield takeLatest("FETCH_TAGS", fetchTagsSaga);
 }
