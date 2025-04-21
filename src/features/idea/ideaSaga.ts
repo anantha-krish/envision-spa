@@ -169,9 +169,11 @@ function* handleFetchParticipantsDetailsSaga(
       fetchPocTeamForIdea,
       ideaId
     );
-    yield put(setPocTeamName(pocTeamMembers[0].teamName));
+    if (pocTeamMembers.length > 0) {
+      yield put(setPocTeamName(pocTeamMembers[0].teamName));
+    }
     const approverId = approver.userId;
-    const pocTeamMemberIds = pocTeamMembers.map((item) => item.userId);
+    const pocTeamMemberIds = pocTeamMembers?.map((item) => item.userId) ?? [];
     const submittersIds = yield select(
       (state: RootState) => state.idea.submittedBy
     );
@@ -212,7 +214,7 @@ function* handleFetchParticipantsDetailsSaga(
     yield put(showLoader());
   } catch (error: unknown) {
     if (error instanceof Error) {
-      //     toast.error(error.message);
+      toast.error(error.message);
     }
   }
 }
@@ -257,6 +259,11 @@ function* handleFetchIdeaDetailsSaga(
     if (isEditMode && ![...submittersId, managerId].includes(loggedInUserId)) {
       yield put(navigateTo("/permission-error"));
     }
+    // yield put(addRecipients([loggedInUserId]));
+    yield call(handleFetchParticipantsDetailsSaga, {
+      type: "FETCH_PARTCIPANTS_DETAILS",
+      payload: ideaId,
+    });
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
       if (error.status === 404) {
@@ -276,8 +283,4 @@ export default function* ideaSaga() {
   yield takeLatest("LIKE", handleNewLikeSaga);
   yield takeLatest("FETCH_LIKE_STATUS", handleFetchLikeStatusSaga);
   yield takeLatest("FETCH_IDEA_DETAILS", handleFetchIdeaDetailsSaga);
-  yield takeLatest(
-    "FETCH_PARTCIPANTS_DETAILS",
-    handleFetchParticipantsDetailsSaga
-  );
 }

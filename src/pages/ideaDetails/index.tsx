@@ -6,7 +6,7 @@ import { EditIdeaDetailsComponent } from "./EditIdeaDetailsComponent";
 import { ImageCarousel } from "./ImageCarousel";
 import { ViewIdeaDetailsPage } from "./ViewIdeaDetailsComponent";
 import { useDispatch, useSelector } from "react-redux";
-import { addRecipients, clearIdeaState } from "../../features/idea/ideaSlice";
+import { clearIdeaState } from "../../features/idea/ideaSlice";
 import { RootState } from "../../store";
 
 import {
@@ -15,10 +15,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { useNavigate } from "@tanstack/react-router";
 import clsx from "clsx";
-import {
-  fetchIdeaDetails,
-  fetchParticpantsDetails,
-} from "../../features/idea/ideaActions";
+import { fetchIdeaDetails } from "../../features/idea/ideaActions";
 import StatusBadge, { Status } from "../../components/StatusBadge";
 export interface IdeaDetailBaseComponentProps {
   ideaId: string;
@@ -35,9 +32,6 @@ export const IdeaDetailsPage: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const canEdit = useSelector((state: RootState) => state.idea.canEdit);
-  const loggedInUser: number = useSelector(
-    (state: RootState) => state.auth.userId
-  );
   const tags = useSelector((state: RootState) => state.idea.tags);
 
   const statusName = useSelector(
@@ -55,14 +49,12 @@ export const IdeaDetailsPage: React.FC = () => {
   const pocTeamName = useSelector((state: RootState) => state.idea.pocTeamName);
 
   useEffect(() => {
-    dispatch(addRecipients([loggedInUser]));
-    dispatch(fetchParticpantsDetails(+ideaId));
     dispatch(fetchIdeaDetails(+ideaId, mode === "edit"));
     return () => {
       //idea state cleanup
       dispatch(clearIdeaState());
     };
-  }, [dispatch, ideaId, loggedInUser]);
+  }, [dispatch, ideaId, mode]);
 
   return (
     <div className="idea_detail_container flex w-full p-6">
@@ -195,7 +187,7 @@ export const IdeaDetailsPage: React.FC = () => {
             </div>
           </div>
 
-          {pocTeamMembers && (
+          {pocTeamMembers != null && pocTeamMembers.length > 1 && (
             <div>
               <h2 className="mb-2 font-semibold  text-gray-600 dark:text-gray-400">
                 Team: {pocTeamName}
