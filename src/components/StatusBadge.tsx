@@ -12,20 +12,7 @@ export type Status =
   | "ARCHIVED"
   | "CANCELED";
 
-const statusColorMap: Record<string, string> = {
-  SUBMITTED: "badge-info",
-  UNDER_REVIEW: "badge-warning",
-  APPROVED: "badge-success",
-  REJECTED: "badge-error",
-  IN_DEVELOPMENT: "badge-secondary",
-  WAITING_FOR_APPROVAL: "badge-ghost",
-  ON_HOLD: "badge-neutral",
-  COMPLETED: "badge-success",
-  ARCHIVED: "badge-accent",
-  CANCELED: "badge-error",
-};
-
-/*const statusColorMap: Record<Status, string> = {
+const statusColorMap: Record<Status, string> = {
   SUBMITTED: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100",
   UNDER_REVIEW:
     "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100",
@@ -40,7 +27,7 @@ const statusColorMap: Record<string, string> = {
     "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-100",
   ARCHIVED: "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-100",
   CANCELED: "bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-100",
-};*/
+};
 
 interface StatusBadgeProps {
   status: Status;
@@ -49,7 +36,7 @@ interface StatusBadgeProps {
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
   return (
     <span
-      className={`px-3 py-1.5 rounded-full text-sm font-semibold ${statusColorMap[status]}`}
+      className={`px-3 py-1.5 rounded-full text-sm font-semibold badge badge-lg ${statusColorMap[status]}`}
     >
       {status.replace(/_/g, " ")}
     </span>

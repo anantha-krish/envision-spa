@@ -82,26 +82,35 @@ export const IdeaList = () => {
               {idea.summary}
             </p>
 
-            <div className="flex flex-wrap gap-1 mb-2">
+            <div className="flex flex-wrap gap-2 mb-2">
               {idea.tags.map((tag: IdeaTag) => (
-                <span key={tag.tagId} className="badge badge-outline">
+                <span
+                  key={tag.tagId}
+                  className="badge py-1 badge-primary dark:bg-sky-900 dark:border-sky-900"
+                >
                   {tag.tagName}
                 </span>
               ))}
             </div>
 
             <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mt-4">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <span className="flex items-center gap-1">
-                  <OutlineLikeIcon fontSize={14} />
+                  <span className="w-7">
+                    <OutlineLikeIcon />
+                  </span>
                   {idea.likes}
                 </span>
                 <span className="flex items-center gap-1">
-                  <OutlineCommentIcon fontSize={14} />
+                  <span className="w-7">
+                    <OutlineCommentIcon fontSize={14} />
+                  </span>
                   {idea.comments}
                 </span>
                 <span className="flex items-center gap-1">
-                  <EyeIcon fontSize={14} />
+                  <span className="w-7">
+                    <EyeIcon fontSize={14} />
+                  </span>
                   {idea.views}
                 </span>
               </div>
