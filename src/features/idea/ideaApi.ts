@@ -71,17 +71,16 @@ export const uploadNewAttachementsApi = async (
   isEditMode: boolean
 ) => {
   const query = new URLSearchParams({ ideaId: ideaId.toString() });
+
   if (isEditMode) {
     query.append("edit", "true");
+    query.append(
+      "recipients",
+      recipients.length > 0 ? recipients.join(",") : ""
+    );
   }
-  const recipientString = recipients?.join(",");
-  const res = await api.post(
-    `/files/?${query.toString()}`,
-    { formData, recipients: recipientString },
-    {
-      headers: { "Content-Type": "multipart/form-data" },
-    }
-  );
+
+  const res = await api.post(`/files/?${query.toString()}`, formData);
   return res.status;
 };
 

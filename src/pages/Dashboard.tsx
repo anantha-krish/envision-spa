@@ -21,7 +21,6 @@ import {
   Cell,
   ResponsiveContainer,
 } from "recharts";
-import { statusColorMap } from "../components/StatusBadge";
 import { HandThumbUpIcon } from "@heroicons/react/24/solid";
 
 const statusHexColorMap = {
