@@ -11,19 +11,46 @@ import {
 } from "../features/app/appSlice";
 import { RootState } from "../store";
 import { useNotificationSocket } from "../utils/useNotificationSocket";
+import {
+  ArrowPathIcon,
+  BellAlertIcon,
+  HandThumbUpIcon,
+  PaperClipIcon,
+} from "@heroicons/react/24/solid";
+import { ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/outline";
 
 const NotificationTypeIcon = ({ type }: { type: string }) => {
   switch (type) {
     case "STATUS_CHANGE":
-      return <span>🔄</span>;
+      return (
+        <span className="w-6 text-sky-600 opacity-70">
+          <ArrowPathIcon />
+        </span>
+      );
     case "COMMENT":
-      return <span>💬</span>;
+      return (
+        <span className="w-6 text-sky-600 opacity-70">
+          <ChatBubbleBottomCenterTextIcon />
+        </span>
+      );
     case "LIKE":
-      return <span>👍</span>;
+      return (
+        <span className="w-6 text-sky-600 opacity-70">
+          <HandThumbUpIcon />
+        </span>
+      );
     case "FILE_ADDED":
-      return <span>📎</span>;
+      return (
+        <span className="w-6 text-sky-600 opacity-70">
+          <PaperClipIcon />
+        </span>
+      );
     default:
-      return <span>🔔</span>;
+      return (
+        <span className="w-6 text-sky-600 opacity-70">
+          <BellAlertIcon />
+        </span>
+      );
   }
 };
 
