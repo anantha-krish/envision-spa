@@ -4,6 +4,7 @@ import {
   fetchTopContributors,
   fetchIdeaSubmissionRate,
   fetchIdeaStatusDistribution,
+  fetchTrendingTags,
 } from "./dashboardAction";
 import { ideaStatsApi } from "./dashboardApi";
 import {
@@ -11,12 +12,14 @@ import {
   setTopContributors,
   setIdeaSubmissionRate,
   setIdeaStatusDistribution,
+  setTrendingTags,
 } from "./dashboardSlice";
 import {
   IdeaSubmissionResponse,
   StatusDistributionResponse,
   TopContributorsResponse,
   TopIdeasResponse,
+  TrendingTagResponse,
   UserProfile,
 } from "../../types/models";
 import { AxiosResponse } from "axios";
@@ -85,6 +88,17 @@ function* handleFetchIdeaStatusDistribution() {
   }
 }
 
+function* handleFetchTrendingTags() {
+  try {
+    const response: AxiosResponse<TrendingTagResponse> = yield call(
+      ideaStatsApi.fetchTrendingTags
+    );
+    yield put(setTrendingTags(response.data));
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export default function* dashboardSaga() {
   yield all([
     takeLatest(fetchTopIdeas.type, handleFetchTopIdeas),
@@ -94,5 +108,6 @@ export default function* dashboardSaga() {
       fetchIdeaStatusDistribution.type,
       handleFetchIdeaStatusDistribution
     ),
+    takeLatest(fetchTrendingTags.type, handleFetchTrendingTags),
   ]);
 }

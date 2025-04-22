@@ -6,3 +6,4 @@ export const fetchIdeaSubmissionRate = createAction("FETCH_IDEA_SUBMISSION");
 export const fetchIdeaStatusDistribution = createAction(
   "FETCH_IDEA_STATUS_DISTRIBUTION"
 );
+export const fetchTrendingTags = createAction("FETCH_TRENDING_TAGS");

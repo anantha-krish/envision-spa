@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ideaDetailsRoute } from "../../routes";
 import { CommentSection } from "./CommentSection";
 
@@ -48,7 +48,7 @@ export const IdeaDetailsPage: React.FC = () => {
   );
   const approver = useSelector((state: RootState) => state.idea.approver);
   const pocTeamName = useSelector((state: RootState) => state.idea.pocTeamName);
-  const [selectedStatus, setSelectedStatus] = useState<string>("");
+  //const [selectedStatus, setSelectedStatus] = useState<string>("");
 
   useEffect(() => {
     dispatch(fetchIdeaDetails(+ideaId, mode === "edit"));
@@ -132,8 +132,9 @@ export const IdeaDetailsPage: React.FC = () => {
                   label: statusCode.replace(/_/g, " "),
                   value: statusCode as string,
                 }))}
-                onChange={(selected) =>
-                  setSelectedStatus(selected?.value ?? "")
+                onChange={
+                  () => {}
+                  //  setSelectedStatus(selected?.value ?? "")
                 }
                 components={{
                   // removes the line between value and chevron

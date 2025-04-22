@@ -4,6 +4,7 @@ import {
   StatusDistributionResponse,
   TopContributorsResponse,
   TopIdeasResponse,
+  TrendingTagResponse,
 } from "../../types/models";
 
 export const ideaStatsApi = {
@@ -15,4 +16,6 @@ export const ideaStatsApi = {
     api.get<IdeaSubmissionResponse>("/ideas/stats/idea-submissions"),
   fetchTopContributors: () =>
     api.get<TopContributorsResponse>("/ideas/stats/top-contributors"),
+  fetchTrendingTags: () =>
+    api.get<TrendingTagResponse>("/ideas/stats/trending-tags"),
 };

@@ -4,6 +4,7 @@ import {
   StatusDistribution,
   TopContributor,
   TopIdea,
+  TrendingTag,
 } from "../../types/models";
 
 export interface DashboardState {
@@ -11,6 +12,7 @@ export interface DashboardState {
   topContributors: TopContributor[];
   submissionRate: IdeaSubmission[] | null;
   statusDistribution: StatusDistribution[];
+  trendingTags: TrendingTag[];
 }
 
 const initialState: DashboardState = {
@@ -18,6 +20,7 @@ const initialState: DashboardState = {
   topContributors: [],
   submissionRate: null,
   statusDistribution: [],
+  trendingTags: [],
 };
 
 const dashboardSlice = createSlice({
@@ -29,6 +32,9 @@ const dashboardSlice = createSlice({
     },
     setTopContributors: (state, action: PayloadAction<TopContributor[]>) => {
       state.topContributors = action.payload;
+    },
+    setTrendingTags: (state, action: PayloadAction<TrendingTag[]>) => {
+      state.trendingTags = action.payload;
     },
     setIdeaSubmissionRate: (
       state,
@@ -50,6 +56,7 @@ export const {
   setTopContributors,
   setIdeaSubmissionRate,
   setIdeaStatusDistribution,
+  setTrendingTags,
 } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

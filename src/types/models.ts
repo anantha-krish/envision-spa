@@ -166,3 +166,10 @@ export interface TopIdea {
 }
 
 export type TopIdeasResponse = TopIdea[];
+
+export interface TrendingTag {
+  tagName: string;
+  count: number;
+}
+
+export type TrendingTagResponse = TrendingTag[];
