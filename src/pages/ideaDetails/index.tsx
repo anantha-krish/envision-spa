@@ -48,7 +48,7 @@ export const IdeaDetailsPage: React.FC = () => {
   );
   const approver = useSelector((state: RootState) => state.idea.approver);
   const pocTeamName = useSelector((state: RootState) => state.idea.pocTeamName);
-  const [selectedStatus, setSelectedStatus] = useState<string>(statusName);
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
 
   useEffect(() => {
     dispatch(fetchIdeaDetails(+ideaId, mode === "edit"));
