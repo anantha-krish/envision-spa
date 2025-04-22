@@ -87,7 +87,7 @@ const Register = () => {
             <div className="flex flex-col flex-2/3 shrink-0 ">
               <div className="text-xl font-medium">
                 {isAuthenticated
-                  ? `Create an Account ${isAdminMode && "(Admin Mode) "}| Envision`
+                  ? `Create an Account ${isAdminMode ? "(Admin Mode) " : ""}| Envision`
                   : "Join Envision — Create Your Account"}
               </div>
             </div>

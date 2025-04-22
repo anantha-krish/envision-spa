@@ -61,6 +61,12 @@ const Navbar = ({
             Ideas
           </button>
         )}
+        <button
+          onClick={() => navigate({ to: "/register" })}
+          className="btn  btn-ghost"
+        >
+          Add User
+        </button>
       </div>
       <button onClick={openSubmitIdeaModal} className="btn btn-primary">
         Submit Your Idea
