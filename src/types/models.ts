@@ -162,6 +162,7 @@ export interface TopIdea {
   title: string;
   likes: number;
   comments: number;
+  ideaId: number;
 }
 
 export type TopIdeasResponse = TopIdea[];

@@ -22,6 +22,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { HandThumbUpIcon } from "@heroicons/react/24/solid";
+import { Link } from "@tanstack/react-router";
 
 const statusHexColorMap = {
   SUBMITTED: "#3B82F6", // blue-500
@@ -57,44 +58,47 @@ export const Dashboard = () => {
         <h2 className="text-lg font-semibold mb-4">Top Ideas</h2>
         <div className="space-y-4">
           {dashboard.topIdeas.map((idea, index) => (
-            <div
+            <Link
               key={index}
-              className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition"
+              to={"/ideas/$ideaId/$mode"}
+              params={{ ideaId: idea.ideaId.toString(), mode: "view" }}
             >
-              <div className="font-medium text-gray-800 mb-2 truncate">
-                {idea.title}
-              </div>
-              <div className="flex items-center gap-4 text-xs">
-                <div className="flex-1">
-                  <div className="flex justify-between mb-1 text-gray-500">
-                    <span>Likes: {idea.likes}</span>
-                    <span className="w-4 mb-1">
-                      <HandThumbUpIcon />
-                    </span>
+              <div className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
+                <div className="font-medium text-gray-800 mb-2 truncate">
+                  {idea.title}
+                </div>
+                <div className="flex items-center gap-4 text-xs">
+                  <div className="flex-1">
+                    <div className="flex justify-between mb-1 text-gray-500">
+                      <span>Likes: {idea.likes}</span>
+                      <span className="w-4 mb-1">
+                        <HandThumbUpIcon />
+                      </span>
+                    </div>
+                    <div className="h-2 bg-gray-200 rounded">
+                      <div
+                        className="h-2 bg-blue-400 rounded"
+                        style={{ width: `${(idea.likes / maxLikes) * 100}%` }}
+                      ></div>
+                    </div>
                   </div>
-                  <div className="h-2 bg-gray-200 rounded">
-                    <div
-                      className="h-2 bg-blue-400 rounded"
-                      style={{ width: `${(idea.likes / maxLikes) * 100}%` }}
-                    ></div>
+                  <div className="flex-1">
+                    <div className="flex justify-between mb-1 text-gray-500">
+                      <span>Comments: {idea.comments}</span>
+                      <span>{idea.comments}</span>
+                    </div>
+                    <div className="h-2 bg-gray-200 rounded">
+                      <div
+                        className="h-2 bg-emerald-400 rounded"
+                        style={{
+                          width: `${(idea.comments / maxComments) * 100}%`,
+                        }}
+                      ></div>
+                    </div>
                   </div>
                 </div>
-                <div className="flex-1">
-                  <div className="flex justify-between mb-1 text-gray-500">
-                    <span>Comments: {idea.comments}</span>
-                    <span>{idea.comments}</span>
-                  </div>
-                  <div className="h-2 bg-gray-200 rounded">
-                    <div
-                      className="h-2 bg-emerald-400 rounded"
-                      style={{
-                        width: `${(idea.comments / maxComments) * 100}%`,
-                      }}
-                    ></div>
-                  </div>
-                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
