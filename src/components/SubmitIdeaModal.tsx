@@ -18,6 +18,7 @@ import { FormButton } from "./FormButton";
 import { FormInput } from "./FormInput";
 import { IdeaFileInputUploader } from "./IdeaFileInputUploader";
 import { SearchableFormSelect } from "./SearchableFormSelect";
+import { useNavigate } from "@tanstack/react-router";
 
 const IdeaSchema = Yup.object({
   title: Yup.string().required("Idea title is required."),
@@ -77,6 +78,7 @@ const SubmitNewIdeaModal = ({
     }
   };
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const refetch = managers.length == 0 || users.length == 0;
   useEffect(() => {
     if (isOpen) {
@@ -123,7 +125,7 @@ const SubmitNewIdeaModal = ({
             initialValues={{ ...initialValues, submittedBy: [loggedInUserId] }}
             validationSchema={IdeaSchema}
             enableReinitialize
-            onSubmit={async (values) => {
+            onSubmit={async (values, formik) => {
               const formData = new FormData();
               if (selectedFiles.length > 0) {
                 selectedFiles.forEach((file: File) =>
@@ -133,12 +135,20 @@ const SubmitNewIdeaModal = ({
               const { status, data } = await submitNewIdeaApi(values);
               if (status === 201 && data.ideaId) {
                 //no alert for creation
-                await uploadNewAttachementsApi(
+                const uploadStatus = await uploadNewAttachementsApi(
                   data.ideaId,
                   formData,
                   [],
                   false
                 );
+                if (uploadStatus === 201) {
+                  formik.resetForm();
+                  onClose();
+                  navigate({
+                    to: "/ideas/$ideaId/$mode",
+                    params: { ideaId: data.ideaId.toString(), mode: "view" },
+                  });
+                }
               }
               toast.success(`Idea: ${data.title} created successfully `);
             }}
