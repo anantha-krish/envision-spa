@@ -259,7 +259,7 @@ function* handleFetchIdeaDetailsSaga(
     if (isEditMode && ![...submittersId, managerId].includes(loggedInUserId)) {
       yield put(navigateTo("/permission-error"));
     }
-    // yield put(addRecipients([loggedInUserId]));
+    yield put(addRecipients([loggedInUserId]));
     yield call(handleFetchParticipantsDetailsSaga, {
       type: "FETCH_PARTCIPANTS_DETAILS",
       payload: ideaId,

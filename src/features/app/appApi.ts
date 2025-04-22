@@ -21,7 +21,7 @@ export const fetchRolesApi = async () => {
 };
 
 export const fetchNotificationsApi = async () => {
-  const res = await api.get("/notifications?limit=5");
+  const res = await api.get("/notifications?limit=7");
   return res.data as NotificationResponse;
 };
 

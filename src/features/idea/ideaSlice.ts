@@ -57,7 +57,10 @@ const ideaSlice = createSlice({
   initialState,
   reducers: {
     addRecipients: (state, action: PayloadAction<number[]>) => {
-      state.recipients = [...new Set([...state.recipients, ...action.payload])];
+      const rawRecipients = [
+        ...new Set([...state.recipients, ...action.payload]),
+      ].filter((id): id is number => typeof id === "number" && id > 0);
+      state.recipients = rawRecipients;
     },
     updateLikeStatus: (state, action: PayloadAction<boolean>) => {
       state.isLiked = action.payload;
