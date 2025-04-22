@@ -3,15 +3,19 @@ import { FormInput } from "../../components/FormInput";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { FormButton } from "../../components/FormButton";
+import { useNavigate } from "@tanstack/react-router";
 
 export const EditIdeaDetailsComponent = () => {
+  const ideaId = useSelector((state: RootState) => state.idea.id);
   const title = useSelector((state: RootState) => state.idea.title);
   const summary = useSelector((state: RootState) => state.idea.summary);
   const description = useSelector((state: RootState) => state.idea.description);
+  const navigate = useNavigate();
 
   return (
-    <div className="card shadow-md p-4 space-y-3">
-      <div className="overflow-y-auto flex-1 pr-14">
+    <div className="card shadow-md p-4 space-y-3 mr-6">
+      <div className="overflow-hidden flex-1 pr-14">
         <Formik
           initialValues={{
             title,
@@ -55,6 +59,22 @@ export const EditIdeaDetailsComponent = () => {
                   errors={errors}
                   touched={touched}
                 />
+              </div>
+              <div className="flex gap-3 justify-end px-6 ">
+                <FormButton
+                  type="button"
+                  color="secondary"
+                  style="outline"
+                  onClick={() =>
+                    navigate({
+                      to: "/ideas/$ideaId/$mode",
+                      params: { ideaId: ideaId.toString(), mode: "view" },
+                    })
+                  }
+                  label="Close"
+                />
+
+                <FormButton onClick={() => {}} type="submit" label="Submit" />
               </div>
             </form>
           )}

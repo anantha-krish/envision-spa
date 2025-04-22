@@ -6,7 +6,7 @@ export const ViewIdeaDetailsPage: React.FC = () => {
   const summary = useSelector((state: RootState) => state.idea.summary);
   const description = useSelector((state: RootState) => state.idea.description);
   return (
-    <div className="card shadow-md p-4 space-y-3">
+    <div className="card shadow-md p-4 space-y-3 mr-6">
       <h2 className="font-bold text-lg">{title}</h2>
       <p className="text-gray-600 dark:text-gray-500">{summary}</p>
       <div
