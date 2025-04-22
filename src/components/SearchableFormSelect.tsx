@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, FieldProps } from "formik";
 import Select from "react-select";
 
-interface OptionType {
+export interface OptionType {
   label: string;
   hint?: string;
   value: string | number;

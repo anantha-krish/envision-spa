@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ideaDetailsRoute } from "../../routes";
 import { CommentSection } from "./CommentSection";
 
@@ -8,7 +8,7 @@ import { ViewIdeaDetailsPage } from "./ViewIdeaDetailsComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { clearIdeaState } from "../../features/idea/ideaSlice";
 import { RootState } from "../../store";
-
+import Select from "react-select";
 import {
   PencilIcon as SolidPencilIcon,
   EyeIcon,
@@ -17,6 +17,7 @@ import { useNavigate } from "@tanstack/react-router";
 import clsx from "clsx";
 import { fetchIdeaDetails } from "../../features/idea/ideaActions";
 import StatusBadge, { Status } from "../../components/StatusBadge";
+import { STATUS_CODES } from "../../utils/constants";
 export interface IdeaDetailBaseComponentProps {
   ideaId: string;
 }
@@ -47,6 +48,7 @@ export const IdeaDetailsPage: React.FC = () => {
   );
   const approver = useSelector((state: RootState) => state.idea.approver);
   const pocTeamName = useSelector((state: RootState) => state.idea.pocTeamName);
+  const [selectedStatus, setSelectedStatus] = useState<string>(statusName);
 
   useEffect(() => {
     dispatch(fetchIdeaDetails(+ideaId, mode === "edit"));
@@ -118,11 +120,52 @@ export const IdeaDetailsPage: React.FC = () => {
               ))}
             </div>
           </div>
-          <div className="status_row">
+          <div className="status_row w-7/12">
             <h2 className="mb-2 font-semibold  text-gray-600 dark:text-gray-400">
               Status
             </h2>
-            <StatusBadge status={statusName} />
+            {isEditMode ? (
+              <Select
+                name="statusCode"
+                isSearchable={false}
+                options={STATUS_CODES.map((statusCode: Status) => ({
+                  label: statusCode.replace(/_/g, " "),
+                  value: statusCode as string,
+                }))}
+                onChange={(selected) =>
+                  setSelectedStatus(selected?.value ?? "")
+                }
+                components={{
+                  // removes the line between value and chevron
+                  IndicatorSeparator: () => null,
+                }}
+                classNames={{
+                  control: ({ isFocused }) =>
+                    `select h-auto  select-primary w-full p-2 ring-2 ring-transparent  ${
+                      isFocused ? "ring-2 ring-primary" : ""
+                    }`,
+                  indicatorsContainer: () => "px-1",
+                  option: ({ isFocused, isSelected }) =>
+                    `p-2 cursor-pointer ${
+                      isSelected
+                        ? "bg-primary text-white"
+                        : isFocused
+                          ? "bg-primary/20"
+                          : ""
+                    }`,
+                  menu: () =>
+                    "shadow-lg border border-base-200 rounded-lg mt-1 bg-base-100",
+                  singleValue: () => "text-base-content",
+                  multiValue: () =>
+                    "bg-primary text-white px-2 py-1 rounded mr-1 mb-1 text-sm",
+                  multiValueLabel: () => "text-white",
+                  multiValueRemove: () => "ml-1 text-white  cursor-pointer",
+                }}
+                unstyled
+              />
+            ) : (
+              <StatusBadge status={statusName} />
+            )}
           </div>
           <div className="flex gap-15 w-32">
             {manager && (
