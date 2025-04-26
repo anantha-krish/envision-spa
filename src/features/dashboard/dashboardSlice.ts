@@ -48,6 +48,13 @@ const dashboardSlice = createSlice({
     ) => {
       state.statusDistribution = action.payload;
     },
+    resetDashboardState: (state) => {
+      state.topIdeas = initialState.topIdeas;
+      state.topContributors = initialState.topContributors;
+      state.submissionRate = initialState.submissionRate;
+      state.statusDistribution = initialState.statusDistribution;
+      state.trendingTags = initialState.trendingTags;
+    },
   },
 });
 
@@ -57,6 +64,7 @@ export const {
   setIdeaSubmissionRate,
   setIdeaStatusDistribution,
   setTrendingTags,
+  resetDashboardState,
 } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

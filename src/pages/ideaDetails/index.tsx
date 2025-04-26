@@ -62,6 +62,7 @@ export const IdeaDetailsPage: React.FC = () => {
   );
   const approver = useSelector((state: RootState) => state.idea.approver);
   const pocTeamName = useSelector((state: RootState) => state.idea.pocTeamName);
+  const isLazyLoading = useSelector((state: RootState) => state.app.lazyLoader);
   //const [selectedStatus, setSelectedStatus] = useState<string>("");
 
   useEffect(() => {
@@ -91,7 +92,9 @@ export const IdeaDetailsPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className={clsx("idea_right_box flex-1/3")}>
+      <div
+        className={clsx("idea_right_box flex-1/3", { skelton: isLazyLoading })}
+      >
         <div className="flex flex-col items-start gap-6 pl-8">
           <div className="flex w-full justify-center">
             {canEdit && (
