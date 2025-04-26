@@ -60,15 +60,17 @@ export type IdeaTag = {
   tagId: number;
   tagName: string;
 };
-export type IdeaDetailsReq = {
+export type IdeaInfoReq = {
   title: string;
   summary: string;
   description: string;
+};
+export interface IdeaDetailsReq extends IdeaInfoReq {
   statusId: number;
   tags: number[];
   managerId: number;
   submittedBy: number[];
-};
+}
 
 export interface IdeaDetailsResponse extends IdeaDetailsReq {
   ideaId: number;

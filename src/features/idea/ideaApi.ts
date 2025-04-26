@@ -6,6 +6,7 @@ import {
   IdeaDetail,
   IdeaDetailsReq,
   IdeaDetailsResponse,
+  IdeaInfoReq,
   LikeResponse,
   PocTeamMember,
   S3File,
@@ -36,6 +37,14 @@ export const updateStatusApi = async (
     statusCode,
     recipients,
   });
+  return res;
+};
+
+export const updateIdeaContents = async (
+  ideaId: number,
+  ideaInfoReq: IdeaInfoReq
+) => {
+  const res = await api.patch(`/ideas/${ideaId}`, ideaInfoReq);
   return res;
 };
 

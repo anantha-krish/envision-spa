@@ -1,10 +1,10 @@
-import { Formik } from "formik";
+import { Form, Formik } from "formik";
 import { FormInput } from "../../components/FormInput";
-import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { FormButton } from "../../components/FormButton";
 import { useNavigate } from "@tanstack/react-router";
+import { updateIdeaContents } from "../../features/idea/ideaApi";
 
 export const EditIdeaDetailsComponent = () => {
   const ideaId = useSelector((state: RootState) => state.idea.id);
@@ -23,12 +23,16 @@ export const EditIdeaDetailsComponent = () => {
             description,
           }}
           enableReinitialize
-          onSubmit={() => {
-            toast.success("updated");
+          onSubmit={async (values) => {
+            await updateIdeaContents(ideaId, values);
+            navigate({
+              to: "/ideas/$ideaId/$mode",
+              params: { ideaId: ideaId.toString(), mode: "view" },
+            });
           }}
         >
-          {({ errors, touched }) => (
-            <form autoComplete="off">
+          {({ errors, touched, handleSubmit }) => (
+            <Form autoComplete="off" onSubmit={handleSubmit}>
               <div className="flex flex-col gap-4 mt-2">
                 <FormInput
                   name="title"
@@ -76,7 +80,7 @@ export const EditIdeaDetailsComponent = () => {
 
                 <FormButton onClick={() => {}} type="submit" label="Submit" />
               </div>
-            </form>
+            </Form>
           )}
         </Formik>
       </div>
