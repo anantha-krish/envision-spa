@@ -62,7 +62,7 @@ export const Dashboard = () => {
       <div></div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
         {/* Submission Rate Line Chart */}
-        <div className="p-4 rounded-2xl shadow bg-white">
+        <div className="p-4 rounded-2xl shadow bg-white dark:bg-gray-800 dark:text-white">
           <h2 className="text-lg font-semibold mb-4">Idea Submission Rate</h2>
           <ResponsiveContainer width="90%" height={250}>
             <LineChart
@@ -76,13 +76,13 @@ export const Dashboard = () => {
               <Line
                 type="monotone"
                 dataKey="count"
-                stroke="oklch(58% 0.158 241.966)"
+                className="stroke-primary"
                 strokeWidth={2}
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
-        <div className="p-4 bg-white rounded-2xl shadow">
+        <div className="p-4  bg-white dark:bg-gray-800 dark:text-white rounded-2xl shadow">
           <h2 className="text-lg font-semibold mb-4">Trending Tags</h2>
 
           <div className="h-64">
@@ -106,7 +106,7 @@ export const Dashboard = () => {
         </div>
 
         {/* Status Distribution Pie Chart */}
-        <div className="p-4 rounded-2xl shadow bg-white">
+        <div className="p-4 rounded-2xl shadow bg-white dark:bg-gray-800 dark:text-white">
           <h2 className="text-lg font-semibold mb-4">
             Idea Status Distribution
           </h2>
@@ -161,12 +161,12 @@ export const Dashboard = () => {
         </div>
 
         {/* Top Contributors Bar Chart */}
-        <div className="p-4 bg-white rounded-2xl shadow">
+        <div className="p-4 bg-white dark:bg-gray-800 dark:text-white rounded-2xl shadow">
           <h2 className="text-lg font-semibold mb-4">Top Contributors</h2>
 
           <div className="overflow-auto">
             <table className="min-w-full text-sm text-left text-gray-500">
-              <thead className="text-sm uppercase bg-gray-100">
+              <thead className="text-sm uppercase bg-gray-100  dark:bg-gray-700 dark:text-gray-50">
                 <tr>
                   <th className="px-4 py-2">Contributor</th>
                   <th className="px-4 py-2">Ideas</th>
@@ -176,7 +176,7 @@ export const Dashboard = () => {
                 {dashboard.topContributors.map((contributor) => (
                   <tr
                     key={contributor.userId}
-                    className="bg-white border-b last:border-none"
+                    className=" dark:text-gray-50 border-b last:border-none"
                   >
                     <td className="px-4 py-2">{contributor.userFullName}</td>
                     <td className="px-4 py-2">{contributor.ideaCount}</td>
@@ -188,7 +188,7 @@ export const Dashboard = () => {
         </div>
 
         {/* Top Ideas Table */}
-        <div className="p-4 bg-white rounded-2xl shadow">
+        <div className="p-4 bg-white  dark:bg-gray-800 dark:text-white rounded-2xl shadow">
           <h2 className="text-lg font-semibold mb-4">Top Ideas</h2>
           <div className="space-y-4">
             {dashboard.topIdeas.map((idea, index) => (
@@ -197,19 +197,19 @@ export const Dashboard = () => {
                 to={"/ideas/$ideaId/$mode"}
                 params={{ ideaId: idea.ideaId.toString(), mode: "view" }}
               >
-                <div className="p-4 py-2 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
-                  <div className="font-medium text-gray-800 mb-1 truncate">
+                <div className="p-4 py-2 bg-gray-50  dark:bg-gray-700 dark:text-white  rounded-xl hover:bg-gray-100 transition">
+                  <div className="font-medium text-gray-800 dark:text-white   mb-1 truncate">
                     {idea.title}
                   </div>
                   <div className="flex items-center gap-4 text-xs">
                     <div className="flex-1">
-                      <div className="flex justify-between mb-1 text-gray-500">
+                      <div className="flex justify-between mb-1 text-gray-500 dark:text-gray-100 ">
                         <span>Likes: {idea.likes}</span>
                         <span className="w-4 mb-1">
                           <HandThumbUpIcon />
                         </span>
                       </div>
-                      <div className="h-2 bg-gray-200 rounded">
+                      <div className="h-2 bg-gray-200 dark:bg-gray-800  rounded">
                         <div
                           className="h-2 bg-blue-400 rounded"
                           style={{ width: `${(idea.likes / maxLikes) * 100}%` }}
@@ -217,11 +217,11 @@ export const Dashboard = () => {
                       </div>
                     </div>
                     <div className="flex-1">
-                      <div className="flex justify-between mb-1 text-gray-500">
+                      <div className="flex justify-between mb-1 text-gray-500  dark:text-gray-100">
                         <span>Comments: {idea.comments}</span>
                         <span>{idea.comments}</span>
                       </div>
-                      <div className="h-2 bg-gray-200 rounded">
+                      <div className="h-2 bg-gray-200  dark:bg-gray-800 rounded">
                         <div
                           className="h-2 bg-emerald-400 rounded"
                           style={{
