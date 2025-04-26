@@ -11,7 +11,7 @@ import { RootState } from "../../store";
 import {
   PencilIcon as SolidPencilIcon,
   EyeIcon,
-  XMarkIcon,
+  CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import { useNavigate } from "@tanstack/react-router";
 import clsx from "clsx";
@@ -23,14 +23,10 @@ import StatusBadge, { Status } from "../../components/StatusBadge";
 import { STATUS_CODES } from "../../utils/constants";
 import { Form, Formik, FormikValues } from "formik";
 import { SearchableFormSelect } from "../../components/SearchableFormSelect";
-import { CheckBadgeIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { XCircleIcon } from "@heroicons/react/24/outline";
 export interface IdeaDetailBaseComponentProps {
   ideaId: string;
 }
-
-const statusFormInitValue = {
-  statusCode: "",
-};
 
 export interface IdeaDetailEditableComponentProps
   extends IdeaDetailBaseComponentProps {
@@ -49,13 +45,15 @@ export const IdeaDetailsPage: React.FC = () => {
 
   const handleStatusChangeSubmit = async ({ statusCode }: FormikValues) => {
     dispatch(updateStatusChange(+ideaId, statusCode));
+    setIsEditStatusMode(false);
   };
 
   const statusName = useSelector(
     (state: RootState) => state.idea.statusName
   ) as Status;
-
-  const lazyLoader = useSelector((state: RootState) => state.app.lazyLoader);
+  const statusFormInitValue = {
+    statusCode: statusName,
+  };
 
   const manager = useSelector((state: RootState) => state.idea.manager);
   const submitters = useSelector((state: RootState) => state.idea.submitters);
@@ -93,9 +91,7 @@ export const IdeaDetailsPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div
-        className={clsx("idea_right_box flex-1/3", { skeleton: lazyLoader })}
-      >
+      <div className={clsx("idea_right_box flex-1/3")}>
         <div className="flex flex-col items-start gap-6 pl-8">
           <div className="flex w-full justify-center">
             {canEdit && (
@@ -136,19 +132,20 @@ export const IdeaDetailsPage: React.FC = () => {
               ))}
             </div>
           </div>
-          <div className="status_row">
+          <div className="status_row  w-full">
             <h2 className="mb-2 font-semibold  text-gray-600 dark:text-gray-400">
               Status
             </h2>
             {isEditMode && isEditStatusMode ? (
               <Formik
                 onSubmit={handleStatusChangeSubmit}
+                enableReinitialize
                 initialValues={statusFormInitValue}
               >
                 {({ handleSubmit }) => (
                   <Form onSubmit={handleSubmit}>
-                    <div className="flex items-center w-full">
-                      <span className="flex-1">
+                    <div className="flex items-center gap-3 w-3/4">
+                      <span className="flex-3/4">
                         <SearchableFormSelect
                           name="statusCode"
                           noValidtion
@@ -159,84 +156,46 @@ export const IdeaDetailsPage: React.FC = () => {
                           }))}
                         />
                       </span>
-                      <span className="flex items-center">
+                      <span className="flex gap-2 items-center">
                         <button
                           type="submit"
                           className="btn btn-primary min-w-0"
                         >
-                          <span className="w-5">
-                            <CheckBadgeIcon />
+                          <span className="w-7">
+                            <CheckCircleIcon />
                           </span>
                         </button>
                         <button
                           type="submit"
-                          className="btn btn-outline min-w-0"
+                          className="btn btn-error btn-outline min-w-0"
                           onClick={() => setIsEditStatusMode(false)}
                         >
                           <span className="w-5">
-                            <XMarkIcon />
+                            <XCircleIcon />
                           </span>
                         </button>
                       </span>
                     </div>
                   </Form>
                 )}
-                {/* <Select
-                      name="statusCode"
-                      isSearchable={false}
-                      options={STATUS_CODES.map((statusCode: Status) => ({
-                        label: statusCode.replace(/_/g, " "),
-                        value: statusCode as string,
-                      }))}
-                      onChange={
-                        () => {}
-                        //  setSelectedStatus(selected?.value ?? "")
-                      }
-                      components={{
-                        // removes the line between value and chevron
-                        IndicatorSeparator: () => null,
-                      }}
-                      classNames={{
-                        control: ({ isFocused }) =>
-                          `select h-auto  select-primary w-full p-2 ring-2 ring-transparent  ${
-                            isFocused ? "ring-2 ring-primary" : ""
-                          }`,
-                        indicatorsContainer: () => "px-1",
-                        option: ({ isFocused, isSelected }) =>
-                          `p-2 cursor-pointer ${
-                            isSelected
-                              ? "bg-primary text-white"
-                              : isFocused
-                                ? "bg-primary/20"
-                                : ""
-                          }`,
-                        menu: () =>
-                          "shadow-lg border border-base-200 rounded-lg mt-1 bg-base-100",
-                        singleValue: () => "text-base-content",
-                        multiValue: () =>
-                          "bg-primary text-white px-2 py-1 rounded mr-1 mb-1 text-sm",
-                        multiValueLabel: () => "text-white",
-                        multiValueRemove: () =>
-                          "ml-1 text-white  cursor-pointer",
-                      }}
-                      unstyled
-                    /> */}
               </Formik>
             ) : (
-              <>
-                <StatusBadge status={statusName} />
+              <div className="flex gap-3">
+                <div>
+                  <StatusBadge status={statusName} />
+                </div>
                 {isEditMode && (
                   <button
                     type="submit"
-                    className="btn btn-outline min-w-0"
+                    className="btn btn-sm btn-ghost hover:bg-gray-200 hover:dark:bg-gray-800 min-w-0 min-h-0"
                     onClick={() => setIsEditStatusMode(true)}
                   >
-                    <span className="w-5">
-                      <PencilIcon />
+                    <span className="w-5 text-gray-500">
+                      <SolidPencilIcon />
                     </span>
                   </button>
                 )}
-              </>
+              </div>
             )}
           </div>
           <div className="flex gap-15 w-32">

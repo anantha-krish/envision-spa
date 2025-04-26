@@ -148,7 +148,9 @@ function* handleNewStatusUpdateSaga(
       recipients
     );
     yield put(updateIdeaStatusName(data.statusCode));
-    toast.success(`Idea Status Updated Successfully to ${data.statusCode}`);
+    toast.success(
+      `Idea Status Updated Successfully to ${data.statusCode.replace(/_/g, " ")}`
+    );
   } catch (error: unknown) {
     if (error instanceof Error) {
       toast.error(error.message);
