@@ -42,6 +42,7 @@ export const ImageCarousel: React.FC<IdeaDetailEditableComponentProps> = ({
         if (selectedFiles.length > 0) {
           await handleNewFileUpload();
         }
+        onRefresh();
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
