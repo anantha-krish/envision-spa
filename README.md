@@ -1,54 +1,49 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Envision - Frontend (SPA)
 
-Currently, two official plugins are available:
+A responsive and real-time Single Page Application (SPA) for the Envision Business Incubation Platform, built with **React v19**, **TypeScript**, and **Tailwind CSS**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<img src="https://github.com/user-attachments/assets/a982cc61-4521-4c69-bd56-e437c5cd42a7" height="200"/>
 
-## Expanding the ESLint configuration
+## 🌐 Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Idea submission, exploration, and interaction (likes/comments)
+- Real-time notifications and updates (via WebSocket)
+- Tag-based search and filtering
+- Role-based UI rendering
+- Dark mode support
+- Admin dashboard with visual analytics
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 🛠️ Tech Stack
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **React v19** + **TypeScript**
+- **Tailwind CSS** + **DaisyUI**
+- **TanStack Router** for type-safe routing
+- **Redux Toolkit** + **Redux Saga** for state management
+- **Axios** for API communication
+- **Formik** + **Yup** for form handling and validation
+- **Socket.IO Client** for real-time updates
+- **React-Select** for multi-tag input
+- **React-Quill** for rich text editing
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🚀 ENVISION UI
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+![image](https://github.com/user-attachments/assets/9f662ef1-ec30-4e69-b207-f56a0345823a)
+
+![image](https://github.com/user-attachments/assets/291e115d-93c0-4300-8827-d086196ca7e1)
+
+![image](https://github.com/user-attachments/assets/9ee7e297-4962-4f52-8894-5eb9510c77d2)
+
+![image](https://github.com/user-attachments/assets/2d8d718d-977a-47c9-879f-7b825efa71ee)
+
+### Prerequisites
+
+- Node.js >= 18
+- Yarn or npm
+
+### Installation
+
+```bash
+git clone https://github.com/your-org/envision-frontend.git
+cd envision-frontend
+yarn install
