@@ -25,6 +25,8 @@ import {
   fetchNotificationFailure,
   fetchNotificationSuccess,
   fetchRegisterPageDropDownOptionsSuccess,
+  hideLoader,
+  showLoader,
   updateTagsOnSuccess,
 } from "./appSlice";
 import { fetchAllTagsApi } from "../idea/ideaApi";
@@ -97,6 +99,7 @@ function* clearRegisterPageDropdownOptionsSaga(): Generator<
 
 function* fetchNotificationSaga() {
   try {
+    yield put(hideLoader());
     const response = (yield call(
       fetchNotificationsApi
     )) as NotificationResponse;
@@ -125,6 +128,7 @@ function* fetchNotificationSaga() {
         notifications: updateNotifications,
       })
     );
+    yield put(showLoader());
   } catch (error: unknown) {
     if (error instanceof Error) {
       toast.error(error.message);

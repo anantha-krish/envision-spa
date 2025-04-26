@@ -23,6 +23,7 @@ import {
   fetchLikeStatusForIdeaApi,
   fetchPocTeamForIdea,
   getAllCommentsForIdea,
+  updateStatusApi,
 } from "./ideaApi";
 import {
   addRecipients,
@@ -39,6 +40,7 @@ import {
   setSubmitters,
   updateCanEditStatus,
   updateCount,
+  updateIdeaStatusName,
   updateLikeStatus,
 } from "./ideaSlice";
 import { AxiosError, AxiosResponse } from "axios";
@@ -125,6 +127,28 @@ function* handleAddNewCommentSaga(
     yield put(postNewCommentFinal(mergedComment));
     yield put(incrementCount("comments"));
     yield put(showLoader());
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      toast.error(error.message);
+    }
+  }
+}
+function* handleNewStatusUpdateSaga(
+  action: PayloadAction<{ ideaId: number; statusCode: string }>
+): Generator {
+  try {
+    const { ideaId, statusCode } = action.payload;
+    const recipients = yield select(
+      (state: RootState) => state.idea.recipients
+    );
+    const { data } = yield call(
+      updateStatusApi,
+      ideaId,
+      statusCode,
+      recipients
+    );
+    yield put(updateIdeaStatusName(data.statusCode));
+    toast.success(`Idea Status Updated Successfully to ${data.statusCode}`);
   } catch (error: unknown) {
     if (error instanceof Error) {
       toast.error(error.message);
@@ -283,4 +307,5 @@ export default function* ideaSaga() {
   yield takeLatest("LIKE", handleNewLikeSaga);
   yield takeLatest("FETCH_LIKE_STATUS", handleFetchLikeStatusSaga);
   yield takeLatest("FETCH_IDEA_DETAILS", handleFetchIdeaDetailsSaga);
+  yield takeLatest("STATUS_CHANGE", handleNewStatusUpdateSaga);
 }

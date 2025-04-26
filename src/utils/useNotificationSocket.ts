@@ -2,6 +2,7 @@ import { useEffect, useRef, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { io, Socket } from "socket.io-client";
 import { setNotificationCount } from "../features/app/appSlice";
+import { fetchNotifications } from "../features/app/appActions";
 
 type NotificationMessage = {
   type: string;
@@ -41,6 +42,7 @@ export function useNotificationSocket(accessToken: string) {
 
         if (data.type === "unread_count") {
           dispatch(setNotificationCount(data.payload));
+          dispatch(fetchNotifications());
         }
 
         if (ack) ack("✅ Client received the notification.");

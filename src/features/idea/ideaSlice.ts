@@ -71,6 +71,9 @@ const ideaSlice = createSlice({
     toggleLikeStatus: (state) => {
       state.isLiked = !state.isLiked;
     },
+    updateIdeaStatusName: (state, action: PayloadAction<string>) => {
+      state.statusName = action.payload;
+    },
     resetLikeStatus: (state) => {
       state.isLiked = initialState.isLiked;
     },
@@ -198,5 +201,6 @@ export const {
   setPocTeamMembers,
   setSubmitters,
   setPocTeamName,
+  updateIdeaStatusName,
 } = ideaSlice.actions;
 export default ideaSlice.reducer;

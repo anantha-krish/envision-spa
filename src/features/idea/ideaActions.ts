@@ -27,3 +27,8 @@ export const toggleLikeEvent = (ideaId: number, liked: boolean) => ({
   type: "LIKE",
   payload: { ideaId, liked: liked },
 });
+
+export const updateStatusChange = (ideaId: number, statusCode: string) => ({
+  type: "STATUS_CHANGE",
+  payload: { ideaId, statusCode },
+});

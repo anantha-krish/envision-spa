@@ -24,12 +24,14 @@ export const SearchableFormSelect = ({
 }: FormSelectProps) => {
   return (
     <div>
-      <label
-        htmlFor={name}
-        className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-      >
-        {label}
-      </label>
+      {label && (
+        <label
+          htmlFor={name}
+          className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+        >
+          {label}
+        </label>
+      )}
       <Field name={name}>
         {({ field, form }: FieldProps) => {
           const selectedValue = isMulti

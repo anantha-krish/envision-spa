@@ -27,6 +27,18 @@ export const submitNewIdeaApi = async (ideaDetails: IdeaDetailsReq) => {
   return { status: res.status, data: res.data as IdeaDetailsResponse };
 };
 
+export const updateStatusApi = async (
+  ideaId: number,
+  statusCode: string,
+  recipients: number[]
+) => {
+  const res = await api.patch(`/ideas/${ideaId}/status`, {
+    statusCode,
+    recipients,
+  });
+  return res;
+};
+
 export const getAllCommentsForIdea = async (
   ideaId: number
 ): Promise<CommentResponse[]> => {
