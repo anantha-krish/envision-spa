@@ -104,7 +104,7 @@ const appSlice = createSlice({
     },
     fetchNotificationSuccess: (state, action) => {
       state.notifications = action.payload.notifications;
-      state.unreadNotificationCount = action.payload.unreadCount;
+      //  state.unreadNotificationCount = action.payload.unreadCount;
     },
     markAllNotificationAsRead: (state) => {
       state.notifications = state.notifications.map((item) => ({
